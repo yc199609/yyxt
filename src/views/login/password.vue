@@ -108,7 +108,7 @@ export default {
           },
           {
             pattern: /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/,
-            message: "手机格式不对"
+            message: "手机格式不对" 
           }
         ],
         pass: [
