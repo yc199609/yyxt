@@ -2,6 +2,7 @@
   <div class="navbar">
     <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
     <breadcrumb />
+    <lang-select class="right-menu-item hover-effect" />
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
         <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
@@ -10,11 +11,11 @@
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
         <router-link class="inlineBlock" to="/">
           <el-dropdown-item>
-            Home
+            {{ $t('loginOut.home') }}
           </el-dropdown-item>
         </router-link>
         <el-dropdown-item divided>
-          <span style="display:block;" @click="logout">LogOut</span>
+          <span style="display:block;" @click="logout">{{ $t('loginOut.loginOut') }}</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -25,11 +26,13 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import LangSelect from '@/components/LangSelect'
 
 export default {
   components: {
     Breadcrumb,
-    Hamburger
+    Hamburger,
+    LangSelect
   },
   computed: {
     ...mapGetters([
@@ -39,7 +42,7 @@ export default {
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch('ToggleSideBar')
+      this.$store.dispatch('app/toggleSideBar')
     },
     logout() {
       this.$store.dispatch('LogOut').then(() => {
@@ -55,18 +58,37 @@ export default {
   height: 50px;
   line-height: 50px;
   box-shadow: 0 1px 3px 0 rgba(0,0,0,.12), 0 0 3px 0 rgba(0,0,0,.04);
+  position: relative;
+
   .hamburger-container {
     line-height: 58px;
     height: 50px;
     float: left;
     padding: 0 10px;
   }
-  .screenfull {
+
+  .right-menu-item {
     position: absolute;
-    right: 90px;
-    top: 16px;
-    color: red;
+    right: 85px;
+    height: 100%;
+    line-height: 50px;
+    display: inline-block;
+    padding: 0 8px;
+    height: 100%;
+    font-size: 18px;
+    color: #5a5e66;
+    vertical-align: text-bottom;
+
+    &.hover-effect {
+      cursor: pointer;
+      transition: background .3s;
+
+      &:hover {
+        background: rgba(0, 0, 0, .025)
+      }
+    }
   }
+
   .avatar-container {
     height: 50px;
     display: inline-block;
