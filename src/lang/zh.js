@@ -12,7 +12,7 @@ export default {
   },
   shouye: {
     name: '名字',
-    year: '123'
+    year: '9999999'
   }
   // ,
   // sidebar: {
