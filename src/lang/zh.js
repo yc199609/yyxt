@@ -4,7 +4,7 @@ export default {
     login: '登录',
     forgetPassword: '忘记密码',
     phone: '修改手机号',
-    RetrievePassword: '找回密码'
+    RetrievePassword: '重置密码'
   },
   loginOut: {
     home: '首页',

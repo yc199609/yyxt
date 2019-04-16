@@ -140,46 +140,22 @@ export default {
   methods: {
     //获取个人用户的信息
     getUser() {
-      postData("接口", this.username).then(response => {
-        if (response.status === 200) {
-          this.userlist = response.data;
-          this.loading = false;
-          console.log(this.userlist, 9696);
-        } else {
-          this.$message({
-            message: "获取信息失败," + response.message,
-            type: "error"
-          });
-        }
-      });
+      // postData("接口", this.username).then(response => {
+      //   if (response.status === 200) {
+      //     this.userlist = response.data;
+      //     this.loading = false;
+      //     console.log(this.userlist, 9696);
+      //   } else {
+      //     this.$message({
+      //       message: "获取信息失败," + response.message,
+      //       type: "error"
+      //     });
+      //   }
+      // });
     },
     //tab切换
     handleClick(tab, event) {
-      console.log(tab, event);
-    },
-    //上传参数图片初始化
-    upload() {
-      var currentTimeStamp = new Date().getTime() / 1000;
-      if (
-        this.uploadParams == null ||
-        this.uploadParams.expire + 3 < currentTimeStamp
-      ) {
-        this.$store
-          .dispatch("GetUploadParams")
-          .then(req => {
-            this.uploadParm = req.data;
-          })
-          .catch(err => {
-            this.$message({ message: err.message, type: "warning" });
-          });
-      } else {
-        this.uploadParm = this.uploadParams;
-      }
-    },
-    //上传之前
-    beforeupload(file) {
-      this.uploadParm.key = this.uploadParm.dir + guid();
-      // console.log(this.uploadParm)
+      // console.log(tab, event);
     },
     //修改密码
     submitForm(ruleForm) {
@@ -189,8 +165,8 @@ export default {
         newpwd: this.ruleForm.newpass
       };
       console.log(obj);
-      postData("接口", obj).then(response => {
-        if (response.status == 200) {
+      postData("/api/User/UpdatePasswordByOld", obj).then(response => {
+        if (response.status == 0) {
           this.$message({
             message: "保存成功",
             type: "success"

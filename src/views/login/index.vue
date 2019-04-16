@@ -31,20 +31,25 @@
           v-model="loginForm.organize"
           name="organize"
           type="text"
-          autocomplete="off"
+          auto-complete="off"
           placeholder="organize"
         />
       </el-form-item>
-      <el-form-item prop="username">
+      <el-form-item
+        prop="cellPhone"
+        :rules="[
+          { required: true, message: '电话号码不能为空'}
+        ]"
+      >
         <span class="svg-container">
           <svg-icon icon-class="user"/>
         </span>
         <el-input
-          v-model="loginForm.username"
-          name="username"
+          v-model="loginForm.cellPhone"
+          name="cellPhone"
           type="text"
           auto-complete="on"
-          placeholder="username"
+          placeholder="cellPhone"
         />
       </el-form-item>
       <el-form-item prop="password">
@@ -117,13 +122,6 @@ export default {
   name: "Login",
   components: { LangSelect, password, phone },
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error("请输入正确的用户名"));
-      } else {
-        callback();
-      }
-    };
     const validatePass = (rule, value, callback) => {
       if (value.length < 5) {
         callback(new Error("密码不能小于5位"));
@@ -134,16 +132,10 @@ export default {
     return {
       loginForm: {
         organize: "Madik",
-        username: "admin",
+        cellPhone: "7758258",
         password: "admin"
       },
       loginRules: {
-        // organize: [
-        //   { required: true, trigger: "blur", validator: validateOrganize }
-        // ],
-        username: [
-          { required: true, trigger: "blur", validator: validateUsername }
-        ],
         password: [{ required: true, trigger: "blur", validator: validatePass }]
       },
       loading: false,
@@ -186,7 +178,11 @@ export default {
           this.loading = true;
           this.$store
             .dispatch("Login", this.loginForm)
-            .then(() => {
+            .then((res) => {
+              if (res === 'isNeedResetPassword') {
+                this.showDialogPassword=true
+                return
+              }
               this.loading = false;
               this.$router.push({ path: this.redirect || "/" });
             })

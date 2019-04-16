@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/login'
+import { login, logout, getInfo, changePassword } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
@@ -27,13 +27,20 @@ const user = {
   actions: {
     // 登录
     Login({ commit }, userInfo) {
-      const username = userInfo.username.trim()
+      const { cellPhone, password } = userInfo
       return new Promise((resolve, reject) => {
-        login(username, userInfo.password).then(response => {
-          const data = response.data
-          setToken(data.token)
+        login({ mobile: cellPhone, password: password }).then(response => {
+          const { data } = response
+          console.log(data)
           commit('SET_TOKEN', data.token)
-          resolve()
+          setToken(data.token)
+          if (data.isNeedResetPassword === 0) {
+            console.log('需要重置密码')
+            resolve('isNeedResetPassword')
+            return
+          } else {
+            resolve()
+          }
         }).catch(error => {
           reject(error)
         })
@@ -45,14 +52,26 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
           const data = response.data
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
-          } else {
-            reject('getInfo: roles must be a non-null array !')
-          }
+          // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
+          //   commit('SET_ROLES', data.roles)
+          // } else {
+          //   reject('getInfo: roles must be a non-null array !')
+          // }
+          console.log(data)
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', data.avatar)
           resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+    // 修改密码
+    changePassword({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        changePassword(state.token).then(response => {
+          console.log(response.data)
         }).catch(error => {
           reject(error)
         })
