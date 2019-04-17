@@ -98,8 +98,10 @@
       :title="$t('login.RetrievePassword')"
       :visible.sync="showDialogPassword"
       :modal-append-to-body="false"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
     >
-      <password/>
+      <password @hidden='hiddenColse'/>
     </el-dialog>
 
     <el-dialog
@@ -155,16 +157,22 @@ export default {
   },
   created() {
     window.setTimeout(() => {
-      const contanier = document.getElementById("contanier");
-      const mask = document.getElementById("mask");
-      contanier.removeChild(mask);
-    }, 3000);
+      this.$store.dispatch("GetInfo", this.loginForm).then(res => {
+        // console.log(res)
+        const contanier = document.getElementById("contanier")
+        const mask = document.getElementById("mask")
+        contanier.removeChild(mask)
+      })
+    }, 1000)
   },
   mounted() {
     this.$refs.mask.style.height =
       document.getElementById("app").clientHeight + "px";
   },
   methods: {
+    hiddenColse() {
+      this.showDialogPassword = false
+    },
     showPwd() {
       if (this.pwdType === "password") {
         this.pwdType = "";
@@ -178,13 +186,43 @@ export default {
           this.loading = true;
           this.$store
             .dispatch("Login", this.loginForm)
-            .then((res) => {
-              if (res === 'isNeedResetPassword') {
-                this.showDialogPassword=true
-                return
+            .then(res => {
+              if (res === "isNeedResetPassword") {
+                const h = this.$createElement;
+                this.$msgbox({
+                  title: '',
+                  message: h("div", null, [
+                    h("span", { style: "display: block, margin-bottom: 4%" }, "新密码 "),
+                    h("el-input", { style: "color: teal; margin-bottom: 8%" }),
+                    h("span", { style: "display: block, margin-bottom: 4%" }, "确认密码"),
+                    h("el-input", { style: "color: teal" })
+                  ]),
+                  confirmButtonText: "确定",
+                  cancelButtonText: "取消",
+                  beforeClose: (action, instance, done) => {
+                    if (action === "confirm") {
+                      instance.confirmButtonText = "执行中...";
+                      this.$store.dispatch("fristChangePwd", this.loginForm).then(
+                        ()=>{
+                          this.$router.push({ path: this.redirect || '/' })
+                        }
+                      )
+                      // instance.confirmButtonLoading = true;
+                      done();
+                    } else {
+                      this.loading = false;
+                      done();
+                    }
+                  }
+                }).then(action => {
+                  this.$message({
+                    type: "success",
+                    message: "登录成功"
+                  });
+                });
+                return;
               }
-              this.loading = false;
-              this.$router.push({ path: this.redirect || "/" });
+              // this.$router.push({ path: this.redirect || "/" });
             })
             .catch(() => {
               this.loading = false;
@@ -199,52 +237,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 /* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
-$bg: #283443;
-$light_gray: #fff;
-$cursor: #fff;
-
-@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
-    color: $cursor;
-  }
-}
-
-/* reset element-ui css */
-.login-container {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-    .el-input__inner {
-      background-color: transparent !important;
-    }
-    input {
-      // background: transparent;
-      border: 0px;
-      -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $light_gray;
-      height: 47px;
-      caret-color: $cursor;
-
-      &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
-      }
-    }
-  }
-
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
-  }
+.login-form >>> .el-input__inner {
+  background-color: #283343;
+  border: none;
 }
 </style>
 

@@ -1,4 +1,4 @@
-import { login, logout, getInfo, changePassword } from '@/api/login'
+import { login, logout, getInfo, fristChangePwd, changePassword } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
@@ -31,7 +31,7 @@ const user = {
       return new Promise((resolve, reject) => {
         login({ mobile: cellPhone, password: password }).then(response => {
           const { data } = response
-          console.log(data)
+          // console.log(data)
           commit('SET_TOKEN', data.token)
           setToken(data.token)
           if (data.isNeedResetPassword === 0) {
@@ -52,15 +52,28 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
           const data = response.data
+          // 判断当前用户是否已经拉取完用户信息
           // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
           //   commit('SET_ROLES', data.roles)
           // } else {
           //   reject('getInfo: roles must be a non-null array !')
           // }
+          console.log(response)
           console.log(data)
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
+          commit('SET_NAME', data.siteInfo)
+          commit('SET_AVATAR', data.userInfo)
           resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+    // 首次登录修改密码(初始化密码)
+    fristChangePwd({ state }) {
+      return new Promise((resolve, reject) => {
+        fristChangePwd(state.token).then(response => {
+          resolve()
         }).catch(error => {
           reject(error)
         })
@@ -71,7 +84,7 @@ const user = {
     changePassword({ commit, state }) {
       return new Promise((resolve, reject) => {
         changePassword(state.token).then(response => {
-          console.log(response.data)
+          console.log(response)
         }).catch(error => {
           reject(error)
         })
@@ -81,9 +94,10 @@ const user = {
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
+        console.log('退出登录111')
         logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
+          // commit('SET_TOKEN', '')
+          // commit('SET_ROLES', [])
           removeToken()
           resolve()
         }).catch(error => {
@@ -95,8 +109,9 @@ const user = {
     // 前端 登出
     FedLogOut({ commit }) {
       return new Promise(resolve => {
-        commit('SET_TOKEN', '')
+        // commit('SET_TOKEN', '')
         removeToken()
+        console.log('退出登录222')
         resolve()
       })
     }
