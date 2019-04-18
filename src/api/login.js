@@ -19,7 +19,7 @@ export function login(mobile, password) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: {
+    data: {
       mobile,
       password
     }
@@ -42,7 +42,7 @@ export function fristChangePwd(password) {
     headers: {
       'Content-type': 'application/json'
     },
-    body: {
+    data: {
       password
     }
   })
@@ -56,7 +56,7 @@ export function changePassword(oldPassword, newPassword) {
     headers: {
       'Content-type': 'application/json'
     },
-    body: {
+    data: {
       oldPassword,
       newPassword
     }
@@ -76,7 +76,7 @@ export function getImgCode(mobile) {
   return request({
     url: api.getImgCode,
     method: 'get',
-    query: {
+    params: {
       mobile
     }
   })
@@ -90,7 +90,7 @@ export function sendForpwsSMS(mobile, imageCode) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: {
+    data: {
       mobile,
       imageCode
     }
@@ -105,7 +105,7 @@ export function updatePswBySMS(mobile, sms, password) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: {
+    data: {
       mobile,
       sms,
       password

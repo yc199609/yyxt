@@ -58,8 +58,8 @@ const user = {
           // } else {
           //   reject('getInfo: roles must be a non-null array !')
           // }
-          console.log(response)
-          console.log(data)
+          // console.log(response)
+          // console.log(data)
           commit('SET_NAME', data.siteInfo)
           commit('SET_AVATAR', data.userInfo)
           resolve(response)

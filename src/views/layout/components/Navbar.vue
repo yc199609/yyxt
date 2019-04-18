@@ -5,7 +5,7 @@
     <lang-select class="right-menu-item hover-effect" />
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
-        <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+        <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
         <i class="el-icon-caret-bottom"/>
       </div>
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -69,7 +69,7 @@ export default {
 
   .right-menu-item {
     position: absolute;
-    right: 85px;
+    right: 45px;
     height: 100%;
     line-height: 50px;
     display: inline-block;
@@ -99,11 +99,11 @@ export default {
       margin-top: 5px;
       position: relative;
       line-height: initial;
-      .user-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-      }
+      // .user-avatar {
+      //   width: 40px;
+      //   height: 40px;
+      //   border-radius: 10px;
+      // }
       .el-icon-caret-bottom {
         position: absolute;
         right: -20px;
