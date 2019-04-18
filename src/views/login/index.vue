@@ -119,6 +119,7 @@ import { isvalidUsername } from "@/utils/validate";
 import LangSelect from "@/components/LangSelect";
 import password from "./password";
 import phone from "./phone";
+import { setToken } from '@/utils/auth'
 
 export default {
   name: "Login",
@@ -187,7 +188,7 @@ export default {
           this.$store
             .dispatch("Login", this.loginForm)
             .then(res => {
-              if (res === "isNeedResetPassword") {
+              if (res&&res.isNeedResetPassword === true) {
                 const h = this.$createElement;
                 this.$msgbox({
                   title: '',
@@ -198,7 +199,6 @@ export default {
                     h("el-input", { style: "color: teal" })
                   ]),
                   confirmButtonText: "确定",
-                  cancelButtonText: "取消",
                   beforeClose: (action, instance, done) => {
                     if (action === "confirm") {
                       instance.confirmButtonText = "执行中...";
@@ -207,7 +207,8 @@ export default {
                           this.$router.push({ path: this.redirect || '/' })
                         }
                       )
-                      // instance.confirmButtonLoading = true;
+                      this.$store.commit('SET_TOKEN', res.token)
+                      setToken(res.token)
                       done();
                     } else {
                       this.loading = false;

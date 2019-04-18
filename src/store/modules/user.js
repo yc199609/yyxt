@@ -31,14 +31,13 @@ const user = {
       return new Promise((resolve, reject) => {
         login({ mobile: cellPhone, password: password }).then(response => {
           const { data } = response
-          // console.log(data)
-          commit('SET_TOKEN', data.token)
-          setToken(data.token)
           if (data.isNeedResetPassword === 0) {
-            console.log('需要重置密码')
-            resolve('isNeedResetPassword')
+            const token = data.token
+            resolve({ isNeedResetPassword: true, token })
             return
           } else {
+            commit('SET_TOKEN', data.token)
+            setToken(data.token)
             resolve()
           }
         }).catch(error => {
