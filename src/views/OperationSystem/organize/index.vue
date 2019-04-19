@@ -2,7 +2,15 @@
   <div style="padding:1vw;width:82.6vw;margin:auto;">
     <section class="conditional-query-container" style="margin-top: .5rem">
       <el-row class="query-wrapper-row">
-        <el-col :span="5" class="query-wrapper-row-right">
+        <el-col :span="10">
+          <el-button
+            type="success"
+            size="small"
+            @click="showDialogCreatedOrganize=true"
+          >创建机构</el-button>
+        </el-col>
+
+        <el-col :span="20" class="query-wrapper-row-right">
           <section class="query-wrapper-row-item">
             <section class="label-text">复合筛选</section>
 
@@ -17,7 +25,7 @@
           </section>
         </el-col>
 
-        <el-col :span="5">
+        <el-col :span="2">
           <el-button type="danger" size="small" icon="el-icon-search" @click="handleLoadAndQuery">搜索</el-button>
         </el-col>
       </el-row>
@@ -40,7 +48,7 @@
           <el-button
             style="margin-bottom: 10px;"
             type="primary"
-            @click="showDialogSetupOrganize=true"
+            @click="setOrganize(scope.row)"
           >机构设置</el-button>
           <br>
           <el-button type="success" @click="busParams(scope.row)">业务参数</el-button>
@@ -61,37 +69,44 @@
     </div>
 
     <el-dialog :visible.sync="showDialogInformation" :modal-append-to-body="false">
-      <baseInformation ref="baseInformation" v-if="showDialogInformation" @hidden="hidden" />
+      <baseInformation ref="baseInformation" v-if="showDialogInformation" @hidden="hidden"/>
     </el-dialog>
 
     <el-dialog :visible.sync="showDialogSetupOrganize" :modal-append-to-body="false">
-      <setupOrganize @hiddenOrganize="hiddenOrganize"/>
+      <setupOrganize :organizeData="organizeData"/>
     </el-dialog>
 
     <el-dialog :visible.sync="showDialogBusinessParameters" :modal-append-to-body="false">
       <businessParameters :businessData="businessData"/>
     </el-dialog>
+
+    <el-dialog :visible.sync="showDialogCreatedOrganize" :modal-append-to-body="false">
+      <createdOrganize @hiddenOrganize="hiddenOrganize"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import baseInformation from "./baseInformation";
-import setupOrganize from "./setupOrganize";
-import businessParameters from "./businessParameters";
-import { companyList, getBaseInfoById, getConfigById } from "@/api/organize";
+import baseInformation from "./baseInformation"
+import setupOrganize from "./setupOrganize"
+import businessParameters from "./businessParameters"
+import createdOrganize from "./createdOrganize"
+import { companyList, getBaseInfoById, getConfigById, getSystemInfoById } from "@/api/organize"
 
 export default {
-  components: { baseInformation, setupOrganize, businessParameters },
+  components: { baseInformation, setupOrganize, businessParameters, createdOrganize },
   data() {
     return {
       ret: "",
       retData: [],
       pageData: "",
       businessData: [],
+      organizeData: "",
       currentPage: "",
       showDialogInformation: false,
       showDialogSetupOrganize: false,
-      showDialogBusinessParameters: false
+      showDialogBusinessParameters: false,
+      showDialogCreatedOrganize: false
     };
   },
   methods: {
@@ -101,7 +116,7 @@ export default {
       return new Promise((resolve, reject) => {
         companyList()
           .then(response => {
-            _that.ret = response.data
+            _that.ret = response.data;
             _that.retData = response.data.items;
             _that.pageData = response.data;
           })
@@ -118,8 +133,8 @@ export default {
         getBaseInfoById(res.id)
           .then(response => {
             const formData = response.data;
-            this.$refs.baseInformation.form=formData
-            console.log(formData)
+            this.$refs.baseInformation.form = formData;
+            console.log(formData);
           })
           .catch(err => {
             console.log(err);
@@ -129,12 +144,12 @@ export default {
     busParams(res) {
       // 业务参数
       const _that = this;
-      const ret = this.ret
+      const ret = this.ret;
       this.showDialogBusinessParameters = true;
       return new Promise((resolve, reject) => {
-        getConfigById(res.id, '', ret.pageIndex, ret.PageSize)
+        getConfigById(res.id, "", ret.pageIndex, ret.PageSize)
           .then(response => {
-            _that.businessData = response.data.items
+            _that.businessData = response.data.items;
             console.log(_that.businessData);
           })
           .catch(err => {
@@ -142,11 +157,24 @@ export default {
           });
       });
     },
-    hidden(){
-      this.showDialogInformation = false
+    setOrganize(res) {
+      // 获取系统设置  机构设置
+      const _that = this
+      _that.showDialogSetupOrganize = true
+      return new Promise((resolve,reject) => {
+        getSystemInfoById(res.id).then(res => {
+          _that.organizeData = res.data
+          console.log(_that.organizeData)
+        }).catch(err => {
+          console.log(err)
+        })
+      })
+    },
+    hidden() {
+      this.showDialogInformation = false;
     },
     hiddenOrganize() {
-      this.showDialogSetupOrganize = false
+      this.showDialogCreatedOrganize = false;
     },
     handlePageChange(val) {
       // 当前分页改变时调起
