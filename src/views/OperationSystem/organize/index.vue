@@ -27,112 +27,139 @@
       <router-view/>
     </el-alert>
 
-    <el-table :data="tableData" border style="width: 100%">
-      <el-table-column align="center" prop="Abbreviation" label="简称"></el-table-column>
+    <el-table :data="retData" border style="width: 100%">
+      <el-table-column align="center" prop="name" label="简称"></el-table-column>
       <el-table-column align="center" prop="code" label="代码"></el-table-column>
-      <el-table-column align="center" prop="site" label="站点">
-        <!-- <template slot-scope="{row}">
-          <router-link :to="'/example/edit/'+row.id" class="link-type">
-            <span>{{ row.title }}</span>
-          </router-link>
-        </template>-->
-      </el-table-column>
-      <el-table-column align="center" prop="state" label="状态"></el-table-column>
-      <el-table-column align="center" prop="ParentalOrganizationName" label="父级机构名"></el-table-column>
+      <el-table-column align="center" prop="dmsSite" label="站点"></el-table-column>
+      <el-table-column align="center" prop="isDMSEnable" label="状态"></el-table-column>
+      <el-table-column align="center" prop="parentCompanyName" label="父级机构名"></el-table-column>
       <el-table-column align="center" prop="operation" label="操作">
         <template slot-scope="scope">
-          <el-button style="margin-bottom: 10px;" @click="showDialogInformation=true">基本信息</el-button><br>
-          <el-button style="margin-bottom: 10px;" type="primary" @click="showDialogSetupOrganize=true">机构设置</el-button><br>
-          <el-button type="success" @click="showDialogBusinessParameters=true">业务参数</el-button>
+          <el-button style="margin-bottom: 10px;" @click="baseInfo(scope.row)">基本信息</el-button>
+          <br>
+          <el-button
+            style="margin-bottom: 10px;"
+            type="primary"
+            @click="showDialogSetupOrganize=true"
+          >机构设置</el-button>
+          <br>
+          <el-button type="success" @click="busParams(scope.row)">业务参数</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog
-      :visible.sync="showDialogInformation"
-      :modal-append-to-body="false"
-    >
-      <baseInformation/>
-    </el-dialog>
-
-    <el-dialog
-      :visible.sync="showDialogSetupOrganize"
-      :modal-append-to-body="false"
-    >
-      <setupOrganize/>
-    </el-dialog>
-
-    <el-dialog
-      :visible.sync="showDialogBusinessParameters"
-      :modal-append-to-body="false"
-    >
-      <businessParameters/>
-    </el-dialog>
-
-    <div class="block" style="margin-top: 15px;">
+    <div class="block" style="margin-top: 15px;" :data="pageData">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="1"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :current-page="pageData.pageIndex"
+        :page-sizes="[2, 5, 10, 100]"
+        :page-size="pageData.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="pageData.totalCount"
       ></el-pagination>
     </div>
+
+    <el-dialog :visible.sync="showDialogInformation" :modal-append-to-body="false">
+      <baseInformation ref="baseInformation" v-if="showDialogInformation" @hidden="hidden" />
+    </el-dialog>
+
+    <el-dialog :visible.sync="showDialogSetupOrganize" :modal-append-to-body="false">
+      <setupOrganize @hiddenOrganize="hiddenOrganize"/>
+    </el-dialog>
+
+    <el-dialog :visible.sync="showDialogBusinessParameters" :modal-append-to-body="false">
+      <businessParameters :businessData="businessData"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import baseInformation from './baseInformation'
-import setupOrganize from './setupOrganize'
-import businessParameters from './businessParameters'
+import baseInformation from "./baseInformation";
+import setupOrganize from "./setupOrganize";
+import businessParameters from "./businessParameters";
+import { companyList, getBaseInfoById, getConfigById } from "@/api/organize";
 
 export default {
   components: { baseInformation, setupOrganize, businessParameters },
   data() {
     return {
-      tableData: [
-        {
-          Abbreviation: "Madik",
-          code: "Madik",
-          site: "www.Madik.gosafenet.com",
-          state: "正常",
-          ParentalOrganizationName: "迈迪克集团",
-          operation: "true"
-        },
-        {
-          Abbreviation: "Madik",
-          code: "Madik",
-          site: "www.Madik.gosafenet.com",
-          state: "正常",
-          ParentalOrganizationName: "迈迪克集团",
-          operation: "true"
-        },
-        {
-          Abbreviation: "Madik",
-          code: "Madik",
-          site: "www.Madik.gosafenet.com",
-          state: "正常",
-          ParentalOrganizationName: "迈迪克集团",
-          operation: "true"
-        },
-        {
-          Abbreviation: "Madik",
-          code: "Madik",
-          site: "www.Madik.gosafenet.com",
-          state: "正常",
-          ParentalOrganizationName: "迈迪克集团",
-          operation: "true"
-        }
-      ],
-      currentPage: '',
+      ret: "",
+      retData: [],
+      pageData: "",
+      businessData: [],
+      currentPage: "",
       showDialogInformation: false,
       showDialogSetupOrganize: false,
       showDialogBusinessParameters: false
     };
   },
   methods: {
+    organizeInformation() {
+      // 获取机构列表信息
+      const _that = this;
+      return new Promise((resolve, reject) => {
+        companyList()
+          .then(response => {
+            _that.ret = response.data
+            _that.retData = response.data.items;
+            _that.pageData = response.data;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      });
+    },
+    baseInfo(res) {
+      // 基本信息
+      const _that = this;
+      _that.showDialogInformation = true;
+      return new Promise((resolve, reject) => {
+        getBaseInfoById(res.id)
+          .then(response => {
+            const formData = response.data;
+            this.$refs.baseInformation.form=formData
+            console.log(formData)
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      });
+    },
+    busParams(res) {
+      // 业务参数
+      const _that = this;
+      const ret = this.ret
+      this.showDialogBusinessParameters = true;
+      return new Promise((resolve, reject) => {
+        getConfigById(res.id, '', ret.pageIndex, ret.PageSize)
+          .then(response => {
+            _that.businessData = response.data.items
+            console.log(_that.businessData);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      });
+    },
+    hidden(){
+      this.showDialogInformation = false
+    },
+    hiddenOrganize() {
+      this.showDialogSetupOrganize = false
+    },
+    handlePageChange(val) {
+      // 当前分页改变时调起
+      this.pageData.PageIndex = val;
+
+      // this.handleLoadAndQuery();
+    },
+    handlePageSizeChange(val) {
+      // 分页页码改变时的调起
+      this.pageData.PageSize = val;
+
+      // this.handleLoadAndQuery()
+    },
     handleLoadAndQuery() {
       console.log("点击搜索按钮了");
     },
@@ -142,6 +169,9 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     }
+  },
+  created() {
+    this.organizeInformation();
   }
 };
 </script>
