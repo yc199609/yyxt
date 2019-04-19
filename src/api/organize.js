@@ -7,7 +7,8 @@ const api = {
   getConfigById: '/api/Operation/Company/GetConfigById',
   updateConfigItem: '/api/Operation/Company/UpdateConfigItem',
   updateBaseInfo: '/api/Operation/Company/UpdateBaseInfo',
-  companyCreate: '/api/Operation/Company/Create'
+  companyCreate: '/api/Operation/Company/Create',
+  getSystemInfoById: '/api/Operation/Company/GetSystemInfoById'
 }
 
 // 机构列表
@@ -78,7 +79,7 @@ export function updateBaseInfo(obj) {
   })
 }
 
-// 创建机构  机构设置
+// 创建机构
 export function companyCreate(obj) {
   return request({
     url: api.companyCreate,
@@ -87,5 +88,14 @@ export function companyCreate(obj) {
       'Content-Type': 'application/json'
     },
     data: obj
+  })
+}
+
+// 获取系统设置  机构设置
+export function getSystemInfoById(id) {
+  return request({
+    url: api.getSystemInfoById,
+    method: 'get',
+    pramas: id
   })
 }
