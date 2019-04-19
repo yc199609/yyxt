@@ -1,5 +1,5 @@
 <template>
-  <div style="padding:3vw;width:82.6vw">
+  <div class="container">
     <el-alert :closable="false" title="系统参数" type="success">
       <router-view />
     </el-alert>
@@ -7,7 +7,9 @@
     <el-table
       :data="tableData"
       border
-      style="width: 100%">
+      max-height="50vh"
+      style="width: 100%;overflow-y: auto;"
+      class="table">
       <el-table-column
         align="center"
         prop="code"
@@ -25,73 +27,123 @@
       </el-table-column>
       <el-table-column
         align="center"
-        prop="remarks"
+        prop="description"
         label="备注">
       </el-table-column>
       <el-table-column
         align="center"
-        prop="operation"
         label="操作">
+        <template slot-scope="scope">
+          <el-button
+            type="warning"
+            @click="editShow(scope.row)">
+            修改
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
 
-    <div class="block" style="margin-top: 20px;">
+    <div class="block paginationContainer">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="1"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :current-page="pageIndex"
+        :page-sizes="[20, 30, 40, 50]"
+        :page-size='pageSize'
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="totalCount"
       ></el-pagination>
     </div>
+
+    <el-dialog
+      title="修改参数"
+      :visible.sync="dialogEditVisible">
+      <el-form v-model="editForm">
+        <el-form-item label="参数值" label-width="120px">
+          <el-input v-model="editForm.value" ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogEditVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submit">确 定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
+import {SystemConfigList,SystemConfigUpdate} from '@api/systemSetup/system'
 export default {
   data() {
     return {
       tableData: [
-        {
-          name: 'Madik',
-          code: 'Madik',
-          value: '100',
-          operation: 'true'
-        },
-        {
-          name: 'Madik',
-          code: 'Madik',
-          value: '100',
-          operation: 'true'
-        },
-        {
-          name: 'Madik',
-          code: 'Madik',
-          value: '100',
-          operation: 'true'
-        },
-        {
-          name: 'Madik',
-          code: 'Madik',
-          value: '100',
-          operation: 'true'
-        }
-      ]
+      ],
+      editForm:{
+        id: '',
+        value: ''
+      },
+      dialogEditVisible:false,
+      pageIndex: 1,
+      pageSize: 20,
+      totalCount: 30
     }
   },
+  mounted(){
+    this.init()
+  },
   methods: {
+    init(){
+      SystemConfigList({
+        pageIndex:this.pageIndex,
+        pageSize:this.pageSize
+      })
+      .then(res =>{
+        this.pageIndex = res.data.pageIndex
+        this.pageSize = res.data.pageSize
+        this.totalCount = res.data.totalCount
+        this.tableData = res.data.items
+      })
+    },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.pageSize = val
+      this.init()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.pageIndex = val
+      this.init()
+    },
+    editShow(res){
+      this.editForm.id = res.id
+      this.editForm.value = res.value
+      this.dialogEditVisible = true
+    },
+    submit(){
+      SystemConfigUpdate(this.editForm)
+      .then(res=>{
+        this.$message({
+          type: 'success',
+          message: '修改成功',
+          duration: 500,
+          onClose:()=>{
+            this.dialogEditVisible = false
+          }
+        })
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  
+  .container{
+    padding:3vw;
+    width:82.6vw;
+    .table{
+      width:100%;
+    }
+    .paginationContainer{
+      margin-top: 20px;
+    }
+  }
 </style>

@@ -4,7 +4,7 @@
     <sidebar class="sidebar-container"/>
     <div class="main-container">
       <navbar/>
-      <app-main/>
+      <app-main class="mainContainer"/>
     </div>
   </div>
 </template>
@@ -47,6 +47,9 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "src/styles/mixin.scss";
+  .mainContainer{
+    margin-top: 50px;
+  }
   .app-wrapper {
     @include clearfix;
     position: relative;

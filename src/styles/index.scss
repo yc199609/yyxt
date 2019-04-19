@@ -76,3 +76,11 @@ a:hover {
 .app-container {
   padding: 20px;
 }
+
+// element table对不齐的样式
+body .el-table th.gutter{
+  display: table-cell!important;
+}
+.el-message {
+  top: 70px;
+}

@@ -6,7 +6,11 @@ import { getToken } from '@/utils/auth'
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api 的 base_url
-  timeout: 5000 // 请求超时时间
+  withCredentials: true, // 跨域带cookie
+  timeout: 5000, // 请求超时时间
+  headers: {
+    'Content-Type': 'application/json; charset=utf-8'
+  }
 })
 
 // request拦截器
@@ -23,6 +27,12 @@ service.interceptors.request.use(
     Promise.reject(error)
   }
 )
+
+//
+service.adornUrl = (actionName) => {
+  // 非生产环境 && 开启代理, 接口前缀统一使用[/proxyApi/]前缀做代理拦截!
+  return (process.env.NODE_ENV !== 'production' && process.env.OPEN_PROXY ? '/proxyApi/' : window.SITE_CONFIG.baseUrl) + actionName
+}
 
 // response 拦截器
 service.interceptors.response.use(
