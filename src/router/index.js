@@ -39,25 +39,14 @@ export const constantRouterMap = [
   {
     path: '/OperationSystem',
     component: Layout,
-    redirect: '/OperationSystem',
-    meta: {
-      title: '业务系统',
-      icon: 'nested'
-    },
+    name: 'OperationSystem',
+    meta: { title: '业务系统', icon: 'nested' },
     children: [
       {
-        path: 'OperationSystem',
-        component: () => import('@/views/OperationSystem/index'), // Parent router-view
-        name: 'OperationSystem',
-        meta: { title: '机构' },
-        children: [
-          {
-            path: 'organize',
-            component: () => import('@/views/OperationSystem/organize'),
-            name: 'Organize',
-            meta: { title: '机构列表' }
-          }
-        ]
+        path: 'organize',
+        component: () => import('@/views/OperationSystem/organize'),
+        name: 'Organize',
+        meta: { title: '机构列表' }
       }
     ]
   },
@@ -65,7 +54,6 @@ export const constantRouterMap = [
     path: '/systemSetup',
     component: Layout,
     name: 'systemSetup',
-    redirect: '/systemSetup',
     meta: { title: '系统设置', icon: 'form' },
     children: [
       {

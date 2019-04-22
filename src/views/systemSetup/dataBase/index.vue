@@ -1,5 +1,5 @@
 <template>
-  <div style="padding:3vw;width:82.6vw">
+  <div style="padding:3vw;">
     <el-alert
       :closable="false"
       title="数据库参数"
@@ -63,7 +63,7 @@
       >
         <template slot-scope="scope">
           <el-row>
-            <el-col :span='8'>
+            <el-col :span='8' class="ycbutton">
               <el-tooltip
                 class="item"
                 effect="dark"
@@ -77,7 +77,7 @@
                 ></el-button>
               </el-tooltip>
             </el-col>
-            <el-col :span='8'>
+            <el-col :span='8' class="ycbutton">
               <el-tooltip
                 class="item"
                 effect="dark"
@@ -91,7 +91,7 @@
                 ></el-button>
               </el-tooltip>
             </el-col>
-            <el-col :span='8'>
+            <el-col :span='8' class="ycbutton">
               <el-tooltip
                 class="item"
                 effect="dark"
@@ -286,5 +286,11 @@ export default {
 <style lang="scss" scoped>
   .pagination{
     margin-top: 15px;
+  }
+</style>
+
+<style lang="css" scoped>
+  .ycbutton >>> .el-button--medium{
+    padding: 0.6vw 1.2vw;
   }
 </style>
