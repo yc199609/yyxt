@@ -112,6 +112,7 @@ export default {
       businessData: [],
       organizeData: "",
       currentPage: "",
+      keyword: "",
       pageIndex: 1,
       pageSize: 20,
       totalCount: 1,
@@ -123,13 +124,14 @@ export default {
   },
   methods: {
     init() {
-      debugger
-      companyList({
-        pageIndex: this.pageIndex,
-        pageSize: this.pageSize
+      // debugger
+      companyList(
+        this.keyword,
+        this.pageIndex,
+        this.pageSize
         // totalCount: this.totalCount
-      }).then(res => {
-        debugger
+      ).then(res => {
+        // debugger
         console.log(res)
         this.pageIndex = res.data.pageIndex
         this.pageSize = res.data.pageSize
@@ -137,21 +139,21 @@ export default {
         this.tableData = res.data.items
       })
     },
-    organizeInformation() {
-      // 获取机构列表信息
-      const _that = this;
-      return new Promise((resolve, reject) => {
-        companyList()
-          .then(response => {
-            _that.ret = response.data;
-            _that.retData = response.data.items;
-            _that.pageData = response.data;
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      });
-    },
+    // organizeInformation() {
+    //   // 获取机构列表信息
+    //   const _that = this;
+    //   return new Promise((resolve, reject) => {
+    //     companyList(this.keyword, this.pageIndex, this.pageSize)
+    //       .then(response => {
+    //         _that.ret = response.data;
+    //         _that.retData = response.data.items;
+    //         _that.pageData = response.data;
+    //       })
+    //       .catch(err => {
+    //         console.log(err);
+    //       });
+    //   });
+    // },
     baseInfo(res) {
       // 基本信息
       const _that = this;
@@ -215,9 +217,9 @@ export default {
       this.init()
     }
   },
-  created() {
-    this.organizeInformation()
-  },
+  // created() {
+  //   this.organizeInformation()
+  // },
   mounted() {
     this.init()
   }

@@ -1,17 +1,24 @@
 <template>
   <el-form
     :model="from"
-    $ref="form"
+    ref="form"
   >
+    <!-- :rules="newloginRules" -->
     <el-form-item
       prop="newpassword"
       label='新密码'
+      :rules="[
+        { required: true, message: '新密码不能为空'}
+      ]"
     >
       <el-input v-model="from.newpassword"></el-input>
     </el-form-item>
     <el-form-item
       prop="submitpassword"
       label='确认密码'
+      :rules="[
+        { required: true, message: '确认密码不能为空'}
+      ]"
     >
       <el-input v-model="from.submitpassword"></el-input>
     </el-form-item>

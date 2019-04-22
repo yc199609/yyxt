@@ -170,7 +170,6 @@ export default {
     }
   },
   created() {
-
     window.setTimeout(() => {
       this.$store.dispatch("GetInfo", this.loginForm).then(res => {
         const contanier = document.getElementById("contanier")
@@ -204,6 +203,8 @@ export default {
               if (res&&res.isNeedResetPassword === true) {
                 this.initView = true
                 this.token = res.token
+              } else {
+                this.$router.push( { path: "/" } )
               }
             })
             .catch(() => {

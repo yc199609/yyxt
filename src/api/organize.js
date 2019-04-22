@@ -13,15 +13,11 @@ const api = {
 
 // 机构列表
 // 获取机构列表
-export function companyList(keyword, pageIndex, pageSize) {
+export function companyList(obj) {
   return request({
     url: api.companyList,
     method: 'get',
-    pramas: {
-      keyword,
-      pageIndex,
-      pageSize
-    }
+    params: obj
   })
 }
 

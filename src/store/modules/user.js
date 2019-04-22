@@ -66,6 +66,7 @@ const user = {
           } else {
             commit('SET_TOKEN', data.token)
             setToken(data.token)
+            // this.$route.push({ '' })
             resolve()
           }
         }).catch(error => {
