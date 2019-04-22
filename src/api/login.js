@@ -19,10 +19,10 @@ export function login({ mobile, password }) {
     headers: {
       'Content-Type': 'application/json'
     },
-    data: {
+    data: JSON.stringify({
       mobile,
       password
-    }
+    })
   })
 }
 

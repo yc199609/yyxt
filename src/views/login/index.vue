@@ -1,10 +1,12 @@
 <template>
   <div id="contanier" class="login-container">
+
     <div id="mask" ref="mask" class="mask">
       <div class="mask_container">
         <img src="./onloadgif.gif" alt="正在加载中">
       </div>
     </div>
+
     <el-form
       ref="loginForm"
       :model="loginForm"
@@ -111,6 +113,15 @@
     >
       <phone/>
     </el-dialog>
+
+    <el-dialog
+      @close="initPasswordHidden"
+      :visible.sync="initView"
+      :modal-append-to-body="false"
+      title="首次登录请重置密码">
+      <initPassword @submit='initPasswordSubmit' />
+    </el-dialog>
+
   </div>
 </template>
 
@@ -120,17 +131,17 @@ import LangSelect from "@/components/LangSelect";
 import password from "./password";
 import phone from "./phone";
 import { setToken } from '@/utils/auth'
+import initPassword from './initPassword'
 
 export default {
   name: "Login",
-  components: { LangSelect, password, phone },
+  components: { LangSelect, password, phone, initPassword},
   data() {
     const validatePass = (rule, value, callback) => {
-      if (value.length < 5) {
-        callback(new Error("密码不能小于5位"));
-      } else {
-        callback();
+      if (value.length < 6) {
+        callback(new Error("密码不能小于6位"));
       }
+      callback()
     };
     return {
       loginForm: {
@@ -145,7 +156,9 @@ export default {
       pwdType: "password",
       showDialogPhone: false,
       showDialogPassword: false,
-      redirect: undefined
+      redirect: undefined,
+      initView: false,
+      token:''
     };
   },
   watch: {
@@ -157,9 +170,9 @@ export default {
     }
   },
   created() {
+
     window.setTimeout(() => {
       this.$store.dispatch("GetInfo", this.loginForm).then(res => {
-        // console.log(res)
         const contanier = document.getElementById("contanier")
         const mask = document.getElementById("mask")
         contanier.removeChild(mask)
@@ -189,50 +202,27 @@ export default {
             .dispatch("Login", this.loginForm)
             .then(res => {
               if (res&&res.isNeedResetPassword === true) {
-                const h = this.$createElement;
-                this.$msgbox({
-                  title: '',
-                  message: h("div", null, [
-                    h("span", { style: "display: block, margin-bottom: 4%" }, "新密码"),
-                    h("el-input", { style: "color: teal; margin-bottom: 8%" }),
-                    h("span", { style: "display: block, margin-bottom: 4%" }, "确认密码"),
-                    h("el-input", { style: "color: teal" })
-                  ]),
-                  confirmButtonText: "确定",
-                  beforeClose: (action, instance, done) => {
-                    if (action === "confirm") {
-                      instance.confirmButtonText = "执行中...";
-                      this.$store.dispatch("fristChangePwd", this.loginForm).then(
-                        ()=>{
-                          this.$router.push({ path: this.redirect || '/' })
-                        }
-                      )
-                      this.$store.commit('SET_TOKEN', res.token)
-                      setToken(res.token)
-                      done();
-                    } else {
-                      this.loading = false;
-                      done();
-                    }
-                  }
-                }).then(action => {
-                  this.$message({
-                    type: "success",
-                    message: "登录成功"
-                  });
-                });
-                return;
+                this.initView = true
+                this.token = res.token
               }
-              // this.$router.push({ path: this.redirect || "/" });
             })
             .catch(() => {
               this.loading = false;
             });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
+    },
+    initPasswordSubmit(){
+      this.initPasswordHidden()
+      this.$store.commit('SET_TOKEN', this.token)
+      setToken(this.token)
+      this.$router.push({ path: this.redirect || '/' })
+    },
+    initPasswordHidden(){
+      this.loading = false
+      this.initView = false
     }
   }
 };

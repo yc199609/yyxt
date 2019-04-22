@@ -141,7 +141,7 @@
       <ModifyForm @init='init' @hidden="modifyHidden" :dataObj='modifyForm' :isDefault='changNameform.isDefault'/>
     </el-dialog>
 
-    <div
+    <!-- <div
       class="block pagination"
     >
       <el-pagination
@@ -153,7 +153,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="400"
       ></el-pagination>
-    </div>
+    </div> -->
 
   </div>
 </template>
@@ -189,7 +189,8 @@ export default {
         dbName: String
       },
       dialogChangeVisible: false,
-      changeDbVisible: false
+      changeDbVisible: false,
+      toolbeRunning:false
     }
   },
   components:{
@@ -203,7 +204,7 @@ export default {
       DataBaseList()
         .then(res => {
           if (res.code === 0) {
-            this.tableData = res.data.items
+            this.tableData = res.data
           } else {
             this.$message.error(data.message)
           }
@@ -212,12 +213,12 @@ export default {
           this.$message.error('错误')
         })
     },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    },
+    // handleSizeChange(val) {
+    //   console.log(`每页 ${val} 条`);
+    // },
+    // handleCurrentChange(val) {
+    //   console.log(`当前页: ${val}`);
+    // },
     changNameDialog(data) {
       this.changNameform = { id: data.id, name: data.name }
       this.dialogChangeVisible = true
@@ -251,28 +252,32 @@ export default {
       this.changeDbVisible = true
     },
     offOrON(data, i) {
-      if (data.status === 0) { //目前是停用
-        UpdateStatus({
-          id: data.id,
-          status: 100
-        }).then(res => {
-          var obj = { ...data, status: 100 }
-          this.$set(this.tableData, i, obj)
-        }).catch(err => {
-          console.log(err)
-        })
-      } else {
-        UpdateStatus({
-          id: data.id,
-          status: 0
-        }).then(res => {
-          var obj = { ...data, status: 0 }
-          this.$set(this.tableData, i, obj)
-        }).catch(err => {
-          console.log(err)
-        })
+      if(this.toolbeRunning===false){
+        this.toolbeRunning =true
+        if (data.status === 0) { //目前是停用
+          UpdateStatus({
+            id: data.id,
+            status: 100
+          }).then(res => {
+            this.toolbeRunning = false
+            var obj = { ...data, status: 100 }
+            this.$set(this.tableData, i, obj)
+          }).catch(err => {
+            this.toolbeRunning = false
+          })
+        } else { //目前是启用
+          UpdateStatus({
+            id: data.id,
+            status: 0
+          }).then(res => {
+            this.toolbeRunning = false
+            var obj = { ...data, status: 0 }
+            this.$set(this.tableData, i, obj)
+          }).catch(err => {
+            this.toolbeRunning = false
+          })
+        }
       }
-
     },
   }
 }

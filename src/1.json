@@ -1,0 +1,17 @@
+[
+  {
+    "path": "yuangong",
+    "component": "yuangong"
+
+  },
+  {
+    "path": "yuangong",
+    "component": "'yuangong'"
+  },
+  {
+    "title": "yuangong",
+    "icon": "yuangong",
+    "path": "yuangong",
+    "component": "yuangong"
+  }
+]
