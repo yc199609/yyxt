@@ -12,7 +12,7 @@ const api = {
 }
 
 // 登录
-export function login(mobile, password) {
+export function login({ mobile, password }) {
   return request({
     url: api.login,
     method: 'post',

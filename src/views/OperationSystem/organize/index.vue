@@ -57,7 +57,7 @@
     </el-table>
 
     <div class="block" style="margin-top: 15px;" :data="pageData">
-      <el-pagination
+      <!-- <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="pageData.pageIndex"
@@ -65,6 +65,15 @@
         :page-size="pageData.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="pageData.totalCount"
+      ></el-pagination> -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pageIndex"
+        :page-sizes="[20, 30, 40, 50]"
+        :page-size='pageSize'
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="totalCount"
       ></el-pagination>
     </div>
 
@@ -103,6 +112,9 @@ export default {
       businessData: [],
       organizeData: "",
       currentPage: "",
+      pageIndex: 1,
+      pageSize: 20,
+      totalCount: 1,
       showDialogInformation: false,
       showDialogSetupOrganize: false,
       showDialogBusinessParameters: false,
@@ -110,6 +122,21 @@ export default {
     };
   },
   methods: {
+    init() {
+      debugger
+      companyList({
+        pageIndex: this.pageIndex,
+        pageSize: this.pageSize
+        // totalCount: this.totalCount
+      }).then(res => {
+        debugger
+        console.log(res)
+        this.pageIndex = res.data.pageIndex
+        this.pageSize = res.data.pageSize
+        this.totalCount = res.data.totalCount
+        this.tableData = res.data.items
+      })
+    },
     organizeInformation() {
       // 获取机构列表信息
       const _that = this;
@@ -176,30 +203,23 @@ export default {
     hiddenOrganize() {
       this.showDialogCreatedOrganize = false;
     },
-    handlePageChange(val) {
-      // 当前分页改变时调起
-      this.pageData.PageIndex = val;
-
-      // this.handleLoadAndQuery();
-    },
-    handlePageSizeChange(val) {
-      // 分页页码改变时的调起
-      this.pageData.PageSize = val;
-
-      // this.handleLoadAndQuery()
-    },
     handleLoadAndQuery() {
       console.log("点击搜索按钮了");
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.pageSize = val
+      this.init()
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.pageIndex = val
+      this.init()
     }
   },
   created() {
-    this.organizeInformation();
+    this.organizeInformation()
+  },
+  mounted() {
+    this.init()
   }
 };
 </script>

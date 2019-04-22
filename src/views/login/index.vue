@@ -134,9 +134,9 @@ export default {
     };
     return {
       loginForm: {
-        organize: "Madik",
-        cellPhone: "7758258",
-        password: "admin"
+        organize: "test2",
+        cellPhone: "18888888888",
+        password: "gosafenet.com"
       },
       loginRules: {
         password: [{ required: true, trigger: "blur", validator: validatePass }]
@@ -193,7 +193,7 @@ export default {
                 this.$msgbox({
                   title: '',
                   message: h("div", null, [
-                    h("span", { style: "display: block, margin-bottom: 4%" }, "新密码 "),
+                    h("span", { style: "display: block, margin-bottom: 4%" }, "新密码"),
                     h("el-input", { style: "color: teal; margin-bottom: 8%" }),
                     h("span", { style: "display: block, margin-bottom: 4%" }, "确认密码"),
                     h("el-input", { style: "color: teal" })

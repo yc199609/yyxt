@@ -75,10 +75,11 @@
         console.log(_that.form)
         return new Promise((resolve, reject) => {
           companyCreate(_that.form).then(res => {
-            this.$message({
+            _that.$message({
               type: 'success',
               message: '修改成功'
             });
+            _that.organizeInformation()
             _that.$emit('hiddenOrganize')
           }).catch(err => {
             console.log(err)
