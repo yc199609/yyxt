@@ -12,17 +12,17 @@ const api = {
 }
 
 // 登录
-export function login(mobile, password) {
+export function login({ mobile, password }) {
   return request({
     url: api.login,
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
     },
-    data: {
+    data: JSON.stringify({
       mobile,
       password
-    }
+    })
   })
 }
 

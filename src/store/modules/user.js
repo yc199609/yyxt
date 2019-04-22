@@ -1,12 +1,33 @@
-import { login, logout, getInfo, fristChangePwd, changePassword } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import {
+  login,
+  logout,
+  getInfo,
+  changePassword
+} from '@/api/login'
+
+import {
+  getToken,
+  setToken,
+  removeToken
+} from '@/utils/auth'
 
 const user = {
   state: {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: [],
+    userInfo: [],
+    siteInfo: []
+  },
+
+  getters: {
+    getUserInfo: state => {
+      return state.userInfo
+    },
+    getSiteInfo: state => {
+      return state.siteInfo
+    }
   },
 
   mutations: {
@@ -21,6 +42,12 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_USERINFO: (state, userInfo) => {
+      state.userInfo = userInfo
+    },
+    SET_SITEINFO: (state, siteInfo) => {
+      state.siteInfo = siteInfo
     }
   },
 
@@ -51,28 +78,9 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
           const data = response.data
-          // 判断当前用户是否已经拉取完用户信息
-          // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-          //   commit('SET_ROLES', data.roles)
-          // } else {
-          //   reject('getInfo: roles must be a non-null array !')
-          // }
-          // console.log(response)
-          // console.log(data)
-          commit('SET_NAME', data.siteInfo)
-          commit('SET_AVATAR', data.userInfo)
+          commit('SET_SITEINFO', data.siteInfo)
+          commit('SET_USERINFO', data.userInfo)
           resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-
-    // 首次登录修改密码(初始化密码)
-    fristChangePwd({ state }) {
-      return new Promise((resolve, reject) => {
-        fristChangePwd(state.token).then(response => {
-          resolve()
         }).catch(error => {
           reject(error)
         })
@@ -82,21 +90,22 @@ const user = {
     // 修改密码
     changePassword({ commit, state }) {
       return new Promise((resolve, reject) => {
-        changePassword(state.token).then(response => {
-          console.log(response)
-        }).catch(error => {
-          reject(error)
-        })
+        changePassword(state.token)
+          .then(response => {
+            console.log(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
 
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
-        console.log('退出登录111')
         logout(state.token).then(() => {
-          // commit('SET_TOKEN', '')
-          // commit('SET_ROLES', [])
+          commit('SET_SITEINFO', null)
+          commit('SET_USERINFO', null)
           removeToken()
           resolve()
         }).catch(error => {
@@ -108,9 +117,9 @@ const user = {
     // 前端 登出
     FedLogOut({ commit }) {
       return new Promise(resolve => {
-        // commit('SET_TOKEN', '')
+        commit('SET_SITEINFO', null)
+        commit('SET_USERINFO', null)
         removeToken()
-        console.log('退出登录222')
         resolve()
       })
     }
