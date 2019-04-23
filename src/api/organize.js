@@ -8,7 +8,8 @@ const api = {
   updateConfigItem: '/api/Operation/Company/UpdateConfigItem',
   updateBaseInfo: '/api/Operation/Company/UpdateBaseInfo',
   companyCreate: '/api/Operation/Company/Create',
-  getSystemInfoById: '/api/Operation/Company/GetSystemInfoById'
+  getSystemInfoById: '/api/Operation/Company/GetSystemInfoById',
+  updateSystemInfo: '/api/Operation/Company/UpdateSystemInfo'
 }
 
 // 机构列表
@@ -26,9 +27,21 @@ export function getBaseInfoById(id) {
   return request({
     url: api.getBaseInfoById,
     method: 'get',
-    pramas: {
+    params: {
       id
     }
+  })
+}
+
+// 修改基本信息
+export function updateBaseInfo(obj) {
+  return request({
+    url: api.updateBaseInfo,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: obj
   })
 }
 
@@ -37,7 +50,7 @@ export function getConfigById(id, keyword, pageIndex, pageSize) {
   return request({
     url: api.getConfigById,
     method: 'get',
-    pramas: {
+    params: {
       id,
       keyword,
       pageIndex,
@@ -62,19 +75,6 @@ export function updateConfigItem(id, companyId, value) {
   })
 }
 
-// 此处没写
-// 修改基本信息
-export function updateBaseInfo(obj) {
-  return request({
-    url: api.updateBaseInfo,
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    data: obj
-  })
-}
-
 // 创建机构
 export function companyCreate(obj) {
   return request({
@@ -92,6 +92,20 @@ export function getSystemInfoById(id) {
   return request({
     url: api.getSystemInfoById,
     method: 'get',
-    pramas: id
+    params: {
+      id
+    }
+  })
+}
+
+// 修改机构
+export function updateSystemInfo(obj) {
+  return request({
+    url: api.updateSystemInfo,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: obj
   })
 }

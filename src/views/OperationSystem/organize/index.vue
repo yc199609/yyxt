@@ -56,16 +56,7 @@
       </el-table-column>
     </el-table>
 
-    <div class="block" style="margin-top: 15px;" :data="pageData">
-      <!-- <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pageData.pageIndex"
-        :page-sizes="[2, 5, 10, 100]"
-        :page-size="pageData.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pageData.totalCount"
-      ></el-pagination> -->
+    <div class="block" style="margin-top: 15px;">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -77,19 +68,19 @@
       ></el-pagination>
     </div>
 
-    <el-dialog :visible.sync="showDialogInformation" :modal-append-to-body="false">
+    <el-dialog :visible.sync="showDialogInformation" :modal-append-to-body="false" :closeOnClickModal="false">
       <baseInformation ref="baseInformation" v-if="showDialogInformation" @hidden="hidden"/>
     </el-dialog>
 
-    <el-dialog :visible.sync="showDialogSetupOrganize" :modal-append-to-body="false">
-      <setupOrganize :organizeData="organizeData"/>
+    <el-dialog :visible.sync="showDialogSetupOrganize" :modal-append-to-body="false" :closeOnClickModal="false">
+      <setupOrganize :organizeData="organizeData" @hiddenSetupOrganize="hiddenSetupOrganize"/>
     </el-dialog>
 
-    <el-dialog :visible.sync="showDialogBusinessParameters" :modal-append-to-body="false">
+    <el-dialog :visible.sync="showDialogBusinessParameters" :modal-append-to-body="false" :closeOnClickModal="false">
       <businessParameters :businessData="businessData"/>
     </el-dialog>
 
-    <el-dialog :visible.sync="showDialogCreatedOrganize" :modal-append-to-body="false">
+    <el-dialog :visible.sync="showDialogCreatedOrganize" :modal-append-to-body="false" :closeOnClickModal="false">
       <createdOrganize @hiddenOrganize="hiddenOrganize"/>
     </el-dialog>
   </div>
@@ -108,9 +99,8 @@ export default {
     return {
       ret: "",
       retData: [],
-      pageData: "",
       businessData: [],
-      organizeData: "",
+      organizeData: {},
       currentPage: "",
       keyword: "",
       pageIndex: 1,
@@ -124,36 +114,20 @@ export default {
   },
   methods: {
     init() {
-      // debugger
-      companyList(
-        this.keyword,
-        this.pageIndex,
-        this.pageSize
-        // totalCount: this.totalCount
+      // 获取机构列表信息
+      companyList({
+        // this.keyword,
+        pageIndex: this.pageIndex,
+        pageSize: this.pageSize,
+        totalCount: this.totalCount
+      }
       ).then(res => {
-        // debugger
-        console.log(res)
         this.pageIndex = res.data.pageIndex
         this.pageSize = res.data.pageSize
         this.totalCount = res.data.totalCount
-        this.tableData = res.data.items
+        this.retData = res.data.items
       })
     },
-    // organizeInformation() {
-    //   // 获取机构列表信息
-    //   const _that = this;
-    //   return new Promise((resolve, reject) => {
-    //     companyList(this.keyword, this.pageIndex, this.pageSize)
-    //       .then(response => {
-    //         _that.ret = response.data;
-    //         _that.retData = response.data.items;
-    //         _that.pageData = response.data;
-    //       })
-    //       .catch(err => {
-    //         console.log(err);
-    //       });
-    //   });
-    // },
     baseInfo(res) {
       // 基本信息
       const _that = this;
@@ -163,12 +137,24 @@ export default {
           .then(response => {
             const formData = response.data;
             this.$refs.baseInformation.form = formData;
-            console.log(formData);
+            // console.log(formData);
           })
           .catch(err => {
             console.log(err);
           });
       });
+    },
+    setOrganize(res) {
+      // 获取系统设置  机构设置
+      const _that = this
+      _that.showDialogSetupOrganize = true
+      return new Promise((resolve,reject) => {
+        getSystemInfoById(res.id).then(res => {
+          _that.organizeData = res.data
+        }).catch(err => {
+          console.log(err)
+        })
+      })
     },
     busParams(res) {
       // 业务参数
@@ -186,40 +172,32 @@ export default {
           });
       });
     },
-    setOrganize(res) {
-      // 获取系统设置  机构设置
-      const _that = this
-      _that.showDialogSetupOrganize = true
-      return new Promise((resolve,reject) => {
-        getSystemInfoById(res.id).then(res => {
-          _that.organizeData = res.data
-          console.log(_that.organizeData)
-        }).catch(err => {
-          console.log(err)
-        })
-      })
-    },
     hidden() {
       this.showDialogInformation = false;
     },
     hiddenOrganize() {
-      this.showDialogCreatedOrganize = false;
+      this.showDialogCreatedOrganize = false
+      this.init()
+    },
+    hiddenSetupOrganize() {
+      this.showDialogSetupOrganize = false
     },
     handleLoadAndQuery() {
-      console.log("点击搜索按钮了");
+      console.log("点击搜索按钮了")
     },
     handleSizeChange(val) {
+      console.log(val)
       this.pageSize = val
+      console.log(val)
       this.init()
     },
     handleCurrentChange(val) {
+      console.log(val)
       this.pageIndex = val
+      console.log(val)
       this.init()
     }
   },
-  // created() {
-  //   this.organizeInformation()
-  // },
   mounted() {
     this.init()
   }

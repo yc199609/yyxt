@@ -7,19 +7,19 @@
         <el-row :gutter="24">
           <el-col :span="8">
             <el-form-item label="简称">
-              <el-input :value="form.id"></el-input>
+              <el-input v-model="form.id"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item label="全称">
-              <el-input :value="form.fullname"></el-input>
+              <el-input v-model="form.fullName"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item label="代码">
-              <el-input :value="form.code"></el-input>
+              <el-input v-model="form.code"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -27,19 +27,19 @@
         <el-row :gutter="24">
           <el-col :span="8">
             <el-form-item label="外线电话">
-              <el-input placeholder="请输入外线电话" :value="form.outsidePhone"></el-input>
+              <el-input placeholder="请输入外线电话" v-model="form.outsidePhone"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item label="内线电话">
-              <el-input placeholder="请输入内线电话" :value="form.insidePhone"></el-input>
+              <el-input placeholder="请输入内线电话" v-model="form.insidePhone"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item label="传真">
-              <el-input placeholder="请输入机构传真" :value="form.fax"></el-input>
+              <el-input placeholder="请输入机构传真" v-model="form.fax"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -47,13 +47,13 @@
         <el-row :gutter="24">
           <el-col :span="8">
             <el-form-item label="经营范围">
-              <el-input placeholder="请输入机构经营范围" :value="form.businessScop"></el-input>
+              <el-input placeholder="请输入机构经营范围" v-model="form.businessScop"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item label="楼层">
-              <el-input placeholder="请输入机构楼层" :value="form.floor"></el-input>
+              <el-input placeholder="请输入机构楼层" v-model="form.floor"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -61,7 +61,7 @@
         <el-row>
           <el-col>
             <el-form-item label="详细地址">
-              <el-input placeholder="请输入机构详细地址" :value="form.address"></el-input>
+              <el-input placeholder="请输入机构详细地址" v-model="form.address"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
