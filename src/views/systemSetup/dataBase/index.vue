@@ -1,5 +1,5 @@
 <template>
-  <div style="padding:3vw;width:82.6vw">
+  <div style="padding:3vw;">
     <el-alert
       :closable="false"
       title="数据库参数"
@@ -8,7 +8,7 @@
 
     <el-table
       :data="tableData"
-       max-height="50vh"
+      max-height="50vh"
       border
       style="width: 100%;overflow-y: auto;"
     >
@@ -63,7 +63,10 @@
       >
         <template slot-scope="scope">
           <el-row>
-            <el-col :span='8'>
+            <el-col
+              :span='8'
+              class="ycbutton"
+            >
               <el-tooltip
                 class="item"
                 effect="dark"
@@ -77,7 +80,10 @@
                 ></el-button>
               </el-tooltip>
             </el-col>
-            <el-col :span='8'>
+            <el-col
+              :span='8'
+              class="ycbutton"
+            >
               <el-tooltip
                 class="item"
                 effect="dark"
@@ -91,7 +97,10 @@
                 ></el-button>
               </el-tooltip>
             </el-col>
-            <el-col :span='8'>
+            <el-col
+              :span='8'
+              class="ycbutton"
+            >
               <el-tooltip
                 class="item"
                 effect="dark"
@@ -114,8 +123,13 @@
       title="修改名称"
       :visible.sync="dialogChangeVisible"
     >
-      <el-form v-model="changNameform">
+      <el-form
+        :model="changNameform"
+        ref='form'
+        :rules="rules"
+      >
         <el-form-item
+          prop="name"
           label="数据库名称"
           label-width="120px"
         >
@@ -138,22 +152,14 @@
       title="修改数据库配置信息"
       :visible.sync="changeDbVisible"
     >
-      <ModifyForm @init='init' @hidden="modifyHidden" :dataObj='modifyForm' :isDefault='changNameform.isDefault'/>
+      <ModifyForm
+        v-if="changeDbVisible"
+        @init='init'
+        @hidden="modifyHidden"
+        :dataObj='modifyForm'
+        :isDefault='changNameform.isDefault'
+      />
     </el-dialog>
-
-    <!-- <div
-      class="block pagination"
-    >
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="1"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
-      ></el-pagination>
-    </div> -->
 
   </div>
 </template>
@@ -179,21 +185,19 @@ export default {
         id: '',
         name: ''
       },
+      rules: {
+        name: [
+          { required: true, message: '请输入数据库名称', trigger: 'blur' }
+        ]
+      },
       modifyForm: {
-        id: Number,
-        ip: String,
-        port: Number,
-        userName: String,
-        password: String,
-        isDefault: Number,
-        dbName: String
       },
       dialogChangeVisible: false,
       changeDbVisible: false,
-      toolbeRunning:false
+      toolbeRunning: false
     }
   },
-  components:{
+  components: {
     ModifyForm
   },
   mounted() {
@@ -213,47 +217,42 @@ export default {
           this.$message.error('错误')
         })
     },
-    // handleSizeChange(val) {
-    //   console.log(`每页 ${val} 条`);
-    // },
-    // handleCurrentChange(val) {
-    //   console.log(`当前页: ${val}`);
-    // },
+    // 打开修改数据库名称的弹框
     changNameDialog(data) {
       this.changNameform = { id: data.id, name: data.name }
       this.dialogChangeVisible = true
     },
+    // 提交修改数据库名称的表单
     changName() {
-      UpdateBaseInfo(this.changNameform)
-        .then(res => {
-          if (res.code === 0) {
-            this.$message({
-              type: "success",
-              message: "修改成功",
-              duration: 500,
-              onClose: () => {
-                this.dialogChangeVisible = false
-                this.init()
-              }
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          UpdateBaseInfo(this.changNameform)
+            .then(res => {
+              this.$message({
+                type: "success",
+                message: "修改成功",
+                duration: 500,
+                onClose: () => {
+                  this.dialogChangeVisible = false
+                  this.init()
+                }
+              })
             })
-          } else {
-            this.$message.error(res.message)
-          }
-        })
-        .catch(err => {
-          this.$message.error('错误')
-        })
+        }
+      })
     },
-    modifyHidden(){
+    // 关闭修改数据库配置信息的弹框
+    modifyHidden() {
       this.changeDbVisible = false
     },
+    // 打开修改数据库配置信息的弹框
     modifyDialog(data) {
-      this.modifyForm = data
+      this.$set(this,"modifyForm",data)
       this.changeDbVisible = true
     },
     offOrON(data, i) {
-      if(this.toolbeRunning===false){
-        this.toolbeRunning =true
+      if (this.toolbeRunning === false) {
+        this.toolbeRunning = true
         if (data.status === 0) { //目前是停用
           UpdateStatus({
             id: data.id,
@@ -284,7 +283,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .pagination{
-    margin-top: 15px;
-  }
+.pagination {
+  margin-top: 15px;
+}
+</style>
+
+<style lang="css" scoped>
+.ycbutton >>> .el-button--medium {
+  padding: 0.6vw 1.2vw;
+}
 </style>

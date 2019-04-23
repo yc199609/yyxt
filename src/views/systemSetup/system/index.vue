@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    
     <el-alert :closable="false" title="系统参数" type="success">
       <router-view />
     </el-alert>
@@ -126,6 +127,7 @@ export default {
           message: '修改成功',
           duration: 500,
           onClose:()=>{
+            this.init()
             this.dialogEditVisible = false
           }
         })
@@ -138,7 +140,6 @@ export default {
 <style lang="scss" scoped>
   .container{
     padding:3vw;
-    width:82.6vw;
     .table{
       width:100%;
     }
