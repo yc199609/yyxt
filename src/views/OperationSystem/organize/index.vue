@@ -1,34 +1,25 @@
 <template>
   <div style="padding:1vw;width:82.6vw;margin:auto;">
     <section class="conditional-query-container" style="margin-top: .5rem">
-      <el-row class="query-wrapper-row">
-        <el-col :span="10">
-          <el-button
-            type="success"
-            size="small"
-            @click="createdOrganizeDialog"
-          >创建机构</el-button>
-        </el-col>
+      <section class="query-wrapper-row">
+        <section class="query-wrapper-row-item ">
+          <section class="label-text">复合筛选</section>
 
-        <el-col :span="20" class="query-wrapper-row-right">
-          <section class="query-wrapper-row-item">
-            <section class="label-text">复合筛选</section>
-
-            <section>
-              <el-input
-                placeholder="请输入关键字搜索"
-                @keyup.enter.native="handleLoadAndQuery"
-                size="small"
-                :clearable="true"
-              ></el-input>
-            </section>
+          <section>
+            <el-input
+              placeholder="请输入关键字搜索"
+              @keyup.enter.native="handleLoadAndQuery"
+              size="small"
+              v-model="keyword"
+              :clearable="true"
+            ></el-input>
           </section>
-        </el-col>
+        </section>
 
-        <el-col :span="2">
-          <el-button type="danger" size="small" icon="el-icon-search" @click="handleLoadAndQuery">搜索</el-button>
-        </el-col>
-      </el-row>
+        <el-button type="success" plain size="small" icon="el-icon-search" @click="handleLoadAndQuery">搜索</el-button>
+
+        <el-button type="warning" plain size="small" @click="createdOrganizeDialog">创建机构</el-button>
+      </section>
     </section>
 
     <el-alert :closable="false" title="机构列表" type="success"></el-alert>
@@ -85,6 +76,7 @@ import createdOrganize from "./createdOrganize"
 import { companyList, getBaseInfoById, getConfigById, getSystemInfoById } from "@/api/organize"
 
 export default {
+  name: 'organize',
   components: { baseInformation, setupOrganize, businessParameters, createdOrganize },
   data() {
     return {
@@ -109,7 +101,8 @@ export default {
       // 获取机构列表信息
       companyList({
         pageIndex: this.pageIndex,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        keyword: this.keyword
       }
       ).then(res => {
         this.pageIndex = res.data.pageIndex
@@ -131,13 +124,13 @@ export default {
     busParams(id) {
       this.$refs.businessData.init(id)
     },
-    // 新增弹框
+    // 创建机构
     createdOrganizeDialog(){
-      console.log(111)
       this.$refs.createdOrganize.init()
     },
     handleLoadAndQuery() {
       console.log("点击搜索按钮了")
+      this.init()
     },
     handleSizeChange(val) {
       console.log(val)
@@ -187,7 +180,7 @@ export default {
   flex-direction: column;
   justify-content: flex-end;
   padding-right: 1rem;
-  width: 100%;
+  // width: 100%;
 }
 
 .conditional-query-container .query-wrapper-row-item:last-child {
