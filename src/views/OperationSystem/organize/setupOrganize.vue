@@ -83,9 +83,13 @@ export default {
         .then(res => {
           this.$message({
             type: "success",
-            message: "修改成功"
+            message: "修改成功",
+            duration:500,
+            onClose:()=>{
+              this.visible = false
+              this.$emit('render')
+            }
           })
-          this.visible = false
         })
     },
     dataBase() {

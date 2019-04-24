@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="visible">
+  <el-dialog :visible.sync="visible" @close="render">
     <div style="padding:1vw;">
       <span>业务参数</span>
       <hr style="background-color:#f7eaea; height: 1px; border: none;">
@@ -22,7 +22,16 @@
           align="center"
           prop="value"
           label="值"
-        ></el-table-column>
+        >
+        <template slot-scope="{row}">
+          <template v-if="row.edit">
+            <el-input v-model="row.value"></el-input>
+          </template>
+          <span v-else>{{row.value}}</span>
+        </template>
+
+
+        </el-table-column>
         <el-table-column
           align="center"
           prop="description"
@@ -33,12 +42,12 @@
           prop="operation"
           label="操作"
         >
-          <template slot-scope="scope">
+          <template slot-scope="{row}">
             <el-button
-              type="primary"
+              :type="row.edit?'success':'warning'"
               icon="el-icon-edit"
-              @click="modify(scope.row)"
-            >修改</el-button>
+              @click="modify(row)"
+            >{{row.edit?"保存":"修改"}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -65,21 +74,32 @@ export default {
       getConfigById({id,pageIndex:this.pageIndex,PageSize:this.PageSize})
         .then(res => {
           this.$set(this,"businessData",res.data.items)
+          console.log(this.businessData)
         })
     },
-    modify(res) {
+    modify(row) {
       // 修改业务参数值
-      console.log(res);
-      const _that = this;
-      return new Promise((resolve, reject) => {
-        updateConfigItem(res)
-          .then(response => {
-            console.log(response);
+        if(row.edit){
+          //保存
+          updateConfigItem(row)
+          .then(res => {
+            this.$message({
+              type:'success',
+              message:"成功",
+              duration:500,
+              onClose:()=>{
+                this.$set(row,'edit',false)
+              }
+            })
           })
-          .catch(err => {
-            console.log(err);
-          });
-      });
+        }else{
+          // 修改
+          this.$set(row,'edit',true)
+        }
+
+    },
+    render(){
+      this.$emit('render')
     }
   }
 };

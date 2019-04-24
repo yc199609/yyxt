@@ -55,7 +55,7 @@ export function getConfigById(obj) {
 }
 
 // 修改业务参数
-export function updateConfigItem(id, companyId, value) {
+export function updateConfigItem(obj) {
   return request({
     url: api.updateConfigItem,
     method: 'post',
@@ -63,9 +63,9 @@ export function updateConfigItem(id, companyId, value) {
       'Content-Type': 'application/json'
     },
     data: {
-      id,
-      companyId,
-      value
+      id: obj.id,
+      companyId: obj.companyId,
+      value: obj.value
     }
   })
 }

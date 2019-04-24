@@ -1,6 +1,8 @@
 <template>
   <div class="container">
     
+    <Search @search='init'/>
+
     <el-alert :closable="false" title="系统参数" type="success">
       <router-view />
     </el-alert>
@@ -74,6 +76,7 @@
 </template>
 
 <script>
+import Search from '@/components/Search'
 import {SystemConfigList,SystemConfigUpdate} from '@api/systemSetup/system'
 export default {
   data() {
@@ -93,11 +96,15 @@ export default {
   mounted(){
     this.init()
   },
+  components:{
+    Search
+  },
   methods: {
-    init(){
+    init(keyword){
       SystemConfigList({
         pageIndex:this.pageIndex,
-        pageSize:this.pageSize
+        pageSize:this.pageSize,
+        keyword
       })
       .then(res =>{
         this.pageIndex = res.data.pageIndex
