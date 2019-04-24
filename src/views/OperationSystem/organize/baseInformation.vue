@@ -129,9 +129,18 @@ export default {
     },
     saveInfo() {
       // 保存修改基本信息
-        updateBaseInfo(this.form).then(res => {
-          this.visible = false
-        })
+        updateBaseInfo(this.form)
+          .then(res => {
+            this.$message({
+              type:'success',
+              message:'成功',
+              duration:500,
+              onClose:()=>{
+                this.visible = false
+                this.$emit('render')
+              }
+            })
+          })
     }
   }
 };

@@ -1,5 +1,8 @@
 <template>
   <div style="padding:3vw;">
+
+    <Search @search='init'/>
+
     <el-alert
       :closable="false"
       title="数据库参数"
@@ -7,10 +10,10 @@
     />
 
     <el-table
+      class="Thistable"
       :data="tableData"
-      max-height="50vh"
       border
-      style="width: 100%;overflow-y: auto;"
+      style="width: 100%;"
     >
       <el-table-column
         align="center"
@@ -47,7 +50,7 @@
       >
         <template slot-scope="scope">
           <el-tag
-            v-if="scope.row.status===0"
+            v-if="scope.row.status===100"
             type="success"
           >启用</el-tag>
           <el-tag
@@ -68,7 +71,6 @@
               class="ycbutton"
             >
               <el-tooltip
-                class="item"
                 effect="dark"
                 content="修改名称"
                 placement="top"
@@ -85,7 +87,6 @@
               class="ycbutton"
             >
               <el-tooltip
-                class="item"
                 effect="dark"
                 content="修改配置"
                 placement="top"
@@ -102,14 +103,13 @@
               class="ycbutton"
             >
               <el-tooltip
-                class="item"
                 effect="dark"
-                :content="scope.row.status===0?'停用':'启用'"
+                :content="scope.row.status===100?'停用':'启用'"
                 placement="top"
               >
                 <el-button
-                  :type="scope.row.status===0?'danger':'success'"
-                  :icon="scope.row.status===0?'el-icon-remove-outline':'el-icon-circle-check-outline'"
+                  :type="scope.row.status===100?'danger':'success'"
+                  :icon="scope.row.status===100?'el-icon-remove-outline':'el-icon-circle-check-outline'"
                   @click="offOrON(scope.row,scope.$index)"
                 ></el-button>
               </el-tooltip>
@@ -167,6 +167,7 @@
 <script>
 import { DataBaseList, UpdateBaseInfo, UpdateStatus } from '@api/systemSetup/dataBase'
 import ModifyForm from './ModifyForm'
+import Search from '@/components/Search'
 export default {
   data() {
     return {
@@ -194,27 +195,21 @@ export default {
       },
       dialogChangeVisible: false,
       changeDbVisible: false,
-      toolbeRunning: false
+      toolbeRunning: false,  // 节流阀
     }
   },
   components: {
-    ModifyForm
+    ModifyForm,
+    Search
   },
   mounted() {
     this.init()
   },
   methods: {
-    init() {
-      DataBaseList()
+    init(keyword) {
+      DataBaseList(keyword)
         .then(res => {
-          if (res.code === 0) {
-            this.tableData = res.data
-          } else {
-            this.$message.error(data.message)
-          }
-        })
-        .catch(err => {
-          this.$message.error('错误')
+          this.tableData = res.data
         })
     },
     // 打开修改数据库名称的弹框
@@ -254,30 +249,34 @@ export default {
       if (this.toolbeRunning === false) {
         this.toolbeRunning = true
         if (data.status === 0) { //目前是停用
-          UpdateStatus({
-            id: data.id,
-            status: 100
-          }).then(res => {
-            this.toolbeRunning = false
-            var obj = { ...data, status: 100 }
-            this.$set(this.tableData, i, obj)
-          }).catch(err => {
-            this.toolbeRunning = false
-          })
+           changStatus("on")
         } else { //目前是启用
-          UpdateStatus({
-            id: data.id,
-            status: 0
-          }).then(res => {
-            this.toolbeRunning = false
-            var obj = { ...data, status: 0 }
-            this.$set(this.tableData, i, obj)
-          }).catch(err => {
-            this.toolbeRunning = false
-          })
+          changStatus("off")
         }
       }
     },
+    // 发送更改请求
+    changStatus(type){
+      UpdateStatus({
+        id: data.id,
+        status: type==='on'?100:0
+      })
+        .then(res => {
+          this.$message({
+            type:"success",
+            message:`已成功${type==='on'?'启用':'停用'}`,
+            duration: 1000,
+            onClose:()=>{
+              this.toolbeRunning = false
+              var obj = { ...data, status: type==="on"?100:0 }
+              this.$set(this.tableData, i, obj)
+            }
+          })
+        })
+        .catch(err => {
+          this.toolbeRunning = false
+        })
+    }
   }
 }
 </script>
@@ -289,7 +288,11 @@ export default {
 </style>
 
 <style lang="css" scoped>
-.ycbutton >>> .el-button--medium {
-  padding: 0.6vw 1.2vw;
-}
+  .Thistable >>> .el-table__body-wrapper {
+      max-height:50vh;
+      overflow-y:auto;
+  }
+  .ycbutton >>> .el-button--medium {
+    padding: 0.5vw 1vw;
+  }
 </style>

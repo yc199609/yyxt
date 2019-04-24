@@ -33,7 +33,7 @@
 
     <el-alert :closable="false" title="机构列表" type="success"></el-alert>
 
-    <el-table :data="retData" border style="width: 100%">
+    <el-table :data="retData" border class="Thistable" style="width: 100%;">
       <el-table-column align="center" prop="name" label="简称"></el-table-column>
       <el-table-column align="center" prop="code" label="代码"></el-table-column>
       <el-table-column align="center" prop="dmsSite" label="站点"></el-table-column>
@@ -41,15 +41,23 @@
       <el-table-column align="center" prop="parentCompanyName" label="父级机构名"></el-table-column>
       <el-table-column align="center" prop="operation" label="操作">
         <template slot-scope="scope">
-          <el-button style="margin-bottom: 10px;" @click="baseInfo(scope.row.id)">基本信息</el-button>
-          <br>
-          <el-button
-            style="margin-bottom: 10px;"
-            type="primary"
-            @click="setOrganize(scope.row.id)"
-          >机构设置</el-button>
-          <br>
-          <el-button type="success" @click="busParams(scope.row.id)">业务参数</el-button>
+          <el-row>
+            <el-col :span='8' class="ycbutton">
+              <el-tooltip content="基本信息" placement="top" effect="dark">
+                <el-button  type="info" icon="el-icon-document" @click="baseInfo(scope.row.id)"></el-button>
+              </el-tooltip>
+            </el-col>
+            <el-col :span='8' class="ycbutton">
+              <el-tooltip content="机构设置" placement="top" effect="dark">
+                <el-button type="warning" icon="el-icon-setting" @click="setOrganize(scope.row.id)"></el-button>
+              </el-tooltip>
+            </el-col>
+            <el-col :span='8' class="ycbutton">
+              <el-tooltip content="业务参数" placement="top" effect="dark">
+                <el-button type="success" icon="el-icon-menu" @click="busParams(scope.row.id)"></el-button>
+              </el-tooltip>
+            </el-col>
+          </el-row>
         </template>
       </el-table-column>
     </el-table>
@@ -66,11 +74,11 @@
       ></el-pagination>
     </div>
 
-    <baseInformation ref="baseInf"/>
+    <baseInformation @render="init" ref="baseInf"/>
 
-    <setupOrganize ref="setOrganize"/>
+    <setupOrganize @render="init" ref="setOrganize"/>
 
-    <businessParameters ref="businessData"/>
+    <businessParameters @render="init" ref="businessData"/>
 
     <createdOrganize @render="init" ref="createdOrganize"/>
 
@@ -133,22 +141,17 @@ export default {
     },
     // 新增弹框
     createdOrganizeDialog(){
-      console.log(111)
       this.$refs.createdOrganize.init()
     },
     handleLoadAndQuery() {
       console.log("点击搜索按钮了")
     },
     handleSizeChange(val) {
-      console.log(val)
       this.pageSize = val
-      console.log(val)
       this.init()
     },
     handleCurrentChange(val) {
-      console.log(val)
       this.pageIndex = val
-      console.log(val)
       this.init()
     }
   },
@@ -213,4 +216,14 @@ export default {
   margin-bottom: 20px;
   background-color: #fff;
 }
+</style>
+
+<style lang='css' scoped>
+  .Thistable >>> .el-table__body-wrapper {
+      max-height:50vh;
+      overflow-y:auto;
+  }
+  .ycbutton >>> .el-button--medium {
+    padding: 0.5vw 1vw;
+  }
 </style>
