@@ -7,7 +7,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 /* Layout */
-import Layout from '../views/layout/Layout'
+import Layout from '../layout'
 
 /**
 * hidden: true if `hidden:true` will not show in the sidebar(default is false)
@@ -39,6 +39,8 @@ export const constantRouterMap = [
   {
     path: '/OperationSystem',
     component: Layout,
+    redirect: '/OperationSystem/organize',
+    alwaysShow: true,
     name: 'OperationSystem',
     meta: { title: '业务系统', icon: 'nested' },
     children: [
@@ -53,6 +55,8 @@ export const constantRouterMap = [
   {
     path: '/systemSetup',
     component: Layout,
+    alwaysShow: true,
+    redirect: '/systemSetup/dataBase',
     name: 'systemSetup',
     meta: { title: '系统设置', icon: 'form' },
     children: [

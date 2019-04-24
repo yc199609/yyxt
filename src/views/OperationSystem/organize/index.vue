@@ -6,7 +6,7 @@
           <el-button
             type="success"
             size="small"
-            @click="showDialogCreatedOrganize=true"
+            @click="createdOrganizeDialog"
           >创建机构</el-button>
         </el-col>
 
@@ -31,9 +31,7 @@
       </el-row>
     </section>
 
-    <el-alert :closable="false" title="机构列表" type="success">
-      <router-view/>
-    </el-alert>
+    <el-alert :closable="false" title="机构列表" type="success"></el-alert>
 
     <el-table :data="retData" border style="width: 100%">
       <el-table-column align="center" prop="name" label="简称"></el-table-column>
@@ -43,15 +41,15 @@
       <el-table-column align="center" prop="parentCompanyName" label="父级机构名"></el-table-column>
       <el-table-column align="center" prop="operation" label="操作">
         <template slot-scope="scope">
-          <el-button style="margin-bottom: 10px;" @click="baseInfo(scope.row)">基本信息</el-button>
+          <el-button style="margin-bottom: 10px;" @click="baseInfo(scope.row.id)">基本信息</el-button>
           <br>
           <el-button
             style="margin-bottom: 10px;"
             type="primary"
-            @click="setOrganize(scope.row)"
+            @click="setOrganize(scope.row.id)"
           >机构设置</el-button>
           <br>
-          <el-button type="success" @click="busParams(scope.row)">业务参数</el-button>
+          <el-button type="success" @click="busParams(scope.row.id)">业务参数</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -68,21 +66,14 @@
       ></el-pagination>
     </div>
 
-    <el-dialog :visible.sync="showDialogInformation" :modal-append-to-body="false" :closeOnClickModal="false">
-      <baseInformation ref="baseInformation" v-if="showDialogInformation" @hidden="hidden"/>
-    </el-dialog>
+    <baseInformation ref="baseInf"/>
 
-    <el-dialog :visible.sync="showDialogSetupOrganize" :modal-append-to-body="false" :closeOnClickModal="false">
-      <setupOrganize :organizeData="organizeData" @hiddenSetupOrganize="hiddenSetupOrganize"/>
-    </el-dialog>
+    <setupOrganize ref="setOrganize"/>
 
-    <el-dialog :visible.sync="showDialogBusinessParameters" :modal-append-to-body="false" :closeOnClickModal="false">
-      <businessParameters :businessData="businessData"/>
-    </el-dialog>
+    <businessParameters ref="businessData"/>
 
-    <el-dialog :visible.sync="showDialogCreatedOrganize" :modal-append-to-body="false" :closeOnClickModal="false">
-      <createdOrganize @hiddenOrganize="hiddenOrganize"/>
-    </el-dialog>
+    <createdOrganize @render="init" ref="createdOrganize"/>
+
   </div>
 </template>
 
@@ -106,81 +97,44 @@ export default {
       pageIndex: 1,
       pageSize: 20,
       totalCount: 1,
-      showDialogInformation: false,
-      showDialogSetupOrganize: false,
       showDialogBusinessParameters: false,
       showDialogCreatedOrganize: false
     };
+  },
+  mounted() {
+    this.init()
   },
   methods: {
     init() {
       // 获取机构列表信息
       companyList({
-        // this.keyword,
         pageIndex: this.pageIndex,
-        pageSize: this.pageSize,
-        totalCount: this.totalCount
+        pageSize: this.pageSize
       }
       ).then(res => {
         this.pageIndex = res.data.pageIndex
         this.pageSize = res.data.pageSize
         this.totalCount = res.data.totalCount
-        this.retData = res.data.items
+        this.$set(this,"retData",res.data.items)
       })
     },
-    baseInfo(res) {
+    // 打开基本信息弹框
+    baseInfo(id) {
       // 基本信息
-      const _that = this;
-      _that.showDialogInformation = true;
-      return new Promise((resolve, reject) => {
-        getBaseInfoById(res.id)
-          .then(response => {
-            const formData = response.data;
-            this.$refs.baseInformation.form = formData;
-            // console.log(formData);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      });
+      this.$refs.baseInf.init(id)
+   },
+   // 获取系统设置  机构设置
+    setOrganize(id) {
+      this.$refs.setOrganize.init(id)
     },
-    setOrganize(res) {
-      // 获取系统设置  机构设置
-      const _that = this
-      _that.showDialogSetupOrganize = true
-      return new Promise((resolve,reject) => {
-        getSystemInfoById(res.id).then(res => {
-          _that.organizeData = res.data
-        }).catch(err => {
-          console.log(err)
-        })
-      })
+    // 业务参数
+    busParams(id) {
+      this.$refs.businessData.init(id)
     },
-    busParams(res) {
-      // 业务参数
-      const _that = this;
-      const ret = this.ret;
-      this.showDialogBusinessParameters = true;
-      return new Promise((resolve, reject) => {
-        getConfigById(res.id, "", ret.pageIndex, ret.PageSize)
-          .then(response => {
-            _that.businessData = response.data.items;
-            console.log(_that.businessData);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      });
-    },
-    hidden() {
-      this.showDialogInformation = false;
-    },
-    hiddenOrganize() {
-      this.showDialogCreatedOrganize = false
-      this.init()
-    },
-    hiddenSetupOrganize() {
-      this.showDialogSetupOrganize = false
+    // 新增弹框
+    createdOrganizeDialog(){
+      console.log(111)
+      this.$refs.createdOrganize.init()
     },
     handleLoadAndQuery() {
       console.log("点击搜索按钮了")
@@ -198,9 +152,6 @@ export default {
       this.init()
     }
   },
-  mounted() {
-    this.init()
-  }
 };
 </script>
 

@@ -15,12 +15,9 @@
 </template>
 
 <script>
-import { menus} from '@/bb'
 import { mapGetters } from 'vuex'
 import variables from '@/styles/variables.scss'
 import SidebarItem from './SidebarItem'
-
-console.log(menus)
 
 export default {
   components: { SidebarItem },

@@ -46,16 +46,11 @@ export function updateBaseInfo(obj) {
 }
 
 // 业务参数
-export function getConfigById(id, keyword, pageIndex, pageSize) {
+export function getConfigById(obj) {
   return request({
     url: api.getConfigById,
     method: 'get',
-    params: {
-      id,
-      keyword,
-      pageIndex,
-      pageSize
-    }
+    params: obj
   })
 }
 
