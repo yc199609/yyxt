@@ -1,12 +1,16 @@
 <template>
   <div class="navbar">
-    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
+    <h3 :class="sidebar.opened?'h3':'h3 h3hidden'">
+      <img :src="require('@/assets/404_images/404.png')" width="54px" height="48px" class="titleImg" />
+      <span>ssss</span>
+    </h3>
+    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />
     <breadcrumb />
     <lang-select class="right-menu-item hover-effect" />
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
         <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
-        <i class="el-icon-caret-bottom"/>
+        <i class="el-icon-caret-bottom" />
       </div>
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
         <router-link class="inlineBlock" to="/">
@@ -54,12 +58,35 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+.titleImg{
+  vertical-align: middle;
+}
+.h3{
+  overflow: hidden;
+  background-color: #67c23a;
+  white-space : nowrap ;
+  color:white;
+  position: fixed;
+  margin: 0;
+  width: 210px;
+  height: 50px;
+  left: 0;
+  top: 0;
+  transition:width 0.28s;
+  @media screen and (max-width: 992px) {
+    width: 54px;
+  }
+}
+.h3hidden{
+  width: 54px;
+}
 .navbar {
+  position: relative;
   height: 50px;
   width: 100%;
   line-height: 50px;
   background-color: #fff;
-  box-shadow: 0 1px 3px 0 rgba(0,0,0,.12), 0 0 3px 0 rgba(0,0,0,.04);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
   position: fixed;
   top: 0;
   z-index: 999999;
@@ -84,10 +111,10 @@ export default {
 
     &.hover-effect {
       cursor: pointer;
-      transition: background .3s;
+      transition: background 0.3s;
 
       &:hover {
-        background: rgba(0, 0, 0, .025)
+        background: rgba(0, 0, 0, 0.025);
       }
     }
   }

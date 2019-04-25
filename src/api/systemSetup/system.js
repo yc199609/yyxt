@@ -4,7 +4,13 @@ const Api = {
   SystemConfigUpdate: '/api/Operation/SystemConfig/Update'
 }
 
-// 系统参数列表
+/**
+ *@description 系统参数列表
+ * @param {Object} obj Query
+ * @param {String} obj.keyword 关键字模糊匹配
+ * @param {Number} obj.pageIndex  当前页
+ * @param {Number} obj.pageSize 每页条数
+ */
 export function SystemConfigList(obj) {
   return request({
     url: Api.SystemConfigList,
@@ -16,7 +22,12 @@ export function SystemConfigList(obj) {
   })
 }
 
-// 修改系统参数值
+/**
+ * @description 修改系统参数值
+ * @param {Object} obj
+ * @param {Number} obj.id
+ * @param {String} obj.value
+ */
 export function SystemConfigUpdate(obj) {
   return request({
     url: Api.SystemConfigUpdate,

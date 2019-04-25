@@ -11,7 +11,11 @@ const api = {
   updatePswBySMS: '/api/User/UpdatePasswordBySMS'
 }
 
-// 登录
+/**
+ * @description 登录
+ * @param  {String} {mobile 手机名
+ * @param  {String} password}
+ */
 export function login({ mobile, password }) {
   return request({
     url: api.login,
@@ -26,7 +30,10 @@ export function login({ mobile, password }) {
   })
 }
 
-// 获取当前信息
+/**
+ * @description 获取当前信息
+ * @param  {String} token
+ */
 export function getInfo(token) {
   return request({
     url: api.getInfo,
@@ -34,7 +41,10 @@ export function getInfo(token) {
   })
 }
 
-// 首次登录修改密码(初始化密码)
+/**
+ * @description 首次登录修改密码(初始化密码)
+ * @param  {String} password
+ */
 export function fristChangePwd(password) {
   return request({
     url: api.fristChangePwd,
@@ -48,7 +58,11 @@ export function fristChangePwd(password) {
   })
 }
 
-// 修改密码
+/**
+ * @description 修改密码
+ * @param  {String} oldPassword 初始密码
+ * @param  {String} newPassword 新密码
+ */
 export function changePassword(oldPassword, newPassword) {
   return request({
     url: api.changePassword,
@@ -63,7 +77,9 @@ export function changePassword(oldPassword, newPassword) {
   })
 }
 
-// 退出登录
+/**
+ * @description 退出登录
+ */
 export function logout() {
   return request({
     url: api.logout,
@@ -71,7 +87,10 @@ export function logout() {
   })
 }
 
-// 忘记密码 输入电话,显示图片验证码
+/**
+ * @description 忘记密码 输入电话,显示图片验证码
+ * @param  {String} mobile 电话
+ */
 export function getImgCode(mobile) {
   return request({
     url: api.getImgCode,
@@ -82,7 +101,11 @@ export function getImgCode(mobile) {
   })
 }
 
-// 发送忘记密码短信验证码
+/**
+ * @description 发送忘记密码短信验证码
+ * @param  {String} mobile 手机号
+ * @param  {String} imageCode 图片验证码
+ */
 export function sendForpwsSMS(mobile, imageCode) {
   return request({
     url: api.sendForpwsSMS,
@@ -97,7 +120,12 @@ export function sendForpwsSMS(mobile, imageCode) {
   })
 }
 
-// 根据短信验证码修改密码(重置密码保存)
+/**
+ * @description  根据短信验证码修改密码(重置密码保存)
+ * @param  {String} mobile 手机号
+ * @param  {String} sms 短信验证码
+ * @param  {String} password 密码
+ */
 export function updatePswBySMS(mobile, sms, password) {
   return request({
     url: api.updatePswBySMS,

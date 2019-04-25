@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar wrap-class="scrollbar-wrapper">
+  <el-scrollbar class="mt50" wrap-class="scrollbar-wrapper">
     <el-menu
       :default-active="$route.path"
       :collapse="isCollapse"
@@ -37,3 +37,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  .mt50{
+    margin-top: 50px;
+  }
+</style>
