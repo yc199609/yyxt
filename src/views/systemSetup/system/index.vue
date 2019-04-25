@@ -146,7 +146,7 @@ export default {
 
 <style lang="scss" scoped>
   .container{
-    padding:3vw;
+    padding: 1vw 3vw 0;
     .table{
       width:100%;
     }

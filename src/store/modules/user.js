@@ -57,7 +57,6 @@ const user = {
       const { cellPhone, password } = userInfo
       return new Promise((resolve, reject) => {
         login({ mobile: cellPhone, password: password }).then(response => {
-          console.log(response)
           const { data } = response
           if (data.isNeedResetPassword === 0) {
             const token = data.token
@@ -94,7 +93,7 @@ const user = {
       return new Promise((resolve, reject) => {
         changePassword(state.token)
           .then(response => {
-            console.log(response)
+            resolve(response)
           })
           .catch(error => {
             reject(error)

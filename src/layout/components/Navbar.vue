@@ -1,14 +1,17 @@
 <template>
   <div class="navbar">
     <h3 :class="sidebar.opened?'h3':'h3 h3hidden'">
-      <img :src="require('@/assets/404_images/404.png')" width="54px" height="48px" class="titleImg" />
-      <span>ssss</span>
+      <div class="imgBox">
+        <img :src="require('@/assets/icon/logo-sm.png')" width="30px" height="30px" class="titleImg" />
+      </div>
+      <span class="SystemTitle">联桥网云运营系统</span>
     </h3>
     <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />
     <breadcrumb />
     <lang-select class="right-menu-item hover-effect" />
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
+        <img :src="require('@/assets/icon/avatar1.png')" width="30px" height="30px" alt="">
         <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
         <i class="el-icon-caret-bottom" />
       </div>
@@ -58,9 +61,18 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.titleImg{
-  vertical-align: middle;
+.SystemTitle{
+  font-size: 17px;
 }
+.imgBox{
+  display: inline-block;
+  width: 54px;
+  text-align: center;
+  .titleImg{
+    vertical-align: middle;
+  }
+}
+
 .h3{
   overflow: hidden;
   background-color: #67c23a;
@@ -127,7 +139,7 @@ export default {
     right: 35px;
     .avatar-wrapper {
       cursor: pointer;
-      margin-top: 5px;
+      margin-top: 12px;
       position: relative;
       line-height: initial;
       .user-avatar {

@@ -22,14 +22,14 @@
           <el-col :span="12">
             <el-form-item label="数据库"><br>
               <el-select
-                v-model="value"
+                v-model="organizeData.db.id"
                 placeholder="请选择"
               >
                 <el-option
                   v-for="item in tableData"
                   :key="item.id"
                   :label="item.name"
-                  :value="item"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -66,20 +66,23 @@ export default {
       tableData: [],
       value: {},
       visible: false,
-      organizeData: {}
+      organizeData: {
+        db:{}
+      }
     }
   },
   methods: {
     init(id) {
       this.visible = true
-      getSystemInfoById(id).then(res => {
-        this.organizeData = res.data
-      })
+      getSystemInfoById(id)
+        .then(res => {
+          this.$set(this,'organizeData',res.data)
+        })
       this.dataBase()
     },
     saveInfo() {
-      // 创建机构  机构设置
-      updateSystemInfo({...this.organizeData,db:this.value})
+      // 修改系统设置
+      updateSystemInfo(this.organizeData)
         .then(res => {
           this.$message({
             type: "success",
@@ -95,7 +98,7 @@ export default {
     dataBase() {
       DataBaseList()
         .then(res => {
-          this.tableData = res.data
+          this.$set(this,'tableData',res.data)
         })
     }
   }

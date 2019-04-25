@@ -70,7 +70,14 @@ export function updateConfigItem(obj) {
   })
 }
 
-// 创建机构
+/**
+ * @description 创建机构
+ * @param {Object} obj
+ * @param {String} name
+ * @param {String} fullName
+ * @param {String} code
+ * @param {String} dbId
+ */
 export function companyCreate(obj) {
   return request({
     url: api.companyCreate,
@@ -82,7 +89,11 @@ export function companyCreate(obj) {
   })
 }
 
-// 获取系统设置  机构设置
+/**
+ * @description 获取系统设置
+ * @param  {String} id 机构Id
+ * @author yc
+ */
 export function getSystemInfoById(id) {
   return request({
     url: api.getSystemInfoById,
@@ -93,7 +104,17 @@ export function getSystemInfoById(id) {
   })
 }
 
-// 修改机构
+/**
+ * @description 修改系统设置
+ * @param  {Object} obj
+ * @param {Number} obj.id
+ * @param {String} obj.dmsSite 设备管理系统站点
+ * @param {Object} obj.db 数据库信息
+ * @param {Boolean} obj.isDMSEnable 是否开通设备管理系统
+ * @param {Number} obj.db.id 数据库Id
+ * @param {String} obj.db.name 数据库名
+ * @author yc
+ */
 export function updateSystemInfo(obj) {
   return request({
     url: api.updateSystemInfo,

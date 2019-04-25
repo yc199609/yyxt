@@ -74,7 +74,6 @@ export default {
       getConfigById({id,pageIndex:this.pageIndex,PageSize:this.PageSize})
         .then(res => {
           this.$set(this,"businessData",res.data.items)
-          console.log(this.businessData)
         })
     },
     modify(row) {

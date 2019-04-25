@@ -1,5 +1,5 @@
 <template>
-  <div style="padding:3vw;">
+  <div class="container">
 
     <Search @search='init' />
 
@@ -171,7 +171,7 @@ export default {
           this.$message({
             type: "success",
             message: `已成功${type === 'on' ? '启用' : '停用'}`,
-            duration: 1000,
+            duration: 500,
             onClose: () => {
               this.toolbeRunning = false
               var obj = { ...data, status: type === "on" ? 100 : 0 }
@@ -188,6 +188,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container{
+  padding: 1vw 3vw 0;
+}
 .pagination {
   margin-top: 15px;
 }
