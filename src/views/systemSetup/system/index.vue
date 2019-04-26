@@ -60,7 +60,7 @@
 
     <el-dialog
       title="修改参数"
-      :visible.sync="dialogEditVisible">
+      :visible.sync="dialogEditVisible" :closeOnClickModal="false">
       <el-form v-model="editForm">
         <el-form-item label="参数值" label-width="120px">
           <el-input v-model="editForm.value" ></el-input>

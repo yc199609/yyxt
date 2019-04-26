@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="visible">
+  <el-dialog :visible.sync="visible" :closeOnClickModal="false">
     <div style="padding:30px;">
       <el-form
         ref="form"

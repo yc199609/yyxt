@@ -51,7 +51,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog title="修改名称" :visible.sync="dialogChangeVisible">
+    <el-dialog title="修改名称" :visible.sync="dialogChangeVisible" :closeOnClickModal="false">
       <el-form :model="changNameform" ref='form' :rules="rules">
         <el-form-item prop="name" label="数据库名称" label-width="120px">
           <el-input v-model="changNameform.name"></el-input>
@@ -63,7 +63,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="修改数据库配置信息" :visible.sync="changeDbVisible">
+    <el-dialog title="修改数据库配置信息" :visible.sync="changeDbVisible" :closeOnClickModal="false">
       <ModifyForm v-if="changeDbVisible" @init='init' @hidden="modifyHidden" :dataObj='modifyForm' :isDefault='changNameform.isDefault' />
     </el-dialog>
 

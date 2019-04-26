@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="visible">
+  <el-dialog :visible.sync="visible" :closeOnClickModal="false">
     <div style="padding:30px;">
       <el-form :data="organizeData">
         <span>机构设置</span>

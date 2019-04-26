@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="visible" @close="render">
+  <el-dialog :visible.sync="visible" @close="render" :closeOnClickModal="false">
     <div style="padding:1vw;">
       <span>业务参数</span>
       <hr style="background-color:#f7eaea; height: 1px; border: none;">
