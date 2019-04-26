@@ -61,6 +61,7 @@ import { getSystemInfoById, updateSystemInfo } from "@/api/organize"
 import { DataBaseList } from "@/api/systemSetup/dataBase"
 
 export default {
+  name: 'setupOrganize',
   data() {
     return {
       tableData: [],

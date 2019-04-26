@@ -60,6 +60,7 @@
 import { updateConfigItem,getConfigById } from "@/api/organize";
 
 export default {
+  name: 'businessParameters',
   data() {
     return {
       visible: false,

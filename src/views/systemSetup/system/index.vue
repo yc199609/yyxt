@@ -78,7 +78,9 @@
 <script>
 import Search from '@/components/Search'
 import {SystemConfigList,SystemConfigUpdate} from '@api/systemSetup/system'
+
 export default {
+  name: 'system',
   data() {
     return {
       tableData: [

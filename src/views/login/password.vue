@@ -52,6 +52,7 @@
 import { getImgCode, sendForpwsSMS, updatePswBySMS } from '@/api/login'
 
 export default {
+  name: 'password',
   data() {
     /*****检验两次密码是否一致***/
     var validatePass = (rule, value, callback) => {

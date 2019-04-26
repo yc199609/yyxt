@@ -74,7 +74,9 @@
 import { DataBaseList, UpdateBaseInfo, UpdateStatus } from '@api/systemSetup/dataBase'
 import ModifyForm from './ModifyForm'
 import Search from '@/components/Search'
+
 export default {
+  name: 'dataBase',
   data() {
     return {
       tableData: [

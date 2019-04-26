@@ -82,7 +82,9 @@
 </template>
 <script>
 import { UpdateConfigInfo } from '@api/systemSetup/dataBase'
+
 export default {
+  name: 'ModifyForm',
   props: ['dataObj'],
   data() {
     return {

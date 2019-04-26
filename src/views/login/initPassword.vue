@@ -32,6 +32,7 @@
 <script>
 import { fristChangePwd } from '@api/login'
 export default {
+  name: 'initPassword',
   data() {
     const checkSubmitpassword = (rule, value, callback) => {
       if (!value) {
