@@ -28,9 +28,17 @@ export const constantRouterMap = [
 
   {
     path: '/',
+    fullPath: '/dashboard',
     component: Layout,
     redirect: '/dashboard',
-    meta: { title: '首页', icon: 'component' },
+    name: '/dashboard',
+    meta: {
+      roles: ['test2', '18888888888'], // 设置该路由进入的权限，支持多个权限叠加
+      title: '首页',
+      icon: 'component',
+      noCache: true,
+      affix: true
+    },
     children: [{
       path: 'dashboard',
       component: () => import('@/views/dashboard/index')
@@ -48,7 +56,11 @@ export const constantRouterMap = [
         path: 'organize',
         component: () => import('@/views/OperationSystem/organize'),
         name: 'Organize',
-        meta: { title: '机构列表' }
+        meta: {
+          title: '机构列表',
+          affix: false,
+          noCache: true
+        }
       }
     ]
   },

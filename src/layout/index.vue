@@ -5,13 +5,14 @@
     
     <div class="main-container">
       <navbar/>
+      <tags-view/>
       <app-main class="mainContainer"/>
     </div>
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain, } from './components'
+import { Navbar, Sidebar, AppMain, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
 
@@ -21,6 +22,7 @@ export default {
     Navbar,
     Sidebar,
     AppMain,
+    TagsView
   },
   mixins: [ResizeMixin],
   computed: {

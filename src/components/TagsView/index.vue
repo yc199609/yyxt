@@ -12,6 +12,7 @@
         @click.middle.native="closeSelectedTag(tag)"
         @contextmenu.prevent.native="openMenu(tag,$event)"
       >
+        {{ generateTitle(tag.title) }}
         <span v-if="!tag.meta.affix" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
       </router-link>
     </scroll-pane>
@@ -35,9 +36,11 @@
 
 <script>
 import ScrollPane from './ScrollPane'
+import { generateTitle } from '@/utils/i18n'
 import path from 'path'
 
 export default {
+  name: 'tagsView',
   components: { ScrollPane },
   data() {
     return {
@@ -50,13 +53,14 @@ export default {
   },
   computed: {
     visitedViews() {
-      console.log('=======')
+      console.log(88888)
       console.log(this.$store.state.tagsView.visitedViews)
       return this.$store.state.tagsView.visitedViews
+    },
+    routes() {
+      // return this.$store.state.permission.routes
+      return this.$store.state.tagsView.visitedViews
     }
-    // routes() {
-    //   return this.$store.state.permission.routes
-    // }
   },
   watch: {
     $route() {
@@ -76,14 +80,21 @@ export default {
     this.addTags()
   },
   methods: {
+    generateTitle, // generateTitle by vue-i18n
     isActive(route) {
       return route.path === this.$route.path
     },
     filterAffixTags(routes, basePath = '/') {
       let tags = []
-      visitedViews.forEach(route => {
-        if (route.meta && route.meta.affix) {
+      console.log(12111)
+      console.log(routes)
+      routes.forEach(route => {
+        // if (route.meta && route.meta.affix) {
+        if (route.meta) {
+          console.log(route)
+          console.log(route.meta)
           const tagPath = path.resolve(basePath, route.path)
+          console.log(tagPath)
           tags.push({
             fullPath: tagPath,
             path: tagPath,
@@ -101,7 +112,7 @@ export default {
       return tags
     },
     initTags() {
-      const affixTags = this.affixTags
+      const affixTags = this.affixTags = this.filterAffixTags(this.routes)
       for (const tag of affixTags) {
         // Must have tag name
         if (tag.name) {
@@ -203,7 +214,9 @@ export default {
 
 <style lang="scss" scoped>
 .tags-view-container {
-  margin-top: 50px;
+  position: fixed;
+  line-height: 34px;
+  top: 50px;
   height: 34px;
   width: 100%;
   background: #fff;
