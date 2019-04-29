@@ -45,12 +45,16 @@
       <el-row type="flex" justify="space-between">
         <el-col :span="10">
           <el-form-item label="性别" prop="sex">
-            <el-input></el-input>
+            <el-select placeholder="请选择性别" v-model="form.sex">
+              <el-option label="女" value="女"></el-option>
+              <el-option label="男" value="男"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item label="生日" prop="birthday">
-            <el-input></el-input>
+            <el-date-picker v-model="form.birthday" type="date" placeholder="选择日期">
+            </el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
@@ -71,7 +75,16 @@ export default {
   data() {
     return {
       visible: false,
-      form: {},
+      form: {
+        name: "",
+        mobile: "",
+        email: "",
+        nickName: "",
+        short: "",
+        birthday: "",
+        sex: "",
+        remark: ""
+      },
       rules: {
         name: [
           {
@@ -89,7 +102,21 @@ export default {
             trigger: "blur"
           }
         ],
-        email: [{required: true, type: "string", validator: validEmail, trigger: "blur" }]
+        email: [
+          {
+            required: true,
+            type: "string",
+            validator: validEmail,
+            trigger: "blur"
+          }
+        ],
+        sex: [
+          {
+            required: true,
+            message: "请选择性别",
+            trigger: "change"
+          }
+        ]
       },
       type: "insert"
     };
@@ -108,34 +135,44 @@ export default {
       }
     },
     onSubmit() {
-      switch (this.type) {
-        case "insert":
-          Create(this.form).then(res => {
-            this.$message({
-              type: "success",
-              message: "新增成功",
-              duration: 500,
-              onClose: () => {
-                this.cancel();
-                this.$emit("reload");
-              }
-            });
-          });
-          break;
-        case "edit":
-          UpdateInfo(this.form).then(res => {
-            this.$message({
-              type: "success",
-              message: "修改成功",
-              duration: 500,
-              onClose: () => {
-                this.cancel();
-                this.$emit("reload");
-              }
-            });
-          });
-          break;
-      }
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          switch (this.type) {
+            case "insert":
+              Create({
+                ...this.form,
+                birthday: this.form.birthday.toUTCString()
+              }).then(res => {
+                this.$message({
+                  type: "success",
+                  message: "新增成功",
+                  duration: 500,
+                  onClose: () => {
+                    this.cancel();
+                    this.$emit("reload");
+                  }
+                });
+              });
+              break;
+            case "edit":
+              UpdateInfo({
+                ...this.form,
+                birthday: this.form.birthday.toUTCString()
+              }).then(res => {
+                this.$message({
+                  type: "success",
+                  message: "修改成功",
+                  duration: 500,
+                  onClose: () => {
+                    this.cancel();
+                    this.$emit("reload");
+                  }
+                });
+              });
+              break;
+          }
+        }
+      });
     },
     cancel() {
       this.visible = false;
