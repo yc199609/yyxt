@@ -27,15 +27,16 @@
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-row>
+            
             <el-col :offset="3" :span='8' class="ycbutton">
               <el-tooltip effect="dark" content="编辑" placement="top">
-                <el-button type="primary" icon="el-icon-edit-outline" @click="edit(scope.row)"></el-button>
+                <el-button type="primary" icon="el-icon-edit-outline" @click="edit(scope.row.id)"></el-button>
               </el-tooltip>
             </el-col>
 
             <el-col :span='8' :offset="2" class="ycbutton">
               <el-tooltip effect="dark" content="删除" placement="top">
-                <el-button type="warning" icon="el-icon-setting" @click="del(scope.row)"></el-button>
+                <el-button type="warning" icon="el-icon-setting" @click="del(scope.row.id)"></el-button>
               </el-tooltip>
             </el-col>
 
@@ -44,20 +45,20 @@
       </el-table-column>
     </el-table>
 
-  <Detail ref="detail" />
+    <Detail ref="detail" @reload ="init" />
   </div>
 </template>
 <script>
 import Search from "@/components/Search";
-import { GetEmployeesByName } from "@api/hr/staff";
-import Detail from './details'
+import { GetEmployeesByName, DeleteEmployee } from "@api/hr/staff";
+import Detail from "./details";
 export default {
   data() {
     return {
       tableData: []
     };
   },
-  components:{
+  components: {
     Search,
     Detail
   },
@@ -66,16 +67,30 @@ export default {
   },
   methods: {
     init(keyword) {
-      GetEmployeesByName(keyword)
-      .then(res => {
-        this.$set(this,'tableData',res.data)
+      GetEmployeesByName(keyword).then(res => {
+        this.$set(this, "tableData", res.data);
       });
     },
-    insert(){},
-    edit() {
-      this.$refs.detail.init()
+    insert() {
+      this.$refs.detail.init();
     },
-    del() {}
+    edit(id) {
+      this.$refs.detail.init(id);
+    },
+    del(id) {
+      DeleteEmployee(id)
+      .then(res=>{
+        console.log(res)
+        this.$message({
+          type:'success',
+          message:'删除成功',
+          duration:500,
+          onClose:()=>{
+            this.init()
+          }
+        })
+      })
+    }
   }
 };
 </script>

@@ -1,11 +1,18 @@
 import request from '@/utils/request'
+
 const Api = {
-  GetEmployeesByName: '/api/Company/Employee/GetEmployeesByName',
-  DeleteEmployee: '/api/Company/Employee/delete',
-  UpdateInfo: '/api/Company/Employee/UpdateInfo',
-  Create: '/api/Company/Employee/create',
-  GetById: '/api/Company/Employee/GetById',
-  UpdateEmployeeRoleRight: '/api/company/employee/updateEmployeeRoleRight'
+  // 根据员工名字模糊查询
+  GetEmployeesByName: '/api/Operation/Employee/GetEmployeesByName',
+  // 删除员工信息
+  DeleteEmployee: '/api/operation/Employee/delete',
+  // 修改员工信息
+  UpdateInfo: '/api/operation/Employee/UpdateInfo',
+  // 新增员工信息
+  Create: '/api/Operation/Employee/create',
+  // 根据ID获取员工信息
+  GetById: '/api/Operation/Employee/GetById',
+  // 新增员工信息
+  UpdateEmployeeRoleRight: '/api/Operation/Employee/create'
 }
 
 /**

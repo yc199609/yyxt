@@ -1,6 +1,6 @@
 <template>
-  <el-dialog :visible.sync="visible" :closeOnClickModal="false" title="修改数据库配置信息">
-    <el-form :model="form" :rules="rules"  ref="form">
+  <el-dialog :visible.sync="visible" :closeOnClickModal="false" :title="type==='insert'?'新增':'修改'">
+    <el-form :model="form" :rules="rules" ref="form">
       <el-row type="flex" justify="space-between">
         <el-col :span="10">
           <el-form-item label="登录账号" prop="code">
@@ -10,7 +10,6 @@
             <el-col :span="3">
               <span>@able</span>
             </el-col>
-
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -27,7 +26,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="邮箱" prop="email">
-            <el-input  v-model="form.email"></el-input>
+            <el-input v-model="form.email"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -38,8 +37,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="简拼" prop="id">
-            <el-input></el-input>
+          <el-form-item label="简拼" prop="short">
+            <el-input v-model="form.short"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -55,7 +54,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="备注">
+      <el-form-item label="备注" prop="remark">
         <el-input type="textarea" v-model="form.remark"></el-input>
       </el-form-item>
       <el-form-item class="buttonRow">
@@ -66,30 +65,81 @@
   </el-dialog>
 </template>
 <script>
-import { GetById } from "@api/hr/staff.js";
+import { GetById, Create, UpdateInfo } from "@api/hr/staff.js";
+import { validPhone, validEmail } from "@/utils/validate.js";
 export default {
   data() {
     return {
       visible: false,
       form: {},
-      rules: {}
+      rules: {
+        name: [
+          {
+            type: "string",
+            required: true,
+            message: "请输入姓名",
+            trigger: "blur"
+          }
+        ],
+        mobile: [
+          {
+            type: "number",
+            required: true,
+            validator: validPhone,
+            trigger: "blur"
+          }
+        ],
+        email: [{required: true, type: "string", validator: validEmail, trigger: "blur" }]
+      },
+      type: "insert"
     };
   },
   methods: {
     init(id) {
+      this.type = id == null ? "insert" : "edit";
       this.visible = true;
-      console.log(this.$refs)
-      this.$refs.form.resetFields();
-
-      //   if (id) {
-      GetById(id)
-      .then(res => {
-        this.$set(this,'form',res.data)
+      this.$nextTick(() => {
+        this.$refs.form.resetFields();
       });
-      //   }
+      if (id) {
+        GetById(id).then(res => {
+          this.$set(this, "form", res.data);
+        });
+      }
     },
-    onSubmit() {},
-    cancel() {}
+    onSubmit() {
+      switch (this.type) {
+        case "insert":
+          Create(this.form).then(res => {
+            this.$message({
+              type: "success",
+              message: "新增成功",
+              duration: 500,
+              onClose: () => {
+                this.cancel();
+                this.$emit("reload");
+              }
+            });
+          });
+          break;
+        case "edit":
+          UpdateInfo(this.form).then(res => {
+            this.$message({
+              type: "success",
+              message: "修改成功",
+              duration: 500,
+              onClose: () => {
+                this.cancel();
+                this.$emit("reload");
+              }
+            });
+          });
+          break;
+      }
+    },
+    cancel() {
+      this.visible = false;
+    }
   }
 };
 </script>
