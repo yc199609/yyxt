@@ -12,6 +12,7 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
+import echarts from 'echarts'
 
 import i18n from './lang' // Internationalization
 import '@/icons' // icon
@@ -27,6 +28,8 @@ import '@/icons' // icon
  */
 
 import '../mock' // simulation data
+
+Vue.prototype.$echarts = echarts
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size

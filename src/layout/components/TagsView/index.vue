@@ -1,35 +1,80 @@
 <template>
-  <div id="tags-view-container" class="tags-view-container">
-    <scroll-pane ref="scrollPane" class="tags-view-wrapper">
-      <router-link
-        v-for="tag in visitedViews"
-        ref="tag"
-        :key="tag.path"
-        :class="isActive(tag)?'active':''"
-        :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
-        tag="span"
-        class="tags-view-item"
-        @click.middle.native="closeSelectedTag(tag)"
-        @contextmenu.prevent.native="openMenu(tag,$event)"
-      >
-        <span v-if="!tag.meta.affix" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
-      </router-link>
-    </scroll-pane>
+  <div
+    id="tags-view-container"
+    class="tags-view-container"
+  >
+    <el-row>
+      <el-col :span="20">
+        <scroll-pane
+          ref="scrollPane"
+          class="tags-view-wrapper"
+        >
+          <router-link
+            v-for="tag in visitedViews"
+            ref="tag"
+            :key="tag.path"
+            :class="isActive(tag)?'active':''"
+            :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
+            tag="span"
+            class="tags-view-item"
+            @click.middle.native="closeSelectedTag(tag)"
+            @contextmenu.prevent.native="openMenu(tag,$event)"
+          >
+            <span>{{tag.title}}</span>
+            <span
+              v-if="!tag.meta.affix"
+              class="el-icon-close"
+              @click.prevent.stop="closeSelectedTag(tag)"
+            />
+          </router-link>
+        </scroll-pane>
+      </el-col>
+      <el-col :span="4">
+        <div class="contextmenu">
+          <!-- <el-tooltip
+            effect="dark"
+            content="刷新"
+            placement="top"
+          >
+            <el-button
+              type="success"
+              class="tagButton"
+              icon="el-icon-refresh"
+              circle
+              @click="refreshSelectedTag(selectedTag)"
+            ></el-button>
+          </el-tooltip> -->
 
-    <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
-      <li @click="refreshSelectedTag(selectedTag)">
-        刷新
-      </li>
-      <li v-if="!(selectedTag.meta&&selectedTag.meta.affix)" @click="closeSelectedTag(selectedTag)">
-        关闭
-      </li>
-      <li @click="closeOthersTags">
-        关闭其他
-      </li>
-      <li @click="closeAllTags(selectedTag)">
-        关闭所有
-      </li>
-    </ul>
+          <el-tooltip
+            effect="dark"
+            class="tagButton"
+            content="关闭其他"
+            placement="top"
+          >
+            <el-button
+              type="info"
+              icon="el-icon-close"
+              circle
+              @click="closeOthersTags"
+            ></el-button>
+          </el-tooltip>
+
+          <el-tooltip
+            effect="dark"
+            class="tagButton"
+            content="关闭所有"
+            placement="top"
+          >
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              @click="closeAllTags(selectedTag)"
+            ></el-button>
+          </el-tooltip>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -41,7 +86,6 @@ export default {
   components: { ScrollPane },
   data() {
     return {
-      visible: false,
       top: 0,
       left: 0,
       selectedTag: {},
@@ -50,13 +94,8 @@ export default {
   },
   computed: {
     visitedViews() {
-      console.log('=======')
-      console.log(this.$store.state.tagsView.visitedViews)
       return this.$store.state.tagsView.visitedViews
     }
-    // routes() {
-    //   return this.$store.state.permission.routes
-    // }
   },
   watch: {
     $route() {
@@ -79,31 +118,9 @@ export default {
     isActive(route) {
       return route.path === this.$route.path
     },
-    filterAffixTags(routes, basePath = '/') {
-      let tags = []
-      visitedViews.forEach(route => {
-        if (route.meta && route.meta.affix) {
-          const tagPath = path.resolve(basePath, route.path)
-          tags.push({
-            fullPath: tagPath,
-            path: tagPath,
-            name: route.name,
-            meta: { ...route.meta }
-          })
-        }
-        if (route.children) {
-          const tempTags = this.filterAffixTags(route.children, route.path)
-          if (tempTags.length >= 1) {
-            tags = [...tags, ...tempTags]
-          }
-        }
-      })
-      return tags
-    },
     initTags() {
       const affixTags = this.affixTags
       for (const tag of affixTags) {
-        // Must have tag name
         if (tag.name) {
           this.$store.dispatch('tagsView/addVisitedView', tag)
         }
@@ -122,7 +139,6 @@ export default {
         for (const tag of tags) {
           if (tag.to.path === this.$route.path) {
             this.$refs.scrollPane.moveToTarget(tag)
-            // when query is different then update
             if (tag.to.fullPath !== this.$route.fullPath) {
               this.$store.dispatch('tagsView/updateVisitedView', this.$route)
             }
@@ -167,10 +183,7 @@ export default {
       if (latestView) {
         this.$router.push(latestView)
       } else {
-        // now the default is to redirect to the home page if there is no tags-view,
-        // you can adjust it according to your needs.
         if (view.name === 'Dashboard') {
-          // to reload home page
           this.$router.replace({ path: '/redirect' + view.fullPath })
         } else {
           this.$router.push('/')
@@ -183,13 +196,11 @@ export default {
       const offsetWidth = this.$el.offsetWidth // container width
       const maxLeft = offsetWidth - menuMinWidth // left boundary
       const left = e.clientX - offsetLeft + 15 // 15: margin right
-
       if (left > maxLeft) {
         this.left = maxLeft
       } else {
         this.left = left
       }
-
       this.top = e.clientY
       this.visible = true
       this.selectedTag = tag
@@ -208,7 +219,7 @@ export default {
   width: 100%;
   background: #fff;
   border-bottom: 1px solid #d8dce5;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
   .tags-view-wrapper {
     .tags-view-item {
       display: inline-block;
@@ -234,7 +245,7 @@ export default {
         color: #fff;
         border-color: #42b983;
         &::before {
-          content: '';
+          content: "";
           background: #fff;
           display: inline-block;
           width: 8px;
@@ -247,24 +258,11 @@ export default {
     }
   }
   .contextmenu {
-    margin: 0;
-    background: #fff;
-    z-index: 3000;
-    position: absolute;
-    list-style-type: none;
-    padding: 5px 0;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 400;
-    color: #333;
-    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, .3);
-    li {
-      margin: 0;
-      padding: 7px 16px;
-      cursor: pointer;
-      &:hover {
-        background: #eee;
-      }
+    height: 34px;
+    line-height: 34px;
+    float: right;
+    .tagButton{
+      padding: 6px;
     }
   }
 }
@@ -280,10 +278,10 @@ export default {
       vertical-align: 2px;
       border-radius: 50%;
       text-align: center;
-      transition: all .3s cubic-bezier(.645, .045, .355, 1);
+      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
       transform-origin: 100% 50%;
       &:before {
-        transform: scale(.6);
+        transform: scale(0.6);
         display: inline-block;
         vertical-align: -3px;
       }

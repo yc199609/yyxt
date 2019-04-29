@@ -35,9 +35,7 @@ export const constantRouterMap = [
     meta: {
       roles: ['test2', '18888888888'], // 设置该路由进入的权限，支持多个权限叠加
       title: '首页',
-      icon: 'component',
-      noCache: true,
-      affix: true
+      icon: 'home'
     },
     children: [{
       path: 'dashboard',
@@ -83,6 +81,41 @@ export const constantRouterMap = [
         component: () => import('@/views/systemSetup/system/index.vue'),
         name: 'system',
         meta: { title: '系统参数' }
+      }
+    ]
+  },
+  {
+    path: '/demo',
+    component: Layout,
+    alwaysShow: true,
+    name: 'demo',
+    meta: { title: 'demo', icon: 'nested' },
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/demo'),
+        name: 'demo',
+        meta: {
+          title: 'demo'
+        }
+      }
+    ]
+  },
+  {
+    path: '/Hr',
+    alwaysShow: true,
+    redirect: '/Hr/staff',
+    component: Layout,
+    name: 'Hr',
+    meta: { title: '人事管理', icon: 'user' },
+    children: [
+      {
+        path: 'staff',
+        component: () => import('@/views/Hr/staff'),
+        name: 'staff',
+        meta: {
+          title: '员工管理'
+        }
       }
     ]
   },

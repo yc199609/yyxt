@@ -2,11 +2,10 @@
   <div :class="classObj" class="app-wrapper">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"/>
     <sidebar class="sidebar-container"/>
-    
     <div class="main-container">
       <navbar/>
       <tags-view/>
-      <app-main class="mainContainer"/>
+      <app-main/>
     </div>
   </div>
 </template>
@@ -57,10 +56,6 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "src/styles/mixin.scss";
   @import "~@/styles/variables.scss";
-
-  .mainContainer{
-    margin-top: 50px;
-  }
   .app-wrapper {
     @include clearfix;
     position: relative;

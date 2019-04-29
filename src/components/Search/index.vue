@@ -16,7 +16,7 @@
       </section>
 
       <el-button type="success" plain size="small" icon="el-icon-search" @click="search">搜索</el-button>
-
+      <slot></slot>
     </section>
   </section>
 </template>
