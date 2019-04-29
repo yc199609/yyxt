@@ -71,12 +71,16 @@
 </template>
 
 <script>
-import { DataBaseList, UpdateBaseInfo, UpdateStatus } from '@api/systemSetup/dataBase'
-import ModifyForm from './ModifyForm'
-import Search from '@/components/Search'
+import {
+  DataBaseList,
+  UpdateBaseInfo,
+  UpdateStatus
+} from "@api/systemSetup/dataBase";
+import ModifyForm from "./ModifyForm";
+import Search from "@/components/Search";
 
 export default {
-  name: 'dataBase',
+  name: "dataBase",
   data() {
     return {
       tableData: [
@@ -91,75 +95,72 @@ export default {
         }
       ],
       changNameform: {
-        id: '',
-        name: ''
+        id: "",
+        name: ""
       },
       rules: {
-        name: [
-          { required: true, message: '请输入数据库名称', trigger: 'blur' }
-        ]
+        name: [{ required: true, message: "请输入数据库名称", trigger: "blur" }]
       },
-      modifyForm: {
-      },
+      modifyForm: {},
       dialogChangeVisible: false,
       changeDbVisible: false,
-      toolbeRunning: false,  // 节流阀
-    }
+      toolbeRunning: false // 节流阀
+    };
   },
   components: {
     ModifyForm,
     Search
   },
   mounted() {
-    this.init()
+    this.init();
   },
   methods: {
     init(keyword) {
-      DataBaseList(keyword)
-        .then(res => {
-          this.tableData = res.data
-        })
+      DataBaseList(keyword).then(res => {
+        this.tableData = res.data;
+      });
     },
     //  打开修改数据库名称的弹框
     changNameDialog(data) {
-      this.changNameform = { id: data.id, name: data.name }
-      this.dialogChangeVisible = true
+      this.changNameform = { id: data.id, name: data.name };
+      this.dialogChangeVisible = true;
     },
     // 提交修改数据库名称的表单
     changName() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          UpdateBaseInfo(this.changNameform)
-            .then(res => {
-              this.$message({
-                type: "success",
-                message: "修改成功",
-                duration: 500,
-                onClose: () => {
-                  this.dialogChangeVisible = false
-                  this.init()
-                }
-              })
-            })
+          UpdateBaseInfo(this.changNameform).then(res => {
+            this.$message({
+              type: "success",
+              message: "修改成功",
+              duration: 500,
+              onClose: () => {
+                this.dialogChangeVisible = false;
+                this.init();
+              }
+            });
+          });
         }
-      })
+      });
     },
     // 关闭修改数据库配置信息的弹框
     modifyHidden() {
-      this.changeDbVisible = false
+      this.changeDbVisible = false;
     },
     // 打开修改数据库配置信息的弹框
     modifyDialog(data) {
-      this.$set(this, "modifyForm", data)
-      this.changeDbVisible = true
+      this.$set(this, "modifyForm", data);
+      this.changeDbVisible = true;
     },
     offOrON(data, i) {
       if (this.toolbeRunning === false) {
-        this.toolbeRunning = true
-        if (data.status === 0) { //目前是停用
-          this.changStatus("on", data, i)
-        } else { //目前是启用
-          this.changStatus("off", data, i)
+        this.toolbeRunning = true;
+        if (data.status === 0) {
+          //目前是停用
+          this.changStatus("on", data, i);
+        } else {
+          //目前是启用
+          this.changStatus("off", data, i);
         }
       }
     },
@@ -167,30 +168,30 @@ export default {
     changStatus(type, data, i) {
       UpdateStatus({
         id: data.id,
-        status: type === 'on' ? 100 : 0
+        status: type === "on" ? 100 : 0
       })
         .then(res => {
           this.$message({
             type: "success",
-            message: `已成功${type === 'on' ? '启用' : '停用'}`,
+            message: `已成功${type === "on" ? "启用" : "停用"}`,
             duration: 500,
             onClose: () => {
-              this.toolbeRunning = false
-              var obj = { ...data, status: type === "on" ? 100 : 0 }
-              this.$set(this.tableData, i, obj)
+              this.toolbeRunning = false;
+              var obj = { ...data, status: type === "on" ? 100 : 0 };
+              this.$set(this.tableData, i, obj);
             }
-          })
+          });
         })
         .catch(err => {
-          this.toolbeRunning = false
-        })
+          this.toolbeRunning = false;
+        });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-.container{
+.container {
   padding: 1vw 3vw 0;
 }
 .pagination {

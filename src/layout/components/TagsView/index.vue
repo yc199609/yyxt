@@ -3,8 +3,8 @@
     id="tags-view-container"
     class="tags-view-container"
   >
-    <el-row>
-      <el-col :span="20">
+    <el-row justify="space-between" type="flex">
+      <el-col :span="22">
         <scroll-pane
           ref="scrollPane"
           class="tags-view-wrapper"
@@ -29,22 +29,8 @@
           </router-link>
         </scroll-pane>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="2">
         <div class="contextmenu">
-          <!-- <el-tooltip
-            effect="dark"
-            content="刷新"
-            placement="top"
-          >
-            <el-button
-              type="success"
-              class="tagButton"
-              icon="el-icon-refresh"
-              circle
-              @click="refreshSelectedTag(selectedTag)"
-            ></el-button>
-          </el-tooltip> -->
-
           <el-tooltip
             effect="dark"
             class="tagButton"
@@ -89,7 +75,7 @@ export default {
       top: 0,
       left: 0,
       selectedTag: {},
-      affixTags: []
+      affixTags: [],
     }
   },
   computed: {
@@ -138,7 +124,7 @@ export default {
       this.$nextTick(() => {
         for (const tag of tags) {
           if (tag.to.path === this.$route.path) {
-            this.$refs.scrollPane.moveToTarget(tag)
+            this.$refs.scrollPane.moveToTarget(tag,tags)
             if (tag.to.fullPath !== this.$route.fullPath) {
               this.$store.dispatch('tagsView/updateVisitedView', this.$route)
             }

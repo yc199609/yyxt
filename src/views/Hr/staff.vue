@@ -44,11 +44,13 @@
       </el-table-column>
     </el-table>
 
+  <Detail ref="detail" />
   </div>
 </template>
 <script>
 import Search from "@/components/Search";
 import { GetEmployeesByName } from "@api/hr/staff";
+import Detail from './details'
 export default {
   data() {
     return {
@@ -56,7 +58,8 @@ export default {
     };
   },
   components:{
-    Search
+    Search,
+    Detail
   },
   mounted() {
     this.init();
@@ -65,11 +68,13 @@ export default {
     init(keyword) {
       GetEmployeesByName(keyword)
       .then(res => {
-        console.log(res);
+        this.$set(this,'tableData',res.data)
       });
     },
     insert(){},
-    edit() {},
+    edit() {
+      this.$refs.detail.init()
+    },
     del() {}
   }
 };
