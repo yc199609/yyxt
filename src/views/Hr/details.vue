@@ -37,8 +37,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="简拼" prop="short">
-            <el-input v-model="form.short"></el-input>
+          <el-form-item label="简拼" prop="pinYing">
+            <el-input v-model="form.pinYing"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -46,8 +46,8 @@
         <el-col :span="10">
           <el-form-item label="性别" prop="sex">
             <el-select placeholder="请选择性别" v-model="form.sex">
-              <el-option label="女" value="女"></el-option>
-              <el-option label="男" value="男"></el-option>
+              <el-option label="女" :value="0"></el-option>
+              <el-option label="男" :value="1"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -80,7 +80,7 @@ export default {
         mobile: "",
         email: "",
         nickName: "",
-        short: "",
+        pinYing: "",
         birthday: "",
         sex: "",
         remark: ""
@@ -130,6 +130,10 @@ export default {
       });
       if (id) {
         GetById(id).then(res => {
+          res.data.birthday = this.$moment
+            .utc(res.data.birthday)
+            .local()
+            .format();
           this.$set(this, "form", res.data);
         });
       }
@@ -137,11 +141,14 @@ export default {
     onSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
+          var utc = this.$moment(this.form.birthday)
+            .utc()
+            .format();
           switch (this.type) {
             case "insert":
               Create({
                 ...this.form,
-                birthday: this.form.birthday.toUTCString()
+                birthday: utc
               }).then(res => {
                 this.$message({
                   type: "success",
@@ -157,7 +164,7 @@ export default {
             case "edit":
               UpdateInfo({
                 ...this.form,
-                birthday: this.form.birthday.toUTCString()
+                birthday: utc
               }).then(res => {
                 this.$message({
                   type: "success",

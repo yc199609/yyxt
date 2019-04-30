@@ -16,8 +16,8 @@
 
       <el-table-column align="center" label="性别">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.sex===100" type="primary">男</el-tag>
-          <el-tag v-else type="danger">女</el-tag>
+          <el-tag v-if="scope.row.sex===0" type="danger">女</el-tag>
+          <el-tag v-else type="primary">男</el-tag>
         </template>
       </el-table-column>
 
@@ -80,7 +80,6 @@ export default {
     del(id) {
       DeleteEmployee(id)
       .then(res=>{
-        console.log(res)
         this.$message({
           type:'success',
           message:'删除成功',

@@ -13,7 +13,7 @@ import App from './App'
 import store from './store'
 import router from './router'
 import echarts from 'echarts'
-
+import moment from 'moment' // 时间处理插件
 import i18n from './lang' // Internationalization
 import '@/icons' // icon
 // import '@/permission' // permission control
@@ -30,6 +30,7 @@ import '@/icons' // icon
 import '../mock' // simulation data
 
 Vue.prototype.$echarts = echarts
+Vue.prototype.$moment = moment
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
