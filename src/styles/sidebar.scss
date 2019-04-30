@@ -88,6 +88,12 @@
 
     .main-container {
       margin-left: 54px;
+      @media screen and (max-width:1009px) {
+        margin-left: 0px !important;
+        .navbar{
+          margin-left: 54px;
+        }
+      }
     }
 
     .svg-icon {
