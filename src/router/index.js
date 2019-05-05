@@ -84,23 +84,23 @@ export const constantRouterMap = [
       }
     ]
   },
-  {
-    path: '/demo',
-    component: Layout,
-    alwaysShow: true,
-    name: 'demo',
-    meta: { title: 'demo', icon: 'nested' },
-    children: [
-      {
-        path: '',
-        component: () => import('@/views/demo'),
-        name: 'demo',
-        meta: {
-          title: 'demo'
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/demo',
+  //   component: Layout,
+  //   alwaysShow: true,
+  //   name: 'demo',
+  //   meta: { title: 'demo', icon: 'nested' },
+  //   children: [
+  //     {
+  //       path: '',
+  //       component: () => import('@/views/demo'),
+  //       name: 'demo',
+  //       meta: {
+  //         title: 'demo'
+  //       }
+  //     }
+  //   ]
+  // },
   {
     path: '/Hr',
     alwaysShow: true,
