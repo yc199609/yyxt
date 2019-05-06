@@ -25,7 +25,7 @@
       </el-table-column>
     </el-table>
 
-    <div class="block paginationContainer">
+    <div class="paginationContainer">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex"
         :page-sizes="[20, 30, 40, 50]" :page-size='pageSize' layout="total, sizes, prev, pager, next, jumper" :total="totalCount"></el-pagination>
     </div>

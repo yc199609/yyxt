@@ -43,6 +43,22 @@ export const constantRouterMap = [
     }]
   },
   {
+    path: '/resetMobile',
+    component: Layout,
+    name: 'resetMobile',
+    redirect: '/resetMobile/resetMobile',
+    hidden: true,
+    meta: {
+      title: '修改手机号'
+    },
+    children: [
+      {
+        path: 'resetMobile',
+        component: () => import('@/views/user/resetMobile')
+      }
+    ]
+  },
+  {
     path: '/OperationSystem',
     component: Layout,
     redirect: '/OperationSystem/organize',

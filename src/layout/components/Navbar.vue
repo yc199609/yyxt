@@ -21,6 +21,11 @@
             {{ $t('loginOut.home') }}
           </el-dropdown-item>
         </router-link>
+        <router-link class="inlineBlock" to="/resetMobile">
+          <el-dropdown-item>
+            修改手机号
+          </el-dropdown-item>
+        </router-link>
         <el-dropdown-item divided>
           <span style="display:block;" @click="logout">{{ $t('loginOut.loginOut') }}</span>
         </el-dropdown-item>
