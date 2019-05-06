@@ -6,7 +6,6 @@ const api = {
   fristChangePwd: '/api/User/InitPassword',
   changePassword: '/api/User/UpdatePasswordByOld',
   logout: '/api/User/logout',
-  getImgCode: '/api/User/GetImageCode',
   sendForpwsSMS: '/api/User/SendForgetPasswordSMS',
   updatePswBySMS: '/api/User/UpdatePasswordBySMS'
 }
@@ -84,20 +83,6 @@ export function logout() {
   return request({
     url: api.logout,
     method: 'get'
-  })
-}
-
-/**
- * @description 忘记密码 输入电话,显示图片验证码
- * @param  {String} mobile 电话
- */
-export function getImgCode(mobile) {
-  return request({
-    url: api.getImgCode,
-    method: 'get',
-    params: {
-      mobile
-    }
   })
 }
 
