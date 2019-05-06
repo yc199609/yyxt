@@ -11,7 +11,7 @@
     <lang-select class="right-menu-item hover-effect" />
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
-        <img :src="require('@/assets/icon/avatar1.png')" width="30px" height="30px" alt="">
+        <img :src="require('@/assets/icon/avatar.gif')" class="user-avatar" alt="">
         <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
         <i class="el-icon-caret-bottom" />
       </div>
@@ -75,7 +75,7 @@ export default {
 
 .h3{
   overflow: hidden;
-  background-color: #67c23a;
+  background-color: #2b2f3a;
   white-space : nowrap ;
   color:white;
   position: fixed;
@@ -143,8 +143,8 @@ export default {
       position: relative;
       line-height: initial;
       .user-avatar {
-        width: 40px;
-        height: 40px;
+        width: 30px;
+        height: 30px;
         border-radius: 10px;
       }
       .el-icon-caret-bottom {
