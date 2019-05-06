@@ -65,7 +65,6 @@ export default {
   watch: {
     $route() {
       this.addTags()
-      this.moveToCurrentTag()
     },
     visible(value) {
       if (value) {
@@ -79,6 +78,9 @@ export default {
     this.initTags()
     this.addTags()
   },
+  created() {
+
+  },
   methods: {
     generateTitle, // generateTitle by vue-i18n
     isActive(route) {
@@ -86,7 +88,6 @@ export default {
     },
     filterAffixTags(routes, basePath = '/') {
       let tags = []
-      console.log(12111)
       console.log(routes)
       routes.forEach(route => {
         // if (route.meta && route.meta.affix) {
@@ -127,21 +128,6 @@ export default {
       }
       return false
     },
-    moveToCurrentTag() {
-      const tags = this.$refs.tag
-      this.$nextTick(() => {
-        for (const tag of tags) {
-          if (tag.to.path === this.$route.path) {
-            this.$refs.scrollPane.moveToTarget(tag)
-            // when query is different then update
-            if (tag.to.fullPath !== this.$route.fullPath) {
-              this.$store.dispatch('tagsView/updateVisitedView', this.$route)
-            }
-            break
-          }
-        }
-      })
-    },
     refreshSelectedTag(view) {
       this.$store.dispatch('tagsView/delCachedView', view).then(() => {
         const { fullPath } = view
@@ -161,9 +147,9 @@ export default {
     },
     closeOthersTags() {
       this.$router.push(this.selectedTag)
-      this.$store.dispatch('tagsView/delOthersViews', this.selectedTag).then(() => {
-        this.moveToCurrentTag()
-      })
+      // this.$store.dispatch('tagsView/delOthersViews', this.selectedTag).then(() => {
+      //   this.moveToCurrentTag()
+      // })
     },
     closeAllTags(view) {
       this.$store.dispatch('tagsView/delAllViews').then(({ visitedViews }) => {
