@@ -114,7 +114,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
-  padding: 1vw 3vw 0;
+  padding: 1vw 0 0;
   .table {
     width: 100%;
   }

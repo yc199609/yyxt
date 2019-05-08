@@ -200,6 +200,7 @@ export default {
 
 <style lang="scss" scoped>
 .tags-view-container {
+  z-index: 2;
   position: fixed;
   line-height: 34px;
   top: 50px;

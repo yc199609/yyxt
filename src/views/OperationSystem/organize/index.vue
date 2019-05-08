@@ -213,10 +213,10 @@ export default {
 </style>
 
 <style lang='css' scoped>
-  .Thistable >>> .el-table__body-wrapper {
+  /* .Thistable >>> .el-table__body-wrapper {
       max-height:50vh;
       overflow-y:auto;
-  }
+  } */
   .ycbutton >>> .el-button--medium {
     padding: 0.5vw 1vw;
   }

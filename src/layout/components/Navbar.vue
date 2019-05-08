@@ -99,7 +99,7 @@ export default {
 }
 .navbar {
   position: relative;
-  height: 50px;
+  height: 52px;
   width: 100%;
   line-height: 50px;
   background-color: #fff;

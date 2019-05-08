@@ -122,6 +122,7 @@ export default {
 <style lang="scss" scoped>
 .tags-view-container {
   // margin-top: 50px;
+  z-index: 2;
   height: 34px;
   width: 100%;
   background: #fff;
