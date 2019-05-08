@@ -11,9 +11,6 @@
       <el-table-column align="center" prop="name" label="姓名">
       </el-table-column>
 
-      <el-table-column align="center" prop="code" label="登录账号">
-      </el-table-column>
-
       <el-table-column align="center" label="性别">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.sex===0" type="danger">女</el-tag>
