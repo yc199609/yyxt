@@ -46,6 +46,30 @@
           </el-col>
         </el-row>
 
+        <span>管理员</span>
+        <hr style="background-color:#f7eaea; height: 1px; border: none;">
+        <el-row :gutter="24">
+          <el-col :span="12">
+            <el-form-item label="手机号" prop="adminMobile">
+              <el-input v-model="form.adminMobile"></el-input>
+            </el-form-item>
+          </el-col>
+          
+          <el-col :span="12">
+            <el-form-item label="姓名" prop="adminName">
+              <el-input v-model="form.adminName"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="昵称" prop="adminNickName">
+              <el-input v-model="form.adminNickName"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
         <el-button
           type="primary"
           style="float: right;"
@@ -68,7 +92,10 @@ export default {
         name: '',
         fullName: '',
         code: '',
-        dbId: ''
+        dbId: '',
+        adminMobile: '',
+        adminName: '',
+        adminNickName: ''
       },
       tableData: [],
       value: '',
@@ -85,6 +112,16 @@ export default {
         ],
         dbId: [
           { required: true, message: '请选择数据库', trigger: 'blur' }
+        ],
+        adminMobile: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { pattern: /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/, message: "手机格式不对" }
+        ],
+        adminName: [
+          { required: true, message: '请输入姓名', trigger: 'blur' }
+        ],
+        adminNickName: [
+          { required: true, message: '请输入昵称', trigger: 'blur' }
         ]
       }
     }
@@ -110,7 +147,10 @@ export default {
                   name: '',
                   fullName: '',
                   code: '',
-                  dbId: ''
+                  dbId: '',
+                  adminMobile: '',
+                  adminName: '',
+                  adminNickName: ''
                 }
                 this.$emit('render')
               }
