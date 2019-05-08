@@ -85,9 +85,10 @@ export default {
         pageIndex: this.pageIndex,
         pageSize: this.pageSize
       }).then(res => {
-        this.$set(this, "tableData", res.data);
-        this.pageIndex = res.pageIndex || this.pageIndex
-        this.pageSize = res.pageSize || this.pageSize
+        this.$set(this, "tableData", res.data.items);
+        this.pageIndex = res.data.pageIndex
+        this.pageSize = res.data.pageSize
+        this.totalCount = res.data.totalCount
       });
     },
     insert() {
