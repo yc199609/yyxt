@@ -122,8 +122,4 @@ export default {
 }
 </style>
 <style lang='css' scoped>
-  .table >>> .el-table__body-wrapper {
-      max-height:50vh;
-      overflow-y:auto;
-  }
 </style>
