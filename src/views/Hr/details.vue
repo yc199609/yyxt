@@ -1,67 +1,66 @@
 <template>
   <el-dialog :visible.sync="visible" :closeOnClickModal="false" :title="type==='insert'?'新增':'修改'">
     <el-form :model="form" :rules="rules" ref="form">
-      <el-row type="flex" justify="space-between">
-        <el-col :span="10">
-          <el-form-item label="登录账号" prop="code">
-            <el-col :span="21">
-              <el-input v-model="form.code"></el-input>
-            </el-col>
-            <el-col :span="3">
-              <span>@able</span>
-            </el-col>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
+      <el-row>
+        <el-col :offset="1" :span="9">
           <el-form-item label="真实姓名" prop="name">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row type="flex" justify="space-between">
-        <el-col :span="10">
+        <el-col :offset="3" :span="9">
           <el-form-item label="手机号" prop="mobile">
             <el-input v-model="form.mobile"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+      </el-row>
+      <el-row>
+        <el-col :offset="1" :span="15">
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="form.email"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="space-between">
-        <el-col :span="10">
+      <el-row>
+        <el-col :offset="1" :span="9">
           <el-form-item label="昵称" prop="nickName">
             <el-input v-model="form.nickName"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :offset="3" :span="9">
           <el-form-item label="简拼" prop="pinYing">
             <el-input v-model="form.pinYing"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="space-between">
-        <el-col :span="10">
+      <el-row>
+        <el-col :offset="1" :span="9">
           <el-form-item label="性别" prop="sex">
-            <el-select placeholder="请选择性别" v-model="form.sex">
-              <el-option label="女" :value="0"></el-option>
-              <el-option label="男" :value="1"></el-option>
-            </el-select>
+            <el-col>
+              <el-select placeholder="请选择性别" v-model="form.sex">
+                <el-option label="女" :value="0"></el-option>
+                <el-option label="男" :value="1"></el-option>
+              </el-select>
+            </el-col>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :offset="3" :span="9">
           <el-form-item label="生日" prop="birthday">
-            <el-date-picker v-model="form.birthday" type="date" placeholder="选择日期">
-            </el-date-picker>
+            <el-col>
+              <el-date-picker v-model="form.birthday" type="date" placeholder="选择日期">
+              </el-date-picker>
+            </el-col>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="备注" prop="remark">
-        <el-input type="textarea" v-model="form.remark"></el-input>
-      </el-form-item>
-      <el-form-item class="buttonRow">
+      <el-row>
+        <el-col :offset="1" :span="22">
+          <el-form-item label="备注" prop="remark">
+            <el-input type="textarea" v-model="form.remark"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-form-item class="buttonRow" style="text-align:center;">
         <el-button class="mr10px" type="primary" @click="onSubmit">确 定</el-button>
         <el-button @click="cancel">取消</el-button>
       </el-form-item>

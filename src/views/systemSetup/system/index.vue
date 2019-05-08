@@ -7,7 +7,7 @@
       <router-view />
     </el-alert>
 
-    <el-table :data="tableData" border max-height="50vh" style="width: 100%;overflow-y: auto;" class="table">
+    <el-table :data="tableData" border class="table">
       <el-table-column align="center" prop="code" label="代码">
       </el-table-column>
       <el-table-column align="center" prop="name" label="名称">
@@ -25,7 +25,7 @@
       </el-table-column>
     </el-table>
 
-    <div class="block paginationContainer">
+    <div class="paginationContainer">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex"
         :page-sizes="[20, 30, 40, 50]" :page-size='pageSize' layout="total, sizes, prev, pager, next, jumper" :total="totalCount"></el-pagination>
     </div>
@@ -116,11 +116,14 @@ export default {
 <style lang="scss" scoped>
 .container {
   padding: 1vw 3vw 0;
-  .table {
-    width: 100%;
-  }
   .paginationContainer {
     margin-top: 20px;
   }
 }
+</style>
+<style lang='css' scoped>
+  .table >>> .el-table__body-wrapper {
+      max-height:50vh;
+      overflow-y:auto;
+  }
 </style>

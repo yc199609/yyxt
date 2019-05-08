@@ -19,16 +19,14 @@ const Api = {
  * @description 根据员工名称模糊查询
  * @param  {String} name 员工名称
  */
-export function GetEmployeesByName(name) {
+export function GetEmployeesByName(obj) {
   return request({
     url: Api.GetEmployeesByName,
     method: 'get',
     headers: {
       'Content-Type': 'application/json'
     },
-    params: {
-      name
-    }
+    params: obj
   })
 }
 
