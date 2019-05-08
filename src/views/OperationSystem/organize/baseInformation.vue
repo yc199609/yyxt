@@ -11,7 +11,7 @@
         <el-row :gutter="24">
           <el-col :span="8">
             <el-form-item label="简称">
-              <el-input v-model="form.id"></el-input>
+              <el-input v-model="form.name"></el-input>
             </el-form-item>
           </el-col>
 
