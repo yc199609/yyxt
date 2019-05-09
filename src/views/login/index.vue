@@ -20,7 +20,7 @@
         <lang-select class="set-language"/>
       </div>
 
-      <el-form-item
+      <!-- <el-form-item
         prop="organize"
         :rules="[
           { required: true, message: '机构名称不能为空'}
@@ -36,7 +36,7 @@
           auto-complete="off"
           placeholder="organize"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item
         prop="cellPhone"
         :rules="[
@@ -85,13 +85,6 @@
             type="primary"
             @click="showDialogPassword=true"
           >{{ $t('login.forgetPassword') }}</el-button>
-        </span>
-        <span>
-          <el-button
-            class="thirdparty-button"
-            type="primary"
-            @click="showDialogPhone=true"
-          >{{ $t('login.phone') }}</el-button>
         </span>
       </div>
     </el-form>
