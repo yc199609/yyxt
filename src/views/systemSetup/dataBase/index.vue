@@ -3,7 +3,7 @@
 
     <Search @search='init' />
 
-    <el-alert :closable="false" title="数据库参数" type="success" />
+    <el-alert :closable="false" title="数据库参数" type="info" />
 
     <el-table class="Thistable" :data="tableData" border style="width: 100%;">
       <el-table-column align="center" prop="id" label="数据库id">

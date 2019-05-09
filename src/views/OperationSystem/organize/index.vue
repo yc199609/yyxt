@@ -22,7 +22,7 @@
       </section>
     </section>
 
-    <el-alert :closable="false" title="机构列表" type="success"></el-alert>
+    <el-alert :closable="false" title="机构列表" type="info"></el-alert>
 
     <el-table :data="retData" border class="Thistable" style="width: 100%;">
       <el-table-column align="center" prop="name" label="简称"></el-table-column>

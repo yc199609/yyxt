@@ -4,7 +4,7 @@
       <el-button type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
     </Search>
 
-    <el-alert :closable="false" title="员工列表" type="success" />
+    <el-alert :closable="false" title="员工列表" type="info" />
 
     <el-table class="table" :data="tableData" border>
 

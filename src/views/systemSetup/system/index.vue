@@ -3,7 +3,7 @@
 
     <Search @search='init' />
 
-    <el-alert :closable="false" title="系统参数" type="success">
+    <el-alert :closable="false" title="系统参数" type="info">
       <router-view />
     </el-alert>
 
