@@ -86,6 +86,10 @@ body .el-table th.gutter{
   top: 70px !important;
 }
 
-.el-date-editor.el-input{
-  width: auto !important;
+.el-date-editor{
+  width: 100% !important;
+}
+
+.el-select{
+  width: 100%;
 }
