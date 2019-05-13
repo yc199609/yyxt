@@ -55,7 +55,7 @@
       <el-row>
         <el-col :offset="1" :span="22">
           <el-form-item label="备注" prop="remark">
-            <el-input type="textarea" v-model="form.remark"></el-input>
+            <el-input :maxlength="100" type="textarea" v-model="form.remark"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
