@@ -55,6 +55,7 @@ import Search from "@/components/Search";
 import { GetEmployeesByName, DeleteEmployee } from "@api/hr/staff";
 import Detail from "./details";
 export default {
+  name:"staff",
   data() {
     return {
       tableData: [],
@@ -86,9 +87,9 @@ export default {
         pageSize: this.pageSize
       }).then(res => {
         this.$set(this, "tableData", res.data.items);
-        this.pageIndex = res.data.pageIndex
-        this.pageSize = res.data.pageSize
-        this.totalCount = res.data.totalCount
+        this.pageIndex = res.data.pageIndex;
+        this.pageSize = res.data.pageSize;
+        this.totalCount = res.data.totalCount;
       });
     },
     insert() {
@@ -98,19 +99,25 @@ export default {
       this.$refs.detail.init(id);
     },
     del(id) {
-      DeleteEmployee(id).then(res => {
-        this.$message({
-          type: "success",
-          message: "删除成功",
-          duration: 500,
-          onClose: () => {
-            this.init();
-          }
-        });
-      });
+      this.$confirm("此操作将删除员工,是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        DeleteEmployee(id).then(res => {
+          this.$message({
+            type: "success",
+            message: "删除成功",
+            duration: 500,
+            onClose: () => {
+              this.init()
+            }
+          })
+        })
+      })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .container {

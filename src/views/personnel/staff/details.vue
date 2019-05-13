@@ -140,9 +140,14 @@ export default {
     onSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          var utc = this.$moment(this.form.birthday)
+          var utc
+          if(this.form.birthday){
+            utc = this.$moment(this.form.birthday)
             .utc()
             .format();
+          }else{
+            utc = ''
+          }
           switch (this.type) {
             case "insert":
               Create({

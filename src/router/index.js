@@ -69,12 +69,8 @@ export const constantRouterMap = [
       {
         path: 'organize',
         component: () => import('@/views/OperationSystem/organize'),
-        name: 'Organize',
-        meta: {
-          title: '机构列表',
-          affix: false,
-          noCache: true
-        }
+        name: 'organize',
+        meta: { title: '机构列表' }
       }
     ]
   },
@@ -100,34 +96,17 @@ export const constantRouterMap = [
       }
     ]
   },
-  // {
-  //   path: '/demo',
-  //   component: Layout,
-  //   alwaysShow: true,
-  //   name: 'demo',
-  //   meta: { title: 'demo', icon: 'nested' },
-  //   children: [
-  //     {
-  //       path: '',
-  //       component: () => import('@/views/demo'),
-  //       name: 'demo',
-  //       meta: {
-  //         title: 'demo'
-  //       }
-  //     }
-  //   ]
-  // },
   {
-    path: '/Hr',
+    path: '/personnel',
     alwaysShow: true,
-    redirect: '/Hr/staff',
+    redirect: '/personnel/staff',
     component: Layout,
-    name: 'Hr',
+    name: 'personnel',
     meta: { title: '人事管理', icon: 'user' },
     children: [
       {
         path: 'staff',
-        component: () => import('@/views/Hr/staff'),
+        component: () => import('@/views/personnel/staff/index.vue'),
         name: 'staff',
         meta: {
           title: '员工管理'
