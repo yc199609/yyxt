@@ -22,7 +22,7 @@
           </el-col>
         </el-row>
 
-        <el-row :gutter="24">
+        <el-row :gutter="24" style="margin-bottom: 12px">
           <el-col :span="12">
             <el-form-item label="代码" prop="code">
               <el-input v-model="form.code"></el-input>
@@ -102,13 +102,17 @@ export default {
       visible: false,
       rules: {
         name: [
-          { required: true, message: '请输入机构简称', trigger: 'blur' }
+          { required: true, message: '请输入机构简称', trigger: 'blur' },
+          { min: 1, max: 50, message: '长度需在 1 到 50 个字符之间', trigger: 'blur' }
         ],
         fullName: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
+          { required: true, message: '请输入名称', trigger: 'blur' },
+          { min: 1, max: 50, message: '长度需在 1 到 50 个字符之间', trigger: 'blur' }
         ],
         code: [
-          { required: true, message: '请输入代码', trigger: 'blur' }
+          { required: true, message: '请输入代码', trigger: 'blur' },
+          // { min: 4, max: 10, message: '长度需在 4 到 10 个字符之间', trigger: 'blur' }
+          { pattern: /^(?=.*?[a-z)(?=.*>[A-Z])(?=.*?[0-9])[a-zA_Z0-9]{4,10}$/, message: "长度需在 4 到 10 个字符之间, 并且由数字和字母组成" }
         ],
         dbId: [
           { required: true, message: '请选择数据库', trigger: 'blur' }
@@ -118,10 +122,12 @@ export default {
           { pattern: /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/, message: "手机格式不对" }
         ],
         adminName: [
-          { required: true, message: '请输入姓名', trigger: 'blur' }
+          { required: true, message: '请输入姓名', trigger: 'blur' },
+          { min: 1, max: 50, message: '长度需在 1 到 50 个字符之间', trigger: 'blur' }
         ],
         adminNickName: [
-          { required: true, message: '请输入昵称', trigger: 'blur' }
+          { required: true, message: '请输入昵称', trigger: 'blur' },
+          { min: 1, max: 50, message: '长度需在 1 到 50 个字符之间', trigger: 'blur' }
         ]
       }
     }
