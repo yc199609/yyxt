@@ -103,11 +103,13 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入机构简称', trigger: 'blur' },
-          { min: 1, max: 50, message: '长度需在 1 到 50 个字符之间', trigger: 'blur' }
+          { min: 1, max: 50, message: '长度需在 1 到 50 个字符之间', trigger: 'blur' },
+          { pattern:  /^\S*$/, message: "不能输入空格" }
         ],
         fullName: [
           { required: true, message: '请输入名称', trigger: 'blur' },
-          { min: 1, max: 50, message: '长度需在 1 到 50 个字符之间', trigger: 'blur' }
+          { min: 1, max: 50, message: '长度需在 1 到 50 个字符之间', trigger: 'blur' },
+          { pattern:  /^\S*$/, message: "不能输入空格" }
         ],
         code: [
           { required: true, message: '请输入代码', trigger: 'blur' },
@@ -123,11 +125,13 @@ export default {
         ],
         adminName: [
           { required: true, message: '请输入姓名', trigger: 'blur' },
-          { min: 1, max: 50, message: '长度需在 1 到 50 个字符之间', trigger: 'blur' }
+          { min: 1, max: 50, message: '长度需在 1 到 50 个字符之间', trigger: 'blur' },
+          { pattern:  /^\S*$/, message: "不能输入空格" }
         ],
         adminNickName: [
           { required: true, message: '请输入昵称', trigger: 'blur' },
-          { min: 1, max: 50, message: '长度需在 1 到 50 个字符之间', trigger: 'blur' }
+          { min: 1, max: 50, message: '长度需在 1 到 50 个字符之间', trigger: 'blur' },
+          { pattern:  /^\S*$/, message: "不能输入空格" }
         ]
       }
     }
