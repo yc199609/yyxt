@@ -1,18 +1,22 @@
 <template>
   <el-dialog :visible.sync="visible" :closeOnClickModal="false">
     <div style="padding:30px;">
-      <el-form :data="organizeData">
+      <el-form :data="organizeData" :model="organizeData" :rules="rules">
+        <!--  :model="organizeData" :rules="rules" -->
         <span>机构设置</span>
         <hr style="background-color:#f7eaea; height: 1px; border: none;">
         <el-row :gutter="24">
           <el-col :span="12">
-            <el-form-item label="代码">
+            <el-form-item 
+              prop="code"
+              label="代码"
+            >
               <el-input v-model="organizeData.code"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
-            <el-form-item label="站点">
+            <el-form-item label="站点" prop="dmsSite">
               <el-input v-model="organizeData.dmsSite"></el-input>
             </el-form-item>
           </el-col>
@@ -69,6 +73,16 @@ export default {
       visible: false,
       organizeData: {
         db:{}
+      },
+      rules: {
+        code: [
+          { required: true, message: '请输入代码', trigger: 'blur' },
+          { pattern: /^(?=.*?[a-z)(?=.*>[A-Z])(?=.*?[0-9])[a-zA_Z0-9]{4,10}$/, message: '长度需在 4 到 10 个字符间,并且由数字和字母组成' }
+        ],
+         dmsSite: [
+          { required: true, message: '请输入站点', trigger: 'blur' },
+          { pattern: /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/|www\.)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/, message: '请输入正确格式的站点' }
+        ]
       }
     }
   },
