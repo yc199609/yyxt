@@ -80,8 +80,8 @@ export default {
           { pattern: /^(?=.*?[a-z)(?=.*>[A-Z])(?=.*?[0-9])[a-zA_Z0-9]{4,10}$/, message: '长度需在 4 到 10 个字符间,并且由数字和字母组成' }
         ],
          dmsSite: [
-          { required: true, message: '请输入站点', trigger: 'blur' },
-          { pattern: /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/|www\.)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/, message: '请输入正确格式的站点' }
+          { required: true, message: '请输入站点', trigger: 'blur' }
+          // { pattern: /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/|www\.)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/, message: '请输入正确格式的站点' }
         ]
       }
     }
