@@ -49,9 +49,11 @@ export default {
   data() {
     /*****检验两次密码是否一致***/
     var validatePass = (rule, value, callback) => {
-      console.log(value);
+      // console.log(value);
       if (value === "") {
         callback(new Error("请输入密码"));
+      } else if (value.length < 6){
+        callback(new Error("密码不能少于6位数"));
       } else {
         callback();
       }
@@ -59,9 +61,10 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value == "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.userlist.checknewpass) {
+      } else if (value !== this.userlist.pass) {
         callback(new Error("两次输入密码不一致!"));
       } else {
+        alert(3)
         callback();
       }
     };

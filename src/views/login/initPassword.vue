@@ -2,25 +2,20 @@
   <el-form
     :model="form"
     ref="form"
+    :rules="rules"
   >
     <!-- :rules="newloginRules" -->
     <el-form-item
       prop="newpassword"
       label='新密码'
-      :rules="[
-        { required: true, message: '新密码不能为空'}
-      ]"
     >
-      <el-input v-model="form.newpassword"></el-input>
+      <el-input v-model="from.newpassword" type="password" :maxlength="50"></el-input>
     </el-form-item>
     <el-form-item
       prop="submitpassword"
       label='确认密码'
-      :rules="[
-        { required: true, message: '确认密码不能为空'}
-      ]"
     >
-      <el-input v-model="form.submitpassword"></el-input>
+      <el-input v-model="from.submitpassword" type="password" :maxlength="50"></el-input>
     </el-form-item>
     <el-form-item>
       <template>
@@ -51,7 +46,7 @@ export default {
       rules: {
         newpassword: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, message: '请输入6位以上密码', trigger: 'blur' }
+          { min: 6, max: 30, message: '密码需在6-30位之间', trigger: 'blur' }
         ],
         submitpassword: [
           { validator: checkSubmitpassword, trigger: 'blur' }

@@ -103,6 +103,7 @@
       :title="$t('login.phone')"
       :visible.sync="showDialogPhone"
       :modal-append-to-body="false"
+      :close-on-click-modal="false"
     >
       <phone/>
     </el-dialog>
@@ -111,6 +112,7 @@
       @close="initPasswordHidden"
       :visible.sync="initView"
       :modal-append-to-body="false"
+      :close-on-click-modal="false"
       title="首次登录请重置密码">
       <initPassword @submit='initPasswordSubmit' />
     </el-dialog>

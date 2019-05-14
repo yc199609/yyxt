@@ -5,12 +5,12 @@
     class="container"
   >
     <section class="content-wrapper-container">
-      <el-form v-model="form">
+      <el-form :model="form" :rules="rules">
         <span>基本信息</span>
         <hr style="background-color:#f7eaea; height: 1px; border: none;">
         <el-row :gutter="24">
           <el-col :span="8">
-            <el-form-item label="简称">
+            <el-form-item label="简称" prop="name">
               <el-input v-model="form.name" :maxlength="50"></el-input>
             </el-form-item>
           </el-col>
@@ -21,11 +21,11 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="8">
+          <!-- <el-col :span="8">
             <el-form-item label="代码">
               <el-input v-model="form.code" :maxlength="50"></el-input>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
 
         <el-row :gutter="24">
@@ -117,9 +117,25 @@ export default {
   name: "baseInformation",
   data() {
     return {
+      visible:false,
       form: {
+        name: '',
+        fullName: '',
+        code: '',
+        outsidePhone: '',
+        insidePhone: '',
+        fax: '',
+        businessScop: '',
+        floor: '',
+        address: ''
       },
-      visible:false
+      rules: {
+        name: [
+          { required: true, message: '请输入机构简称', trigger: 'blur' },
+          { min: 1, max: 50, message: '长度需在 1 到 50 个字符之间', trigger: 'blur' },
+          { pattern:  /^\S*$/, message: "不能输入空格" }
+        ],
+      }
     }
   },
   methods: {
@@ -133,9 +149,12 @@ export default {
     closeInfo() {
       this.visible = false
     },
-    saveInfo() {
+    saveInfo(formName) {
       // 保存修改基本信息
-        updateBaseInfo(this.form)
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert('submit!');
+          updateBaseInfo(this.form)
           .then(res => {
             this.$message({
               type:'success',
@@ -147,6 +166,12 @@ export default {
               }
             })
           })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      })
+
     }
   }
 };
