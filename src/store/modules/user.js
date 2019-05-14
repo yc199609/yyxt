@@ -5,6 +5,8 @@ import {
   changePassword
 } from '@/api/login'
 
+import Cookies from 'js-cookie'
+
 import {
   getToken,
   setToken,
@@ -79,6 +81,9 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
           const data = response.data
+          if (data.userInfo) {
+            Cookies.set('userName', data.userInfo.userName)
+          }
           commit('SET_SITEINFO', data.siteInfo)
           commit('SET_USERINFO', data.userInfo)
           resolve(response)

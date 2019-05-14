@@ -12,7 +12,7 @@
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
         <img :src="require('@/assets/icon/avatar.gif')" class="user-avatar" alt="">
-        <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
+        {{userName}}
         <i class="el-icon-caret-bottom" />
       </div>
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -40,12 +40,18 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie'
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import LangSelect from '@/components/LangSelect'
 
 export default {
+  data(){
+    return{
+      userName:''
+    }
+  },
   components: {
     Breadcrumb,
     Hamburger,
@@ -66,6 +72,9 @@ export default {
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })
     }
+  },
+  mounted(){
+   this.userName = Cookies.get('userName')
   }
 }
 </script>
@@ -123,7 +132,7 @@ export default {
   .right-menu-item {
     position: fixed;
     top: 0;
-    right: 85px;
+    right: 140px;
     line-height: 50px;
     display: inline-block;
     padding: 0 8px;

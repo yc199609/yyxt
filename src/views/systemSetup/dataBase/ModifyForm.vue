@@ -19,7 +19,7 @@
       </el-form-item>
 
       <el-form-item label="数据库密码" label-width="120px" prop="password">
-        <el-input v-model="form.password" :maxlength="50"></el-input>
+        <el-input type="password" v-model="form.password" :maxlength="50"></el-input>
       </el-form-item>
 
       <el-form-item label="数据库名" label-width="120px" prop="name">
