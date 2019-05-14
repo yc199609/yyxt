@@ -7,13 +7,13 @@
         <el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="代码">
-              <el-input v-model="organizeData.code"></el-input>
+              <el-input v-model="organizeData.code" :maxlength="50"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="站点">
-              <el-input v-model="organizeData.dmsSite"></el-input>
+              <el-input v-model="organizeData.dmsSite" :maxlength="50"></el-input>
             </el-form-item>
           </el-col>
         </el-row>

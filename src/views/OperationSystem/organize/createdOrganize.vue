@@ -11,13 +11,13 @@
         <el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="简称" prop="name">
-              <el-input v-model="form.name"></el-input>
+              <el-input v-model="form.name" :maxlength="50"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="12">
             <el-form-item label="名称" prop="fullName">
-              <el-input v-model="form.fullName"></el-input>
+              <el-input v-model="form.fullName" :maxlength="50"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -25,7 +25,7 @@
         <el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="代码" prop="code">
-              <el-input v-model="form.code"></el-input>
+              <el-input v-model="form.code" :maxlength="50"></el-input>
             </el-form-item>
           </el-col>
 
@@ -51,13 +51,13 @@
         <el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="手机号" prop="adminMobile">
-              <el-input v-model="form.adminMobile"></el-input>
+              <el-input v-model="form.adminMobile" :maxlength="50"></el-input>
             </el-form-item>
           </el-col>
           
           <el-col :span="12">
             <el-form-item label="姓名" prop="adminName">
-              <el-input v-model="form.adminName"></el-input>
+              <el-input v-model="form.adminName" :maxlength="50"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -65,7 +65,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="昵称" prop="adminNickName">
-              <el-input v-model="form.adminNickName"></el-input>
+              <el-input v-model="form.adminNickName" :maxlength="50"></el-input>
             </el-form-item>
           </el-col>
         </el-row>

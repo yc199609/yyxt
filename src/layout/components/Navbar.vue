@@ -26,6 +26,11 @@
             修改手机号
           </el-dropdown-item>
         </router-link>
+        <router-link class="inlineBlock" to="/resetPassword">
+          <el-dropdown-item>
+            修改密码
+          </el-dropdown-item>
+        </router-link>
         <el-dropdown-item divided>
           <span style="display:block;" @click="logout">{{ $t('loginOut.loginOut') }}</span>
         </el-dropdown-item>

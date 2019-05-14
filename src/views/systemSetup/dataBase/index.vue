@@ -54,7 +54,7 @@
     <el-dialog title="修改名称" :visible.sync="dialogChangeVisible" :closeOnClickModal="false">
       <el-form :model="changNameform" ref='form' :rules="rules">
         <el-form-item prop="name" label="数据库名称" label-width="120px">
-          <el-input v-model="changNameform.name"></el-input>
+          <el-input :maxlength="80" v-model="changNameform.name"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
