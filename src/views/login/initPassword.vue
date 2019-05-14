@@ -1,6 +1,6 @@
 <template>
   <el-form
-    :model="from"
+    :model="form"
     ref="form"
     :rules="rules"
   >
@@ -9,13 +9,13 @@
       prop="newpassword"
       label='新密码'
     >
-      <el-input v-model="from.newpassword" type="password"></el-input>
+      <el-input v-model="from.newpassword" type="password" :maxlength="50"></el-input>
     </el-form-item>
     <el-form-item
       prop="submitpassword"
       label='确认密码'
     >
-      <el-input v-model="from.submitpassword" type="password"></el-input>
+      <el-input v-model="from.submitpassword" type="password" :maxlength="50"></el-input>
     </el-form-item>
     <el-form-item>
       <template>
@@ -32,14 +32,14 @@ export default {
     const checkSubmitpassword = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('请确认密码'))
-      } else if (value !== this.from.newpassword) {
+      } else if (value !== this.form.newpassword) {
         return callback(new Error('2次密码输入不一致'))
       } else {
         callback()
       }
     }
     return {
-      from: {
+      form: {
         newpassword: '',
         submitpassword: ''
       },
@@ -58,7 +58,7 @@ export default {
     submit() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          fristChangePwd(this.from.newpassword)
+          fristChangePwd(this.form.newpassword)
             .then(res => {
               this.$emit('submit')
             })

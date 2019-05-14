@@ -54,7 +54,7 @@
     <el-dialog title="修改名称" :visible.sync="dialogChangeVisible" :closeOnClickModal="false">
       <el-form :model="changNameform" ref='form' :rules="rules">
         <el-form-item prop="name" label="数据库名称" label-width="120px">
-          <el-input v-model="changNameform.name"></el-input>
+          <el-input :maxlength="80" v-model="changNameform.name"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -63,9 +63,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="修改数据库配置信息" :visible.sync="changeDbVisible" :closeOnClickModal="false">
-      <ModifyForm v-if="changeDbVisible" @init='init' @hidden="modifyHidden" :dataObj='modifyForm' :isDefault='changNameform.isDefault' />
-    </el-dialog>
+    <ModifyForm v-if="changeDbVisible" ref="modifyForm" @reload='init'/>
 
   </div>
 </template>
@@ -85,13 +83,13 @@ export default {
     return {
       tableData: [
         {
-          id: "nulla eu minim",
-          ip: "elit est eiusmod",
-          isDefault: -75270224,
-          name: "occaecat voluptate non sit",
-          port: -3742555,
-          status: 28552227,
-          userName: "laboris"
+          id: "",
+          ip: "",
+          isDefault: 0,
+          name: "",
+          port: '',
+          status: '',
+          userName: ""
         }
       ],
       changNameform: {
@@ -101,7 +99,6 @@ export default {
       rules: {
         name: [{ required: true, message: "请输入数据库名称", trigger: "blur" }]
       },
-      modifyForm: {},
       dialogChangeVisible: false,
       changeDbVisible: false,
       toolbeRunning: false // 节流阀
@@ -149,8 +146,10 @@ export default {
     },
     // 打开修改数据库配置信息的弹框
     modifyDialog(data) {
-      this.$set(this, "modifyForm", data);
       this.changeDbVisible = true;
+      this.$nextTick(()=>{
+        this.$refs.modifyForm.init(data)
+      })
     },
     offOrON(data, i) {
       if (this.toolbeRunning === false) {

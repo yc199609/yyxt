@@ -11,19 +11,19 @@
         <el-row :gutter="24">
           <el-col :span="8">
             <el-form-item label="简称" prop="name">
-              <el-input v-model="form.name"></el-input>
+              <el-input v-model="form.name" :maxlength="50"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col :span="8">
             <el-form-item label="全称">
-              <el-input v-model="form.fullName"></el-input>
+              <el-input v-model="form.fullName" :maxlength="50"></el-input>
             </el-form-item>
           </el-col>
 
           <!-- <el-col :span="8">
             <el-form-item label="代码">
-              <el-input v-model="form.code"></el-input>
+              <el-input v-model="form.code" :maxlength="50"></el-input>
             </el-form-item>
           </el-col> -->
         </el-row>
@@ -34,6 +34,7 @@
               <el-input
                 placeholder="请输入外线电话"
                 v-model="form.outsidePhone"
+                :maxlength="50"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -43,6 +44,7 @@
               <el-input
                 placeholder="请输入内线电话"
                 v-model="form.insidePhone"
+                :maxlength="50"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -52,6 +54,7 @@
               <el-input
                 placeholder="请输入机构传真"
                 v-model="form.fax"
+                :maxlength="50"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -63,6 +66,7 @@
               <el-input
                 placeholder="请输入机构经营范围"
                 v-model="form.businessScop"
+                :maxlength="50"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -72,6 +76,7 @@
               <el-input
                 placeholder="请输入机构楼层"
                 v-model="form.floor"
+                :maxlength="50"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -83,6 +88,7 @@
               <el-input
                 placeholder="请输入机构详细地址"
                 v-model="form.address"
+                :maxlength="50"
               ></el-input>
             </el-form-item>
           </el-col>

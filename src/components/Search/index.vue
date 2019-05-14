@@ -76,6 +76,7 @@
 </style>
 <script>
 export default {
+  name:'Search',
   data(){
     return{
       keyword:''

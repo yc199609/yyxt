@@ -4,31 +4,31 @@
       <el-row>
         <el-col :offset="1" :span="9">
           <el-form-item label="真实姓名" prop="name">
-            <el-input v-model="form.name"></el-input>
+            <el-input v-model="form.name" :maxlength="50"></el-input>
           </el-form-item>
         </el-col>
         <el-col :offset="3" :span="9">
           <el-form-item label="手机号" prop="mobile">
-            <el-input v-model="form.mobile"></el-input>
+            <el-input v-model="form.mobile" :maxlength="50"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :offset="1" :span="15">
           <el-form-item label="邮箱" prop="email">
-            <el-input v-model="form.email"></el-input>
+            <el-input v-model="form.email" :maxlength="70"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :offset="1" :span="9">
           <el-form-item label="昵称" prop="nickName">
-            <el-input v-model="form.nickName"></el-input>
+            <el-input v-model="form.nickName" :maxlength="30"></el-input>
           </el-form-item>
         </el-col>
         <el-col :offset="3" :span="9">
           <el-form-item label="简拼" prop="pinYing">
-            <el-input v-model="form.pinYing"></el-input>
+            <el-input v-model="form.pinYing" :maxlength="30"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -55,7 +55,7 @@
       <el-row>
         <el-col :offset="1" :span="22">
           <el-form-item label="备注" prop="remark">
-            <el-input type="textarea" v-model="form.remark"></el-input>
+            <el-input :maxlength="100" type="textarea" v-model="form.remark"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -140,9 +140,14 @@ export default {
     onSubmit() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          var utc = this.$moment(this.form.birthday)
+          var utc
+          if(this.form.birthday){
+            utc = this.$moment(this.form.birthday)
             .utc()
             .format();
+          }else{
+            utc = ''
+          }
           switch (this.type) {
             case "insert":
               Create({

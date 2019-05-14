@@ -3,18 +3,18 @@
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" :rules="rules">
       <el-form-item label="输入手机号" prop="mobile" :label-width="formLabelWidth">
         <el-col :span="8">
-          <el-input v-model="form.mobile" @change="imgCode" placeholder="请输入手机号"></el-input>
+          <el-input v-model="form.mobile" :maxlength="50" @change="imgCode" placeholder="请输入手机号"></el-input>
         </el-col>
       </el-form-item>
       <el-form-item label="图片验证码" prop="imageCode" :label-width="formLabelWidth" style="position: relative;">
         <el-col :span="8">
-          <el-input v-model="form.imageCode" placeholder="请输入图片验证码" style="float: left;"></el-input>
+          <el-input v-model="form.imageCode"  :maxlength="50" placeholder="请输入图片验证码" style="float: left;"></el-input>
           <img :src="imgCodeShow?'/api/User/GetImageCode?mobile='+form.mobile:''" alt style="position: absolute; top: 0; margin-left: 10px;">
         </el-col>
       </el-form-item>
       <el-form-item label="短信验证码" prop="sms" :label-width="formLabelWidth" style="position: relative;">
         <el-col :span="8">
-          <el-input v-model="form.sms" placeholder="请输入短信验证码" style="float: left;"></el-input>
+          <el-input v-model="form.sms" placeholder="请输入短信验证码" :maxlength="50" style="float: left;"></el-input>
           <el-button :type="sendsms?'primary':'info'" @click="SendForgetPsw" plain style="position: absolute; top: 0; margin-left: 10px;">{{sendCode}}</el-button>
         </el-col>
       </el-form-item>

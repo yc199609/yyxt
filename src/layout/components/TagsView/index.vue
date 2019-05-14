@@ -3,7 +3,7 @@
     <el-row>
       <scroll-pane ref="scrollPane" class="tags-view-wrapper">
         <router-link v-for="tag in visitedViews" ref="tag" :key="tag.path" :class="isActive(tag)?'active':''" :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
-          tag="span" class="tags-view-item" @click.middle.native="closeSelectedTag(tag)" @contextmenu.prevent.native="openMenu(tag,$event)">
+          tag="span" class="tags-view-item"  @contextmenu.prevent.native="openMenu(tag,$event)">
           <span>{{tag.title}}</span>
           <span v-if="!tag.meta.affix" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
         </router-link>
@@ -66,24 +66,14 @@ export default {
       }
       return false;
     },
-    refreshSelectedTag(view) {
-      this.$store.dispatch("tagsView/delCachedView", view).then(() => {
-        const { fullPath } = view;
-        this.$nextTick(() => {
-          this.$router.replace({
-            path: "/redirect" + fullPath
-          });
-        });
-      });
-    },
     closeSelectedTag(view) {
       this.$store
         .dispatch("tagsView/delView", view)
         .then(({ visitedViews }) => {
           if (this.isActive(view)) {
-            this.toLastView(visitedViews, view);
+            this.toLastView(visitedViews, view)
           }
-        });
+        })
     },
     toLastView(visitedViews, view) {
       const latestView = visitedViews.slice(-1)[0];
