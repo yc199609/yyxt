@@ -8,49 +8,53 @@
     </h3>
     <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />
     <breadcrumb />
-    <lang-select class="right-menu-item hover-effect" />
-    <el-dropdown class="avatar-container" trigger="click">
-      <div class="avatar-wrapper">
-        <img :src="require('@/assets/icon/avatar.gif')" class="user-avatar" alt="">
-        {{userName}}
-        <i class="el-icon-caret-bottom" />
-      </div>
-      <el-dropdown-menu slot="dropdown" class="user-dropdown">
-        <router-link class="inlineBlock" to="/">
-          <el-dropdown-item>
-            {{ $t('loginOut.home') }}
+    
+    <div>
+      <lang-select class="right-menu-item hover-effect" />
+      <el-dropdown class="avatar-container" trigger="click">
+        <div class="avatar-wrapper">
+          <img :src="require('@/assets/icon/avatar.gif')" class="user-avatar" alt="">
+          {{userName}}
+          <i class="el-icon-caret-bottom" />
+        </div>
+        <el-dropdown-menu slot="dropdown" class="user-dropdown">
+          <router-link class="inlineBlock" to="/">
+            <el-dropdown-item>
+              {{ $t('loginOut.home') }}
+            </el-dropdown-item>
+          </router-link>
+          <router-link class="inlineBlock" to="/resetMobile">
+            <el-dropdown-item>
+              修改手机号
+            </el-dropdown-item>
+          </router-link>
+          <router-link class="inlineBlock" to="/resetPassword">
+            <el-dropdown-item>
+              修改密码
+            </el-dropdown-item>
+          </router-link>
+          <el-dropdown-item divided>
+            <span style="display:block;" @click="logout">{{ $t('loginOut.loginOut') }}</span>
           </el-dropdown-item>
-        </router-link>
-        <router-link class="inlineBlock" to="/resetMobile">
-          <el-dropdown-item>
-            修改手机号
-          </el-dropdown-item>
-        </router-link>
-        <router-link class="inlineBlock" to="/resetPassword">
-          <el-dropdown-item>
-            修改密码
-          </el-dropdown-item>
-        </router-link>
-        <el-dropdown-item divided>
-          <span style="display:block;" @click="logout">{{ $t('loginOut.loginOut') }}</span>
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
+
   </div>
 </template>
 
 <script>
-import Cookies from 'js-cookie'
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-import LangSelect from '@/components/LangSelect'
+import Cookies from "js-cookie";
+import { mapGetters } from "vuex";
+import Breadcrumb from "@/components/Breadcrumb";
+import Hamburger from "@/components/Hamburger";
+import LangSelect from "@/components/LangSelect";
 
 export default {
-  data(){
-    return{
-      userName:''
-    }
+  data() {
+    return {
+      userName: ""
+    };
   },
   components: {
     Breadcrumb,
@@ -58,57 +62,54 @@ export default {
     LangSelect
   },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar'
-    ])
+    ...mapGetters(["sidebar", "avatar"])
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
+      this.$store.dispatch("app/toggleSideBar");
     },
     logout() {
-      this.$store.dispatch('LogOut').then(() => {
-        location.reload() // 为了重新实例化vue-router对象 避免bug
-      })
+      this.$store.dispatch("LogOut").then(() => {
+        location.reload(); // 为了重新实例化vue-router对象 避免bug
+      });
     }
   },
-  mounted(){
-   this.userName = Cookies.get('userName')
+  mounted() {
+    this.userName = Cookies.get("userName");
   }
-}
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.SystemTitle{
+.SystemTitle {
   font-size: 17px;
 }
-.imgBox{
+.imgBox {
   display: inline-block;
   width: 54px;
   text-align: center;
-  .titleImg{
+  .titleImg {
     vertical-align: middle;
   }
 }
 
-.h3{
+.h3 {
   overflow: hidden;
   background-color: #2b2f3a;
-  white-space : nowrap ;
-  color:white;
+  white-space: nowrap;
+  color: white;
   position: fixed;
   margin: 0;
   width: 210px;
   height: 50px;
   left: 0;
   top: 0;
-  transition:width 0.28s;
+  transition: width 0.28s;
   @media screen and (max-width: 992px) {
     width: 54px;
   }
 }
-.h3hidden{
+.h3hidden {
   width: 54px;
 }
 .navbar {

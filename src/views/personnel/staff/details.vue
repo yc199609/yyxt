@@ -9,7 +9,7 @@
         </el-col>
         <el-col :offset="3" :span="9">
           <el-form-item label="手机号" prop="mobile">
-            <el-input v-model="form.mobile" :maxlength="50"></el-input>
+            <el-input :disabled="type==='edit'" v-model="form.mobile" :maxlength="50"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
