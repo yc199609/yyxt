@@ -127,7 +127,7 @@ export default {
       var _that = this;
       this.$refs.EditorUserForms.validateField("mobile", err => {
         if (!err) {
-          console.log(this.$refs.imgcode)
+          // console.log(this.$refs.imgcode)
           this.$refs.imgcode.setAttribute('src','/api/User/GetImageCode?mobile=' + this.userlist.mobile + '&rander=' + Math.random(1))
         }
       });
