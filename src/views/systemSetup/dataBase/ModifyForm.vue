@@ -26,7 +26,7 @@
         <el-input v-model="form.dbName" :maxlength="50"></el-input>
       </el-form-item>
 
-      <el-switch style="display: block" v-model="form.isDefault" active-color="#13ce66" inactive-color="#ff4949"
+      <el-switch style="display: inline-block;" v-model="form.isDefault" active-color="#13ce66" inactive-color="#ff4949"
         active-text="默认数据库" inactive-text="非默认数据库" :active-value="1" :inactive-value="0">
       </el-switch>
 
