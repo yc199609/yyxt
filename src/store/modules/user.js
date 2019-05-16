@@ -68,7 +68,7 @@ const user = {
             commit('SET_TOKEN', data.token)
             setToken(data.token)
             // this.$route.push({ '' })
-            resolve()
+            resolve(response)
           }
         }).catch(error => {
           reject(error)

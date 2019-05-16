@@ -9,13 +9,13 @@
       prop="newpassword"
       label='新密码'
     >
-      <el-input v-model="from.newpassword" type="password" :maxlength="50"></el-input>
+      <el-input v-model="form.newpassword" type="password" :maxlength="50"></el-input>
     </el-form-item>
     <el-form-item
       prop="submitpassword"
       label='确认密码'
     >
-      <el-input v-model="from.submitpassword" type="password" :maxlength="50"></el-input>
+      <el-input v-model="form.submitpassword" type="password" :maxlength="50"></el-input>
     </el-form-item>
     <el-form-item>
       <template>

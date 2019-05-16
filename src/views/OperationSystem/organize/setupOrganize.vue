@@ -1,7 +1,7 @@
 <template>
-  <el-dialog :visible.sync="visible" :closeOnClickModal="false">
+  <el-dialog :visible.sync="visible" :closeOnClickModal="false" @close="close">
     <div style="padding:30px;">
-      <el-form :data="organizeData" :model="organizeData" :rules="rules">
+      <el-form :data="organizeData" :model="organizeData" ref="organizeData" :rules="rules">
         <!--  :model="organizeData" :rules="rules" -->
         <span>机构设置</span>
         <hr style="background-color:#f7eaea; height: 1px; border: none;">
@@ -80,15 +80,22 @@ export default {
           { pattern: /^(?=.*?[a-z)(?=.*>[A-Z])(?=.*?[0-9])[a-zA_Z0-9]{4,10}$/, message: '长度需在 4 到 10 个字符间,并且由数字和字母组成' }
         ],
          dmsSite: [
-          { required: true, message: '请输入站点', trigger: 'blur' }
+          { required: true, message: '请输入站点', trigger: 'blur' },
+          { pattern:  /^\S*$/, message: "不能输入空格" }
           // { pattern: /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/|www\.)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/, message: '请输入正确格式的站点' }
         ]
       }
     }
   },
   methods: {
+    close(){
+      this.$refs.organizeData.resetFields()
+    },
     init(id) {
       this.visible = true
+      this.$nextTick(() => {
+        this.$refs.organizeData.resetFields();
+      });
       getSystemInfoById(id)
         .then(res => {
           this.$set(this,'organizeData',res.data)
@@ -97,18 +104,23 @@ export default {
     },
     saveInfo() {
       // 修改系统设置
-      updateSystemInfo(this.organizeData)
-        .then(res => {
-          this.$message({
-            type: "success",
-            message: "修改成功",
-            duration:500,
-            onClose:()=>{
-              this.visible = false
-              this.$emit('render')
-            }
-          })
+        this.$refs.organizeData.validate((valid) => {
+          if (valid) {
+            updateSystemInfo(this.organizeData)
+            .then(res => {
+              this.$message({
+                type: "success",
+                message: "修改成功",
+                duration:500,
+                onClose:()=>{
+                  this.visible = false
+                  this.$emit('render')
+                }
+              })
+            })
+          }
         })
+
     },
     dataBase() {
       DataBaseList()
