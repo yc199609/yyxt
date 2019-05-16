@@ -3,13 +3,13 @@
     <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="100px" class="demo-ruleForm" :rules="rules">
       <el-form-item label="输入手机号" prop="phone" :label-width="formLabelWidth">
         <el-col :span="8">
-          <el-input v-model="numberValidateForm.phone" @change="imgCode" placeholder="请输入手机号"></el-input>
+          <el-input v-model="numberValidateForm.phone" @blur="imgCode" placeholder="请输入手机号"></el-input>
         </el-col>
       </el-form-item>
       <el-form-item label="图片验证码" prop="pictrue" :label-width="formLabelWidth" style="position: relative;">
         <el-col :span="8">
           <el-input v-model="numberValidateForm.pictrue" placeholder="请输入图片验证码" style="float: left;"></el-input>
-          <img :src="imgCodeShow?'/api/User/GetImageCode?mobile='+numberValidateForm.phone:''" alt style="position: absolute; top: 0; margin-left: 10px;">
+          <img ref="imgcode" @click="imgCode" src="" alt style="position: absolute; top: 0; margin-left: 10px;">
         </el-col>
       </el-form-item>
       <el-form-item label="短信验证码" prop="smsv" :label-width="formLabelWidth" style="position: relative;">
@@ -39,7 +39,6 @@ export default {
         pictrue:'',
         smsv:''
       },
-      imgCodeShow:false,
       formLabelWidth: "150px",
       rules: {
         phone: [
@@ -64,7 +63,7 @@ export default {
     imgCode() {
       this.$refs.numberValidateForm.validateField("phone", err => {
         if (!err) {
-          this.imgCodeShow = true;
+          this.$refs.imgcode.setAttribute('src','/api/User/GetImageCode?mobile=' + this.form.mobile + '&rander=' + Math.random(1))
         }
       });
     },
@@ -107,7 +106,7 @@ export default {
             .catch(err => {
               clearInterval(timer)
               _that.sendSmsv = true
-              _that.sendCode = "服务器错误请重新获取"
+              _that.sendCode = "重新获取"
             })
         }
       })
