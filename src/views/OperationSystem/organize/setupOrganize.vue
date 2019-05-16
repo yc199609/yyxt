@@ -81,6 +81,7 @@ export default {
         ],
          dmsSite: [
           { required: true, message: '请输入站点', trigger: 'blur' },
+          { pattern:  /^\S*$/, message: "不能输入空格" }
           // { pattern: /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/|www\.)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/, message: '请输入正确格式的站点' }
         ]
       }
