@@ -22,8 +22,8 @@
         <el-input type="password" v-model="form.password" :maxlength="50"></el-input>
       </el-form-item>
 
-      <el-form-item label="数据库名" label-width="120px" prop="name">
-        <el-input v-model="form.name" :maxlength="50"></el-input>
+      <el-form-item label="数据库名" label-width="120px" prop="dbName">
+        <el-input v-model="form.dbName" :maxlength="50"></el-input>
       </el-form-item>
 
       <el-switch style="display: block" v-model="form.isDefault" active-color="#13ce66" inactive-color="#ff4949"
@@ -56,7 +56,7 @@ export default {
           { required: true, message: "数据库用户名不能为空", trigger: "blur" }
         ],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
-        name: [{ required: true, message: "数据库名不能为空", trigger: "blur" }]
+        dbName: [{ required: true, message: "数据库名不能为空", trigger: "blur" }]
       },
       visible: false
     };

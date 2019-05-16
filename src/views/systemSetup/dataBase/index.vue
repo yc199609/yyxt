@@ -8,7 +8,7 @@
     <el-table class="Thistable" :data="tableData" border style="width: 100%;">
       <el-table-column align="center" prop="id" label="数据库id">
       </el-table-column>
-      <el-table-column align="center" prop="name" label="数据库名">
+      <el-table-column align="center" prop="dbName" label="数据库名">
       </el-table-column>
       <el-table-column align="center" label="服务器IP/端口">
         <template slot-scope="scope">
@@ -53,7 +53,7 @@
 
     <el-dialog title="修改名称" :visible.sync="dialogChangeVisible" :closeOnClickModal="false">
       <el-form :model="changNameform" ref='form' :rules="rules">
-        <el-form-item prop="name" label="数据库名称" label-width="120px">
+        <el-form-item prop="dbName" label="数据库名称" label-width="120px">
           <el-input :maxlength="80" v-model="changNameform.name"></el-input>
         </el-form-item>
       </el-form>
