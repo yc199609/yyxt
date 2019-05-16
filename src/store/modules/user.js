@@ -112,6 +112,7 @@ const user = {
         logout(state.token).then(() => {
           commit('SET_SITEINFO', null)
           commit('SET_USERINFO', null)
+          Cookies.set('userName', '')
           removeToken()
           resolve()
         }).catch(error => {
@@ -125,6 +126,7 @@ const user = {
       return new Promise(resolve => {
         commit('SET_SITEINFO', null)
         commit('SET_USERINFO', null)
+        Cookies.set('userName', '')
         removeToken()
         resolve()
       })

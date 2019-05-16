@@ -199,7 +199,7 @@ export default {
                 this.initView = true
                 this.token = res.token
               } else {
-                this.$router.push( { path: "/" } )
+                window.location.href = res.data.redirectUrl;
               }
             })
             .catch(() => {
