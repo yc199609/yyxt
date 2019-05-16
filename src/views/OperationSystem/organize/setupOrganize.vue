@@ -77,7 +77,7 @@ export default {
       rules: {
         code: [
           { required: true, message: '请输入代码', trigger: 'blur' },
-          { pattern: /^(?=.*?[a-z)(?=.*>[A-Z])(?=.*?[0-9])[a-zA_Z0-9]{4,10}$/, message: '长度需在 4 到 10 个字符间,并且由数字和字母组成' }
+          { pattern: /^(?=.*?[a-z)(?=.*>[A-Z])[a-zA_Z0-9]{4,10}$/, message: '长度需在 4 到 10 个字符间,并且其中有字母组成' }
         ],
          dmsSite: [
           { required: true, message: '请输入站点', trigger: 'blur' },
