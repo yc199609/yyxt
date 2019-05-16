@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="visible" :closeOnClickModal="false" :title="type==='insert'?'新增':'修改'">
+  <el-dialog :visible.sync="visible" :closeOnClickModal="false" :title="type==='insert'?'新增':'修改'" @close="close">
     <el-form :model="form" :rules="rules" ref="form">
       <el-row>
         <el-col :offset="1" :span="9">
@@ -121,6 +121,9 @@ export default {
     };
   },
   methods: {
+    close(){
+      this.$refs.form.resetFields()
+    },
     init(id) {
       this.type = id == null ? "insert" : "edit";
       this.visible = true;

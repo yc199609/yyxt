@@ -91,6 +91,7 @@ export default {
       this.visible = false;
     },
     onClose() {
+      this.$refs.form.clearValidate()
       this.$parent.changeDbVisible = false;
     }
   }

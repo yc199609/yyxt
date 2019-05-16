@@ -153,7 +153,6 @@ export default {
       // 保存修改基本信息
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
           updateBaseInfo(this.form)
           .then(res => {
             this.$message({

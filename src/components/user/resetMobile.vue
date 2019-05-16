@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <el-dialog :visible.sync="visible" :closeOnClickModal="false" title="修改手机号" @close="close">
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" :rules="rules">
       <el-form-item label="输入手机号" prop="mobile" :label-width="formLabelWidth">
         <el-col :span="8">
@@ -8,7 +8,7 @@
       </el-form-item>
       <el-form-item label="图片验证码" prop="imageCode" :label-width="formLabelWidth" style="position: relative;">
         <el-col :span="8">
-          <el-input v-model="form.imageCode"  :maxlength="50" placeholder="请输入图片验证码" style="float: left;"></el-input>
+          <el-input v-model="form.imageCode" :maxlength="50" placeholder="请输入图片验证码" style="float: left;"></el-input>
           <img :src="imgCodeShow?'/api/User/GetImageCode?mobile='+form.mobile:''" alt style="position: absolute; top: 0; margin-left: 10px;">
         </el-col>
       </el-form-item>
@@ -23,7 +23,7 @@
         <el-button @click="resetForm()">重置</el-button>
       </el-form-item>
     </el-form>
-  </div>
+  </el-dialog>
 
 </template>
 <script>
@@ -57,10 +57,17 @@ export default {
           { required: true, message: "请输入图片验证码", trigger: "blur" }
         ],
         sms: [{ required: true, message: "请输入短信验证码", trigger: "blur" }]
-      }
+      },
+      visible:false
     };
   },
   methods: {
+    init(){
+      this.visible = true
+    },
+    close(){
+      this.$refs.form.resetFields()
+    },
     imgCode() {
       this.$refs.form.validateField("mobile", err => {
         if (!err) {
@@ -96,11 +103,13 @@ export default {
             n--;
             if (n <= 0) {
               _that.sendsms = true;
+              _that.sendCode = "重新获取验证码"
               clearInterval(timer);
+            }else{
+              _that.sendCode = n + "秒后重新获取验证码";
             }
-            _that.sendCode = n + "秒后重新获取验证码";
           }, 1000);
-          SendUpdateMobileSMS({mobile, imageCode})
+          SendUpdateMobileSMS({ mobile, imageCode })
             .then(response => {})
             .catch(err => {
               clearInterval(timer);
@@ -112,14 +121,16 @@ export default {
     },
     submitForm() {
       this.$refs.form.validate(valid => {
-        updateMobile(this.form)
-        .then(res=>{
+        updateMobile(this.form).then(res => {
           this.$message({
-            type:'success',
-            message:'修改手机号成功',
-            duration:500
-          })
-        })
+            type: "success",
+            message: "修改手机号成功",
+            duration: 500,
+            onClose:()=>{
+              this.visible = false
+            }
+          });
+        });
       });
     },
     resetForm() {
@@ -128,9 +139,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
- .container {
-    padding: 3vw 2vw 0;
-  }
-</style>

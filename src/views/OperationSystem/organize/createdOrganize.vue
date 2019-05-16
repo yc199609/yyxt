@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="visible" :closeOnClickModal="false">
+  <el-dialog :visible.sync="visible" :closeOnClickModal="false" @close="close">
     <div style="padding:30px;">
       <el-form
         ref="form"
@@ -137,6 +137,9 @@ export default {
     }
   },
   methods: {
+    close(){
+      this.$refs.form.resetFields()
+    },
     init() {
       this.visible = true
       this.dataBase()

@@ -30,8 +30,8 @@
         :page-sizes="[20, 30, 40, 50]" :page-size='pageSize' layout="total, sizes, prev, pager, next, jumper" :total="totalCount"></el-pagination>
     </div>
 
-    <el-dialog title="修改参数" :visible.sync="dialogEditVisible" :closeOnClickModal="false">
-      <el-form v-model="editForm">
+    <el-dialog title="修改参数" :visible.sync="dialogEditVisible" :closeOnClickModal="false"  @close="$refs.form1.clearValidate()">
+      <el-form ref="form1" v-model="editForm">
         <el-form-item label="参数值" label-width="120px">
           <el-input :maxlength="50" v-model="editForm.value"></el-input>
         </el-form-item>

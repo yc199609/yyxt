@@ -95,10 +95,12 @@ export default {
           var timer = setInterval(() => {
             n--
             if (n <= 0) {
+              _that.sendCode = "重新获取验证码"
               _that.sendSmsv = true
               clearInterval(timer)
+            }else{
+              _that.sendCode = n + "秒后重新获取验证码"
             }
-            _that.sendCode = n + "秒后重新获取验证码"
           }, 1000)
           sendForpwsSMS(mobile, imageCode)
             .then(response => {})

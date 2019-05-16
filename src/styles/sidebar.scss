@@ -3,14 +3,14 @@
   // 主体区域 Main container
   .main-container {
     // min-height: 100%;
-    transition: margin-left .28s;
+    transition: margin-left .2s;
     margin-left: $sideBarWidth;
     position: relative;
   }
 
   // 侧边栏 Sidebar container
   .sidebar-container {
-    transition: width 0.28s;
+    transition: width 0.2s;
     width: $sideBarWidth !important;
     height: 100%;
     position: fixed;

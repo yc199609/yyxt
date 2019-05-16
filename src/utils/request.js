@@ -30,8 +30,20 @@ service.interceptors.request.use(
 // response 拦截器
 service.interceptors.response.use(
   response => {
-    const status = response.status
-    // 判断http状态值
+    const res = response.data
+    if (res.code !== 0) {
+      Message({
+        message: res.message,
+        type: 'error',
+        duration: 2 * 1000
+      })
+      return Promise.reject('error')
+    } else {
+      return response.data
+    }
+  },
+  error => {
+    const status = error.response.status
     if (status === 401) {
       MessageBox.confirm(
         '你已被登出，可以取消继续留在该页面，或者重新登录',
@@ -47,19 +59,6 @@ service.interceptors.response.use(
         })
       })
     }
-    const res = response.data
-    if (res.code !== 0) {
-      Message({
-        message: res.message,
-        type: 'error',
-        duration: 2 * 1000
-      })
-      return Promise.reject('error')
-    } else {
-      return response.data
-    }
-  },
-  error => {
     Message({
       message: error.message,
       type: 'error',

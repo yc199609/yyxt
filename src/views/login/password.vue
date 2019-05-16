@@ -2,30 +2,30 @@
   <div class="all-container">
     <div class="all-container-padding bg">
       <el-form :model="userlist" :rules="rules" ref="EditorUserForms">
-        <el-form-item label="电话" prop="phone" :label-width="formLabelWidth">
+        <el-form-item label="电话" prop="mobile" :label-width="formLabelWidth">
           <el-col :span="8">
-            <el-input v-model="userlist.phone" @change="imgCode" placeholder="请输入电话"></el-input>
+            <el-input v-model="userlist.mobile" @change="imgCode" placeholder="请输入电话"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="图片验证码" prop="pictrue" :label-width="formLabelWidth" style="position: relative;">
           <el-col :span="8">
             <el-input v-model="userlist.pictrue" placeholder="请输入图片验证码" style="float: left;"></el-input>
-            <img :src="imgCodeShow?'/api/User/GetImageCode?mobile='+userlist.phone:''" alt="" style="position: absolute; top: 0; margin-left: 10px; border: 0">
+            <img :src="imgCodeShow?'/api/User/GetImageCode?mobile='+userlist.mobile:''" alt="" style="position: absolute; top: 0; margin-left: 10px; border: 0">
           </el-col>
         </el-form-item>
-        <el-form-item label="短信验证码" prop="smsv" :label-width="formLabelWidth" style="position: relative;">
+        <el-form-item label="短信验证码" prop="sms" :label-width="formLabelWidth" style="position: relative;">
           <el-col :span="8">
-            <el-input v-model="userlist.smsv" placeholder="请输入短信验证码" style="float: left;"></el-input>
-            <el-button :type="sendSmsv?'primary':'info'" plain style="position: absolute; top: 0; margin-left: 10px; border: 0"
+            <el-input v-model="userlist.sms" placeholder="请输入短信验证码" style="float: left;"></el-input>
+            <el-button :type="sendsms?'primary':'info'" plain style="position: absolute; top: 0; margin-left: 10px; border: 0"
               @click="SendForgetPsw">{{sendCode}}</el-button>
           </el-col>
         </el-form-item>
 
         <br>
 
-        <el-form-item label="新密码" prop="pass" :label-width="formLabelWidth">
+        <el-form-item label="新密码" prop="password" :label-width="formLabelWidth">
           <el-col :span="8">
-            <el-input v-model="userlist.pass" placeholder="请输入新密码" id="newkey" type="password"></el-input>
+            <el-input v-model="userlist.password" placeholder="请输入新密码" id="newkey" type="password"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="重复新密码" prop="checknewpass" :label-width="formLabelWidth">
@@ -61,29 +61,28 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value == "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.userlist.pass) {
+      } else if (value !== this.userlist.password) {
         callback(new Error("两次输入密码不一致!"));
       } else {
-        alert(3)
         callback();
       }
     };
     return {
       sendCode: "点击获取验证码",
       imgCodeShow: false,
-      sendSmsv: true,
+      sendsms: true,
       activeName: "first",
       loading: true,
       userlist: {
-        phone: "",
-        smsv: "",
-        pass: "",
+        mobile: "",
+        sms: "",
+        password: "",
         checknewpass: ""
       }, //信息表单
       formLabelWidth: "150px",
       /***校验***/
       rules: {
-        phone: [
+        mobile: [
           {
             required: true,
             message: "请输入电话号码"
@@ -99,13 +98,13 @@ export default {
             message: "请输入图片验证码"
           }
         ],
-        smsv: [
+        sms: [
           {
             required: true,
             message: "请输入短信验证码"
           }
         ],
-        pass: [
+        password: [
           {
             validator: validatePass,
             required: true,
@@ -127,7 +126,7 @@ export default {
     // 电话失焦,拿到图片验证码
     imgCode() {
       var _that = this;
-      this.$refs.EditorUserForms.validateField("phone", err => {
+      this.$refs.EditorUserForms.validateField("mobile", err => {
         if (!err) {
           this.imgCodeShow = true;
         }
@@ -136,10 +135,10 @@ export default {
     // 发送短信验证码
     SendForgetPsw() {
       var _that = this;
-      const mobile = _that.userlist.phone
+      const mobile = _that.userlist.mobile
       const imageCode = _that.userlist.pictrue
       var promise1 = new Promise((resolve, reject) => {
-        this.$refs.EditorUserForms.validateField("phone", err => {
+        this.$refs.EditorUserForms.validateField("mobile", err => {
           if (!err) {
             resolve();
           }
@@ -153,23 +152,25 @@ export default {
         });
       });
       Promise.all([promise1, promise2]).then(() => {
-        if (_that.sendSmsv) {
-          _that.sendSmsv = false
+        if (_that.sendsms) {
+          _that.sendsms = false
           var n = 60
           _that.sendCode = n + "秒后重新获取验证码"
           var timer = setInterval(() => {
             n--
             if (n <= 0) {
-              _that.sendSmsv = true
+              _that.sendCode = "重新获取验证码"
+              _that.sendsms = true
               clearInterval(timer)
+            }else{
+              _that.sendCode = n + "秒后重新获取验证码"
             }
-            _that.sendCode = n + "秒后重新获取验证码"
           }, 1000)
           sendForpwsSMS(mobile, imageCode)
             .then(response => {})
             .catch(err => {
               clearInterval(timer)
-              _that.sendSmsv = true
+              _that.sendsms = true
               _that.sendCode = "服务器错误请重新获取"
             })
         }

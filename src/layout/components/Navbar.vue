@@ -8,7 +8,7 @@
     </h3>
     <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />
     <breadcrumb />
-    
+
     <div>
       <lang-select class="right-menu-item hover-effect" />
       <el-dropdown class="avatar-container" trigger="click">
@@ -23,22 +23,28 @@
               {{ $t('loginOut.home') }}
             </el-dropdown-item>
           </router-link>
-          <router-link class="inlineBlock" to="/resetMobile">
-            <el-dropdown-item>
+
+          <el-dropdown-item>
+            <span class="inlineBlock" @click="resetMobile">
               修改手机号
-            </el-dropdown-item>
-          </router-link>
-          <router-link class="inlineBlock" to="/resetPassword">
-            <el-dropdown-item>
+            </span>
+          </el-dropdown-item>
+
+          <el-dropdown-item>
+            <span class="inlineBlock" @click="resetPassword">
               修改密码
-            </el-dropdown-item>
-          </router-link>
+            </span>
+          </el-dropdown-item>
+
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">{{ $t('loginOut.loginOut') }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+
+    <resetMobile ref="resetMobile" />
+    <resetPassword ref="resetPassword" />
 
   </div>
 </template>
@@ -49,6 +55,8 @@ import { mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 import Hamburger from "@/components/Hamburger";
 import LangSelect from "@/components/LangSelect";
+import resetMobile from "@/components/user/resetMobile";
+import resetPassword from "@/components/user/resetPassword";
 
 export default {
   data() {
@@ -59,12 +67,20 @@ export default {
   components: {
     Breadcrumb,
     Hamburger,
-    LangSelect
+    LangSelect,
+    resetMobile,
+    resetPassword
   },
   computed: {
     ...mapGetters(["sidebar", "avatar"])
   },
   methods: {
+    resetPassword() {
+      this.$refs.resetPassword.init()
+    },
+    resetMobile() {
+      this.$refs.resetMobile.init()
+    },
     toggleSideBar() {
       this.$store.dispatch("app/toggleSideBar");
     },
@@ -178,3 +194,8 @@ export default {
 }
 </style>
 
+<style scoped>
+  .inlineBlock >>> .el-button--text{
+    color: black ;
+  }
+</style>

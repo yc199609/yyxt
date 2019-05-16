@@ -111,17 +111,13 @@ export function sendForpwsSMS(mobile, imageCode) {
  * @param  {String} sms 短信验证码
  * @param  {String} password 密码
  */
-export function updatePswBySMS(mobile, sms, password) {
+export function updatePswBySMS(obj) {
   return request({
     url: api.updatePswBySMS,
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
     },
-    data: {
-      mobile,
-      sms,
-      password
-    }
+    data: obj
   })
 }
