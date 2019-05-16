@@ -3,13 +3,13 @@
     <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm" :rules="rules">
       <el-form-item label="输入手机号" prop="mobile" :label-width="formLabelWidth">
         <el-col :span="8">
-          <el-input v-model="form.mobile" :maxlength="50" @change="imgCode" placeholder="请输入手机号"></el-input>
+          <el-input v-model="form.mobile" :maxlength="50" @blur="imgCode" placeholder="请输入手机号"></el-input>
         </el-col>
       </el-form-item>
       <el-form-item label="图片验证码" prop="imageCode" :label-width="formLabelWidth" style="position: relative;">
         <el-col :span="8">
           <el-input v-model="form.imageCode" :maxlength="50" placeholder="请输入图片验证码" style="float: left;"></el-input>
-          <img :src="imgCodeShow?'/api/User/GetImageCode?mobile='+form.mobile:''" alt style="position: absolute; top: 0; margin-left: 10px;">
+          <img ref="imgcode" src="" @click="imgCode" alt style="position: absolute; top: 0; margin-left: 10px;">
         </el-col>
       </el-form-item>
       <el-form-item label="短信验证码" prop="sms" :label-width="formLabelWidth" style="position: relative;">
@@ -39,7 +39,6 @@ export default {
         imageCode: "",
         sms: ""
       },
-      imgCodeShow: false,
       formLabelWidth: "150px",
       rules: {
         mobile: [
@@ -71,7 +70,7 @@ export default {
     imgCode() {
       this.$refs.form.validateField("mobile", err => {
         if (!err) {
-          this.imgCodeShow = true;
+          this.$refs.imgcode.setAttribute('src','/api/User/GetImageCode?mobile=' + this.form.mobile + '&rander=' + Math.random(1))
         }
       });
     },
