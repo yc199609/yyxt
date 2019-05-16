@@ -10,7 +10,7 @@
         <el-form-item label="图片验证码" prop="pictrue" :label-width="formLabelWidth" style="position: relative;">
           <el-col :span="8">
             <el-input v-model="userlist.pictrue" placeholder="请输入图片验证码" style="float: left;"></el-input>
-            <img src="" @click="imgCode" alt="" style="position: absolute; top: 0; margin-left: 10px; border: 0">
+            <img src="" @click="imgCode" ref="imgcode" alt="" style="position: absolute; top: 0; margin-left: 10px; border: 0">
           </el-col>
         </el-form-item>
         <el-form-item label="短信验证码" prop="sms" :label-width="formLabelWidth" style="position: relative;">
@@ -127,7 +127,8 @@ export default {
       var _that = this;
       this.$refs.EditorUserForms.validateField("mobile", err => {
         if (!err) {
-          this.$refs.imgcode.setAttribute('src','/api/User/GetImageCode?mobile=' + this.form.mobile + '&rander=' + Math.random(1))
+          console.log(this.$refs.imgcode)
+          this.$refs.imgcode.setAttribute('src','/api/User/GetImageCode?mobile=' + this.userlist.mobile + '&rander=' + Math.random(1))
         }
       });
     },
