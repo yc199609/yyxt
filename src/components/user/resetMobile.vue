@@ -58,15 +58,15 @@ export default {
         ],
         sms: [{ required: true, message: "请输入短信验证码", trigger: "blur" }]
       },
-      visible:false
+      visible: false
     };
   },
   methods: {
-    init(){
-      this.visible = true
+    init() {
+      this.visible = true;
     },
-    close(){
-      this.$refs.form.resetFields()
+    close() {
+      this.$refs.form.resetFields();
     },
     imgCode() {
       this.$refs.form.validateField("mobile", err => {
@@ -103,9 +103,9 @@ export default {
             n--;
             if (n <= 0) {
               _that.sendsms = true;
-              _that.sendCode = "重新获取验证码"
+              _that.sendCode = "重新获取验证码";
               clearInterval(timer);
-            }else{
+            } else {
               _that.sendCode = n + "秒后重新获取验证码";
             }
           }, 1000);
@@ -121,16 +121,18 @@ export default {
     },
     submitForm() {
       this.$refs.form.validate(valid => {
-        updateMobile(this.form).then(res => {
-          this.$message({
-            type: "success",
-            message: "修改手机号成功",
-            duration: 500,
-            onClose:()=>{
-              this.visible = false
-            }
+        if (valid) {
+          updateMobile(this.form).then(res => {
+            this.$message({
+              type: "success",
+              message: "修改手机号成功",
+              duration: 500,
+              onClose: () => {
+                this.visible = false;
+              }
+            });
           });
-        });
+        }
       });
     },
     resetForm() {

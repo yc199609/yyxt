@@ -82,28 +82,30 @@ export default {
           }
         ]
       },
-      visible:false
+      visible: false
     };
   },
   methods: {
-    init(){
-      this.visible = true
+    init() {
+      this.visible = true;
     },
-    close(){
-      this.$refs.form.resetFields()
+    close() {
+      this.$refs.form.resetFields();
     },
     submitForm() {
       this.$refs.form.validate(valid => {
-        UpdatePasswordByOld(this.form).then(res => {
-          this.$message({
-            type: "success",
-            message: "修改成功",
-            duration: 500,
-            onClose:()=>{
-              this.visible = false
-            }
+        if (valid) {
+          UpdatePasswordByOld(this.form).then(res => {
+            this.$message({
+              type: "success",
+              message: "修改成功",
+              duration: 500,
+              onClose: () => {
+                this.visible = false;
+              }
+            });
           });
-        });
+        }
       });
     },
     resetForm() {
