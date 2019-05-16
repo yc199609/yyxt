@@ -113,7 +113,7 @@ export default {
             .catch(err => {
               clearInterval(timer);
               _that.sendsms = true;
-              _that.sendCode = "服务器错误请重新获取";
+              _that.sendCode = "重新获取";
             });
         }
       });
