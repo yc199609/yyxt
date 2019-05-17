@@ -24,17 +24,17 @@
             </el-dropdown-item>
           </router-link>
 
-          <el-dropdown-item>
-            <span class="inlineBlock" @click="resetMobile">
+          <span class="inlineBlock" @click="resetMobile">
+            <el-dropdown-item>
               修改手机号
-            </span>
-          </el-dropdown-item>
-
-          <el-dropdown-item>
-            <span class="inlineBlock" @click="resetPassword">
+            </el-dropdown-item>
+          </span>
+          
+          <span class="inlineBlock" @click="resetPassword">
+            <el-dropdown-item>
               修改密码
-            </span>
-          </el-dropdown-item>
+            </el-dropdown-item>
+          </span>
 
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">{{ $t('loginOut.loginOut') }}</span>
