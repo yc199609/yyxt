@@ -8,6 +8,8 @@
     <el-table class="Thistable" :data="tableData" border style="width: 100%;">
       <el-table-column align="center" prop="id" label="数据库id">
       </el-table-column>
+      <el-table-column align="center" prop="name" label="名称">
+      </el-table-column>
       <el-table-column align="center" prop="dbName" label="数据库名">
       </el-table-column>
       <el-table-column align="center" label="服务器IP/端口">
@@ -30,17 +32,17 @@
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-row>
-            <el-col :span='8' class="ycbutton">
+            <el-col :span='8'>
               <el-tooltip effect="dark" content="修改名称" placement="top">
                 <el-button type="primary" icon="el-icon-edit-outline" @click="changNameDialog(scope.row)"></el-button>
               </el-tooltip>
             </el-col>
-            <el-col :span='8' class="ycbutton">
+            <el-col :span='8'>
               <el-tooltip effect="dark" content="修改配置" placement="top">
                 <el-button type="warning" icon="el-icon-setting" @click="modifyDialog(scope.row)"></el-button>
               </el-tooltip>
             </el-col>
-            <el-col :span='8' class="ycbutton">
+            <el-col :span='8'>
               <el-tooltip effect="dark" :content="scope.row.status===100?'停用':'启用'" placement="top">
                 <el-button :type="scope.row.status===100?'danger':'success'" :icon="scope.row.status===100?'el-icon-remove-outline':'el-icon-circle-check-outline'"
                   @click="offOrON(scope.row,scope.$index)"></el-button>
@@ -53,7 +55,7 @@
 
     <el-dialog title="修改名称" :visible.sync="dialogChangeVisible" :closeOnClickModal="false">
       <el-form :model="changNameform" ref='form' :rules="rules">
-        <el-form-item prop="dbName" label="数据库名称" label-width="120px">
+        <el-form-item prop="dbName" label="名称" label-width="120px">
           <el-input :maxlength="80" v-model="changNameform.name"></el-input>
         </el-form-item>
       </el-form>
