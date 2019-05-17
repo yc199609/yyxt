@@ -1,7 +1,9 @@
 <template>
   <div class="container">
 
-    <Search @search='init' />
+    <Search @search='init' @changeKeyword='changeKeyword'>
+      <el-input placeholder="请输入关键字搜索" @keyup.enter.native="init" size="small" v-model="keyword" :clearable="true" slot="search"></el-input>
+    </Search>
 
     <el-alert :closable="false" title="数据库参数" type="info" />
 
@@ -65,7 +67,7 @@
       </div>
     </el-dialog>
 
-    <ModifyForm v-if="changeDbVisible" ref="modifyForm" @reload='init'/>
+    <ModifyForm v-if="changeDbVisible" ref="modifyForm" @reload='init' />
 
   </div>
 </template>
@@ -83,14 +85,15 @@ export default {
   name: "dataBase",
   data() {
     return {
+      keyword: "",
       tableData: [
         {
           id: "",
           ip: "",
           isDefault: 0,
           name: "",
-          port: '',
-          status: '',
+          port: "",
+          status: "",
           userName: ""
         }
       ],
@@ -114,8 +117,11 @@ export default {
     this.init();
   },
   methods: {
-    init(keyword) {
-      DataBaseList(keyword).then(res => {
+    changeKeyword(val){
+      this.keyword = val
+    },
+    init() {
+      DataBaseList(this.keyword).then(res => {
         this.tableData = res.data;
       });
     },
@@ -149,9 +155,9 @@ export default {
     // 打开修改数据库配置信息的弹框
     modifyDialog(data) {
       this.changeDbVisible = true;
-      this.$nextTick(()=>{
-        this.$refs.modifyForm.init(data)
-      })
+      this.$nextTick(() => {
+        this.$refs.modifyForm.init(data);
+      });
     },
     offOrON(data, i) {
       if (this.toolbeRunning === false) {
@@ -184,7 +190,9 @@ export default {
           });
         })
         .catch(err => {
-          this.toolbeRunning = false;
+          if (err) {
+            this.toolbeRunning = false;
+          }
         });
     }
   }

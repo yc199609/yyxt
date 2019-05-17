@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Search @search='init'>
+    <Search @search='init' @changeKeyword='changeKeyword'>
       <el-button type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
     </Search>
 
@@ -58,6 +58,7 @@ export default {
   name:"staff",
   data() {
     return {
+      keyword:'',
       tableData: [],
       pageIndex: 1,
       pageSize: 20,
@@ -72,6 +73,9 @@ export default {
     this.init();
   },
   methods: {
+    changeKeyword(val){
+      this.keyword = val
+    },
     handleSizeChange(val) {
       this.pageSize = val;
       this.init();
@@ -80,9 +84,9 @@ export default {
       this.pageIndex = val;
       this.init();
     },
-    init(name) {
+    init() {
       GetEmployeesByName({
-        name,
+        name:this.keyword,
         pageIndex: this.pageIndex,
         pageSize: this.pageSize
       }).then(res => {
