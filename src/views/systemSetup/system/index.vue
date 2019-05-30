@@ -1,7 +1,7 @@
 <template>
   <div class="container">
 
-    <Search @search='init' />
+    <Search @search='init' @changeKeyword='changeKeyword'/>
 
     <el-alert :closable="false" title="系统参数" type="info">
       <router-view />
@@ -53,6 +53,7 @@ export default {
   name: "system",
   data() {
     return {
+      keyword:'',
       tableData: [],
       editForm: {
         id: "",
@@ -71,11 +72,14 @@ export default {
     Search
   },
   methods: {
-    init(keyword) {
+    changeKeyword(val){
+      this.keyword = val
+    },
+    init() {
       SystemConfigList({
         pageIndex: this.pageIndex,
         pageSize: this.pageSize,
-        keyword
+        keyword: this.keyword
       }).then(res => {
         this.pageIndex = res.data.pageIndex;
         this.pageSize = res.data.pageSize;

@@ -3,9 +3,9 @@
     <section class="query-wrapper-row">
       <section class="query-wrapper-row-item ">
         <section class="label-text">复合筛选</section>
-
         <section>
           <el-input
+            @change="changeKeyword"
             placeholder="请输入关键字搜索"
             @keyup.enter.native="search"
             size="small"
@@ -84,7 +84,11 @@ export default {
   },
   methods:{
     search(){
-      this.$emit("search",this.keyword)
+      this.$emit('changeKeyword',this.keyword)
+      this.$emit("search")
+    },
+    changeKeyword(){
+      this.$emit('changeKeyword',this.keyword)
     }
   }
 }

@@ -12,7 +12,7 @@ export function isExternal(path) {
 }
 
 export const validPhone = (rule, value, callback) => {
-  const reg = /^[1]([3-9])[0-9]{9}$/
+  const reg = /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/
   if (!value) {
     callback(new Error('请输入电话号码'))
   } else if (!reg.test(value)) {
