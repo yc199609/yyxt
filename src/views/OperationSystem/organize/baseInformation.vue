@@ -5,7 +5,7 @@
     class="container"
   >
     <section class="content-wrapper-container">
-      <el-form :model="form" :rules="rules">
+      <el-form :model="form" :rules="rules" ref="form">
         <span>基本信息</span>
         <hr style="background-color:#f7eaea; height: 1px; border: none;">
         <el-row :gutter="24">
@@ -149,9 +149,9 @@ export default {
     closeInfo() {
       this.visible = false
     },
-    saveInfo(formName) {
+    saveInfo() {
       // 保存修改基本信息
-      this.$refs[formName].validate((valid) => {
+      this.$refs.form.validate((valid) => {
         if (valid) {
           updateBaseInfo(this.form)
           .then(res => {
