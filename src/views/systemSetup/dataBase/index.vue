@@ -200,20 +200,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-  padding: 1vw 3vw 0;
-}
-.pagination {
-  margin-top: 15px;
-}
+  .container {
+    padding: 1vw 3vw 0;
+  }
+  .pagination {
+    margin-top: 15px;
+  }
 </style>
 
 <style lang="css" scoped>
-.Thistable >>> .el-table__body-wrapper {
-  max-height: 50vh;
-  overflow-y: auto;
-}
-.ycbutton >>> .el-button--medium {
-  padding: 0.5vw 1vw;
-}
+  .Thistable >>> .el-table__body-wrapper {
+    max-height: 50vh;
+    overflow-y: auto;
+  }
 </style>

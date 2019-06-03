@@ -1,5 +1,5 @@
 <template>
-  <div style="padding:1vw;width:82.6vw;margin:auto;">
+  <div class="container">
     <section class="conditional-query-container" style="margin-top: .5rem">
       <section class="query-wrapper-row">
         <section class="query-wrapper-row-item ">
@@ -33,17 +33,17 @@
       <el-table-column align="center" prop="operation" label="操作">
         <template slot-scope="scope">
           <el-row>
-            <el-col :span='8' class="ycbutton">
+            <el-col :span='8' class="rowbutton">
               <el-tooltip content="基本信息" placement="top" effect="dark">
                 <el-button  type="info" icon="el-icon-document" @click="baseInfo(scope.row.id)"></el-button>
               </el-tooltip>
             </el-col>
-            <el-col :span='8' class="ycbutton">
+            <el-col :span='8' class="rowbutton">
               <el-tooltip content="机构设置" placement="top" effect="dark">
                 <el-button type="warning" icon="el-icon-setting" @click="setOrganize(scope.row.id)"></el-button>
               </el-tooltip>
             </el-col>
-            <el-col :span='8' class="ycbutton">
+            <el-col :span='8' class="rowbutton">
               <el-tooltip content="业务参数" placement="top" effect="dark">
                 <el-button type="success" icon="el-icon-menu" @click="busParams(scope.row.id)"></el-button>
               </el-tooltip>
@@ -153,7 +153,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/*表单模块样式*/
+.container{
+  padding: 1vw 3vw 0;
+}
 
 /*查询条件样式区*/
 .conditional-query-container .query-wrapper-row .query-wrapper-row-left {
@@ -217,7 +219,7 @@ export default {
       max-height:50vh;
       overflow-y:auto;
   } */
-  .ycbutton >>> .el-button--medium {
+  .rowbutton >>> .el-button--medium {
     padding: 0.5vw 1vw;
   }
 </style>
