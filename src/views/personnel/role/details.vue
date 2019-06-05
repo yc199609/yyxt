@@ -101,7 +101,8 @@ export default {
           if (this.$refs.tree.getCheckedNodes().length === 0) {
             this.$message({
               message: '请选择至少一个功能权限',
-              type: 'warning'
+              type: 'warning',
+              duration: 2000
             })
             return
           }
@@ -111,7 +112,8 @@ export default {
               this.visible = false
               this.$message({
                 message: '保存成功',
-                type: 'success'
+                type: 'success',
+                duration: 500
               })
             })
           }
@@ -121,7 +123,8 @@ export default {
               this.visible = false
               this.$message({
                 message: '保存成功',
-                type: 'success'
+                type: 'success',
+                duration: 500
               })
             })
           }

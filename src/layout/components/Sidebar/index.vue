@@ -1,6 +1,7 @@
 <template>
   <el-scrollbar class="mt50" wrap-class="scrollbar-wrapper">
     <el-menu
+      :unique-opened="true"
       :default-active="$route.path"
       :collapse="isCollapse"
       :background-color="variables.menuBg"
