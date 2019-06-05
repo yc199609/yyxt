@@ -3,27 +3,26 @@
 
     <Search @search='init' @changeKeyword='changeKeyword'/>
 
-    <el-alert :closable="false" title="系统参数" type="info">
-      <router-view />
-    </el-alert>
-
-    <el-table :data="tableData" border class="table">
-      <el-table-column align="center" prop="code" label="代码">
-      </el-table-column>
-      <el-table-column align="center" prop="name" label="名称">
-      </el-table-column>
-      <el-table-column align="center" prop="value" label="值">
-      </el-table-column>
-      <el-table-column align="center" prop="description" label="备注">
-      </el-table-column>
-      <el-table-column align="center" label="操作">
-        <template slot-scope="scope">
-          <el-button type="warning" @click="editShow(scope.row)">
-            修改
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-card>
+       <el-table :data="tableData" border class="table">
+        <el-table-column align="center" prop="code" label="代码">
+        </el-table-column>
+        <el-table-column align="center" prop="name" label="名称">
+        </el-table-column>
+        <el-table-column align="center" prop="value" label="值">
+        </el-table-column>
+        <el-table-column align="center" prop="description" label="备注">
+        </el-table-column>
+        <el-table-column align="center" label="操作">
+          <template slot-scope="scope">
+            <el-button type="warning" @click="editShow(scope.row)">
+              修改
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+   
 
     <div class="paginationContainer">
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex"

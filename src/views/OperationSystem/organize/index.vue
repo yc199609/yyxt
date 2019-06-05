@@ -2,9 +2,7 @@
   <div class="container">
     <section class="conditional-query-container" style="margin-top: .5rem">
       <section class="query-wrapper-row">
-        <section class="query-wrapper-row-item ">
-          <section class="label-text">复合筛选</section>
-
+        <section class="query-wrapper-row-item">
           <section>
             <el-input
               placeholder="请输入关键字搜索"
@@ -22,36 +20,37 @@
       </section>
     </section>
 
-    <el-alert :closable="false" title="机构列表" type="info"></el-alert>
+    <el-card>
+      <el-table :data="retData" border class="Thistable" style="width: 100%;">
+        <el-table-column align="center" prop="name" label="简称"></el-table-column>
+        <el-table-column align="center" prop="code" label="代码"></el-table-column>
+        <el-table-column align="center" prop="dmsSite" label="站点"></el-table-column>
+        <el-table-column align="center" prop="isDMSEnable" label="状态"></el-table-column>
+        <el-table-column align="center" prop="parentCompanyName" label="父级机构名"></el-table-column>
+        <el-table-column align="center" prop="operation" label="操作">
+          <template slot-scope="scope">
+            <el-row>
+              <el-col :span='8' class="rowbutton">
+                <el-tooltip content="基本信息" placement="top" effect="dark">
+                  <el-button  type="info" icon="el-icon-document" @click="baseInfo(scope.row.id)"></el-button>
+                </el-tooltip>
+              </el-col>
+              <el-col :span='8' class="rowbutton">
+                <el-tooltip content="机构设置" placement="top" effect="dark">
+                  <el-button type="warning" icon="el-icon-setting" @click="setOrganize(scope.row.id)"></el-button>
+                </el-tooltip>
+              </el-col>
+              <el-col :span='8' class="rowbutton">
+                <el-tooltip content="业务参数" placement="top" effect="dark">
+                  <el-button type="success" icon="el-icon-menu" @click="busParams(scope.row.id)"></el-button>
+                </el-tooltip>
+              </el-col>
+            </el-row>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
 
-    <el-table :data="retData" border class="Thistable" style="width: 100%;">
-      <el-table-column align="center" prop="name" label="简称"></el-table-column>
-      <el-table-column align="center" prop="code" label="代码"></el-table-column>
-      <el-table-column align="center" prop="dmsSite" label="站点"></el-table-column>
-      <el-table-column align="center" prop="isDMSEnable" label="状态"></el-table-column>
-      <el-table-column align="center" prop="parentCompanyName" label="父级机构名"></el-table-column>
-      <el-table-column align="center" prop="operation" label="操作">
-        <template slot-scope="scope">
-          <el-row>
-            <el-col :span='8' class="rowbutton">
-              <el-tooltip content="基本信息" placement="top" effect="dark">
-                <el-button  type="info" icon="el-icon-document" @click="baseInfo(scope.row.id)"></el-button>
-              </el-tooltip>
-            </el-col>
-            <el-col :span='8' class="rowbutton">
-              <el-tooltip content="机构设置" placement="top" effect="dark">
-                <el-button type="warning" icon="el-icon-setting" @click="setOrganize(scope.row.id)"></el-button>
-              </el-tooltip>
-            </el-col>
-            <el-col :span='8' class="rowbutton">
-              <el-tooltip content="业务参数" placement="top" effect="dark">
-                <el-button type="success" icon="el-icon-menu" @click="busParams(scope.row.id)"></el-button>
-              </el-tooltip>
-            </el-col>
-          </el-row>
-        </template>
-      </el-table-column>
-    </el-table>
 
     <div class="block" style="margin-top: 15px;">
       <el-pagination
