@@ -29,7 +29,7 @@
           </div>
           <el-form ref="form" :model="form" :rules="rules">
 
-            <el-col :span="12">
+            <el-col :span="12" class="parentIdBox">
               <el-form-item label="上级部门" prop="parentId">
                 <div>
                   <el-cascader

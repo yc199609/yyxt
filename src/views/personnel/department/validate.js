@@ -4,8 +4,7 @@ export default {
     return {
       rules: {
         parentId: [
-          { required: true, message: '请输入上级部门', trigger: 'blur' },
-          { min: 1, max: 15, message: '请输入1-15位字符' }
+          { required: true, message: '请输入上级部门', trigger: 'change' }
         ],
         name: [
           { required: true, message: '请输入部门名称', trigger: 'blur' },
