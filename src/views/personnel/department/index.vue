@@ -31,7 +31,14 @@
 
             <el-col :span="12">
               <el-form-item label="上级部门" prop="parentId">
-                <el-input v-model="form.parentId" :maxlength="30"/>
+                <div>
+                  <el-cascader
+                    v-model="form.parentId"
+                    :options="options"
+                    :props="parentProp"
+                    :show-all-levels="false"
+                    clearable/>
+                </div>
               </el-form-item>
             </el-col>
 
@@ -104,6 +111,13 @@ export default {
   mixins: [success, validate],
   data() {
     return {
+      parentProp: {
+        value: 'id',
+        label: 'name',
+        children: 'children',
+        checkStrictly: true
+      },
+      options: [],
       mode: 'edit',
       data: [],
       defaultProps: {
@@ -130,8 +144,14 @@ export default {
     init() {
       GetAll()
         .then(res => {
-          this.data = res.data
-          console.log(this.data)
+          var data = res.data || []
+          data = data.map(item => {
+            return this.getChildren(item)
+          })
+          this.$nextTick(() => {
+            this.data = [...data]
+            this.options = [{ id: -1, name: '顶级部门', children: [...data] }]
+          })
         })
     },
     viewDetail(data) {
@@ -141,24 +161,49 @@ export default {
       this.$set(this, 'form', obj)
     },
     submit() {
+      var data = { ...this.form }
+      data = this.formFarmet(data)
       this.$refs.form.validate((valid) => {
         if (valid) {
           switch (this.mode) {
             case 'edit':
-              updateinfo(this.form)
+              updateinfo(data)
                 .then(res => {
                   this.success('修改成功')
                 })
               break
             case 'insert':
-              Create({ ...this.form, remark: 'sds' })
+              Create({ ...data, remark: 'sds' })
                 .then(res => {
                   this.success('新增成功')
+                  this.$refs.form.resetFields()
                 })
               break
           }
         }
       })
+    },
+    getChildren(obj) {
+      obj.parentId = [obj.parentId]
+      if (obj.children && obj.children.length === 0) {
+        delete obj.children
+      } else if (obj.children) {
+        obj.children.forEach(child => {
+          this.getChildren(child)
+        })
+      }
+      return obj
+    },
+    formFarmet(obj) {
+      if (obj.parentId instanceof Array) {
+        obj.parentId = obj.parentId[obj.parentId.length - 1]
+      }
+      if (obj.children) {
+        obj.children.forEach(child => {
+          this.formFarmet(child)
+        })
+      }
+      return obj
     },
     insert() {
       this.$refs.form.resetFields()
@@ -207,5 +252,14 @@ export default {
   }
   .cardHeader{
     height: 26px;
+  }
+</style>
+<style scoped>
+  .parentIdBox >>> .el-form-item__label{
+    width: 100%;
+    text-align: left;
+  }
+  .parentIdBox >>> .el-cascader{
+    width: 100%;
   }
 </style>

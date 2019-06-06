@@ -105,6 +105,12 @@ export const constantRouterMap = [
         name: 'Role',
         meta: { title: '角色', icon: 'role' }
       }
+      // {
+      //   path: 'test',
+      //   component: () => import('@/views/personnel/test'),
+      //   name: 'test',
+      //   meta: { title: '调试用的页面', icon: 'test' }
+      // }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }
