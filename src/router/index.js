@@ -25,7 +25,6 @@ breadcrumb: false if false, the item will hidden in breadcrumb(default is true)
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
-
   {
     path: '/',
     fullPath: '/dashboard',
@@ -54,7 +53,7 @@ export const constantRouterMap = [
         path: 'organize',
         component: () => import('@/views/OperationSystem/organize'),
         name: 'organize',
-        meta: { title: '机构列表' }
+        meta: { title: '机构列表', icon: 'organize' }
       }
     ]
   },
@@ -70,32 +69,48 @@ export const constantRouterMap = [
         path: 'dataBase',
         component: () => import('@/views/systemSetup/dataBase/index.vue'),
         name: 'dataBase',
-        meta: { title: '数据库设置' }
+        meta: { title: '数据库设置', icon: 'dataBase' }
       },
       {
         path: 'system',
         component: () => import('@/views/systemSetup/system/index.vue'),
         name: 'system',
-        meta: { title: '系统参数' }
+        meta: { title: '系统参数', icon: 'system' }
       }
     ]
   },
   {
     path: '/personnel',
     alwaysShow: true,
-    redirect: '/personnel/staff',
+    redirect: '/personnel/employees',
     component: Layout,
     name: 'personnel',
     meta: { title: '人事管理', icon: 'user' },
     children: [
       {
-        path: 'staff',
-        component: () => import('@/views/personnel/staff/index.vue'),
-        name: 'staff',
-        meta: {
-          title: '员工管理'
-        }
+        path: 'employees',
+        component: () => import('@/views/personnel/employees/index.vue'),
+        name: 'employees',
+        meta: { title: '员工', icon: 'employees' }
+      },
+      {
+        path: 'department',
+        component: () => import('@/views/personnel/department'),
+        name: 'department',
+        meta: { title: '部门', icon: 'department' }
+      },
+      {
+        path: 'Role',
+        component: () => import('@/views/personnel/role'),
+        name: 'Role',
+        meta: { title: '角色', icon: 'role' }
       }
+      // {
+      //   path: 'test',
+      //   component: () => import('@/views/personnel/test'),
+      //   name: 'test',
+      //   meta: { title: '调试用的页面', icon: 'test' }
+      // }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }

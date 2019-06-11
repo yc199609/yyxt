@@ -1,6 +1,7 @@
 <template>
   <el-scrollbar class="mt50" wrap-class="scrollbar-wrapper">
     <el-menu
+      :unique-opened="true"
       :default-active="$route.path"
       :collapse="isCollapse"
       :background-color="variables.menuBg"
@@ -31,6 +32,7 @@ export default {
     variables() {
       return variables
     },
+    // 展开折叠状态
     isCollapse() {
       return !this.sidebar.opened
     }

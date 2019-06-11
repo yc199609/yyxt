@@ -4,56 +4,57 @@
     <Search @search='init' @changeKeyword='changeKeyword'>
       <el-input placeholder="请输入关键字搜索" @keyup.enter.native="init" size="small" v-model="keyword" :clearable="true" slot="search"></el-input>
     </Search>
+    
+    <el-card>
+      <el-table class="Thistable" :data="tableData" border style="width: 100%;">
+        <el-table-column align="center" prop="id" label="数据库id">
+        </el-table-column>
+        <el-table-column align="center" prop="name" label="名称">
+        </el-table-column>
+        <el-table-column align="center" prop="dbName" label="数据库名">
+        </el-table-column>
+        <el-table-column align="center" label="服务器IP/端口">
+          <template slot-scope="scope">
+            <div>
+              <span>ip:</span><span>{{scope.row.ip}}</span><br />
+              <span>端口:</span><span>{{scope.row.port}}</span><br />
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="userName" label="数据库用户名">
+        </el-table-column>
+        <el-table-column align="center" label="状态">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.status===100" type="success">启用</el-tag>
+            <el-tag v-else type="danger">停用</el-tag>
+          </template>
+        </el-table-column>
 
-    <el-alert :closable="false" title="数据库参数" type="info" />
-
-    <el-table class="Thistable" :data="tableData" border style="width: 100%;">
-      <el-table-column align="center" prop="id" label="数据库id">
-      </el-table-column>
-      <el-table-column align="center" prop="name" label="名称">
-      </el-table-column>
-      <el-table-column align="center" prop="dbName" label="数据库名">
-      </el-table-column>
-      <el-table-column align="center" label="服务器IP/端口">
-        <template slot-scope="scope">
-          <div>
-            <span>ip:</span><span>{{scope.row.ip}}</span><br />
-            <span>端口:</span><span>{{scope.row.port}}</span><br />
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="userName" label="数据库用户名">
-      </el-table-column>
-      <el-table-column align="center" label="状态">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.status===100" type="success">启用</el-tag>
-          <el-tag v-else type="danger">停用</el-tag>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" label="操作">
-        <template slot-scope="scope">
-          <el-row>
-            <el-col :span='8'>
-              <el-tooltip effect="dark" content="修改名称" placement="top">
-                <el-button type="primary" icon="el-icon-edit-outline" @click="changNameDialog(scope.row)"></el-button>
-              </el-tooltip>
-            </el-col>
-            <el-col :span='8'>
-              <el-tooltip effect="dark" content="修改配置" placement="top">
-                <el-button type="warning" icon="el-icon-setting" @click="modifyDialog(scope.row)"></el-button>
-              </el-tooltip>
-            </el-col>
-            <el-col :span='8'>
-              <el-tooltip effect="dark" :content="scope.row.status===100?'停用':'启用'" placement="top">
-                <el-button :type="scope.row.status===100?'danger':'success'" :icon="scope.row.status===100?'el-icon-remove-outline':'el-icon-circle-check-outline'"
-                  @click="offOrON(scope.row,scope.$index)"></el-button>
-              </el-tooltip>
-            </el-col>
-          </el-row>
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-table-column align="center" label="操作">
+          <template slot-scope="scope">
+            <el-row>
+              <el-col :span='8'>
+                <el-tooltip effect="dark" content="修改名称" placement="top">
+                  <el-button type="primary" icon="el-icon-edit-outline" @click="changNameDialog(scope.row)"></el-button>
+                </el-tooltip>
+              </el-col>
+              <el-col :span='8'>
+                <el-tooltip effect="dark" content="修改配置" placement="top">
+                  <el-button type="warning" icon="el-icon-setting" @click="modifyDialog(scope.row)"></el-button>
+                </el-tooltip>
+              </el-col>
+              <el-col :span='8'>
+                <el-tooltip effect="dark" :content="scope.row.status===100?'停用':'启用'" placement="top">
+                  <el-button :type="scope.row.status===100?'danger':'success'" :icon="scope.row.status===100?'el-icon-remove-outline':'el-icon-circle-check-outline'"
+                    @click="offOrON(scope.row,scope.$index)"></el-button>
+                </el-tooltip>
+              </el-col>
+            </el-row>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+  
 
     <el-dialog title="修改名称" :visible.sync="dialogChangeVisible" :closeOnClickModal="false">
       <el-form :model="changNameform" ref='form' :rules="rules">
@@ -200,20 +201,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-  padding: 1vw 3vw 0;
-}
-.pagination {
-  margin-top: 15px;
-}
+  .container {
+    padding: 1vw 3vw 0;
+  }
+  .pagination {
+    margin-top: 15px;
+  }
 </style>
 
 <style lang="css" scoped>
-.Thistable >>> .el-table__body-wrapper {
-  max-height: 50vh;
-  overflow-y: auto;
-}
-.ycbutton >>> .el-button--medium {
-  padding: 0.5vw 1vw;
-}
+  .Thistable >>> .el-table__body-wrapper {
+    max-height: 50vh;
+    overflow-y: auto;
+  }
 </style>

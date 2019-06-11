@@ -27,11 +27,9 @@ export default {
 <style lang="scss" scoped>
 .app-main {
   /*50 = navbar  */
-  padding: 3vw 3vw 0;
-  margin-top: 50px;
   // min-height: calc(100vh - 50px);
-  // position: relative;
-  // overflow: hidden;
+  position: relative;
+  overflow: hidden;
 }
 
 .hasTagsView {

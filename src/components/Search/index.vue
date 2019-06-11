@@ -2,7 +2,6 @@
   <section class="conditional-query-container" style="margin-top: .5rem">
     <section class="query-wrapper-row">
       <section class="query-wrapper-row-item ">
-        <section class="label-text">复合筛选</section>
         <section>
           <el-input
             @change="changeKeyword"
