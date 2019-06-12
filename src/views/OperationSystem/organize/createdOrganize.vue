@@ -114,7 +114,7 @@ export default {
         code: [
           { required: true, message: '请输入代码', trigger: 'blur' },
           // { min: 4, max: 10, message: '长度需在 4 到 10 个字符之间', trigger: 'blur' }
-          { pattern: /^(?=.*?[a-z)(?=.*>[A-Z])(?=.*?[0-9])[a-zA_Z0-9]{4,10}$/, message: "长度需在 4 到 10 个字符之间, 并且由数字和字母组成" }
+          { pattern: /^(?=.*?[a-z)(?=.*>[A-Z])[a-zA_Z0-9]{4,10}$/, message: '长度需在 4 到 10 个字符间,并且其中有字母组成' }
         ],
         dbId: [
           { required: true, message: '请选择数据库', trigger: 'blur' }
