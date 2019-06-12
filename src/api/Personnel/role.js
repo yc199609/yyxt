@@ -5,7 +5,7 @@ const api = {
   GetById: '/api/Operation/Role/GetById',
   Create: '/api/Operation/Role/create',
   deleteRole: '/api/Operation/Role/delete',
-  GetAllFunction: '/api/Operation/Function/GetAll',
+  GetAllFunction: '/api/Operation/Function/GetAllOptFuncs',
   UpdateRoleRights: '/api/Operation/Role/UpdateRoleRights',
   SaveRoleRights: '/api/Operation/Role/SaveRoleRights'
 }
