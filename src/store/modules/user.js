@@ -5,6 +5,8 @@ import {
   changePassword
 } from '@/api/login'
 
+import router, { asyncRouterMap } from '@/router'
+
 import Cookies from 'js-cookie'
 
 import {
@@ -20,7 +22,8 @@ const user = {
     avatar: '',
     roles: [],
     userInfo: [],
-    siteInfo: []
+    siteInfo: [],
+    getmenu: false
   },
 
   getters: {
@@ -50,6 +53,9 @@ const user = {
     },
     SET_SITEINFO: (state, siteInfo) => {
       state.siteInfo = siteInfo
+    },
+    SET_MENU: (state, getmenu) => {
+      state.getmenu = getmenu
     }
   },
 
@@ -83,6 +89,11 @@ const user = {
           const data = response.data
           if (data.userInfo) {
             Cookies.set('userName', data.userInfo.userName)
+            Cookies.set('menus', data.userInfo.menus)
+            commit('SET_MENU', true)
+            const routes = getRoute(asyncRouterMap, data.userInfo.menus)
+            router.options.routes = [...router.options.routes, ...routes]
+            router.addRoutes(routes)
           }
           commit('SET_SITEINFO', data.siteInfo)
           commit('SET_USERINFO', data.userInfo)
@@ -132,6 +143,22 @@ const user = {
       })
     }
   }
+}
+
+function getRoute(map, menus) {
+  return map.filter((item) => {
+    if (item.children) {
+      item.children = getRoute(item.children, menus)
+    }
+    var flag = false
+    for (let len = menus.length, i = 0; i < len; i++) {
+      if (menus[i].code === item.meta.code) {
+        flag = true
+        break
+      }
+    }
+    return flag
+  })
 }
 
 export default user

@@ -40,20 +40,23 @@ export const constantRouterMap = [
       path: 'dashboard',
       component: () => import('@/views/dashboard/index')
     }]
-  },
+  }
+]
+
+export const asyncRouterMap = [
   {
     path: '/OperationSystem',
     component: Layout,
     redirect: '/OperationSystem/organize',
     alwaysShow: true,
     name: 'OperationSystem',
-    meta: { title: '业务系统', icon: 'nested' },
+    meta: { title: '业务系统', icon: 'nested', code: '9200' },
     children: [
       {
         path: 'organize',
         component: () => import('@/views/OperationSystem/organize'),
         name: 'organize',
-        meta: { title: '机构列表', icon: 'organize' }
+        meta: { title: '机构列表', icon: 'organize', code: '920001' }
       }
     ]
   },
@@ -63,19 +66,19 @@ export const constantRouterMap = [
     alwaysShow: true,
     redirect: '/systemSetup/dataBase',
     name: 'systemSetup',
-    meta: { title: '系统设置', icon: 'form' },
+    meta: { title: '系统设置', icon: 'form', code: '9300' },
     children: [
       {
         path: 'dataBase',
         component: () => import('@/views/systemSetup/dataBase/index.vue'),
         name: 'dataBase',
-        meta: { title: '数据库设置', icon: 'dataBase' }
+        meta: { title: '数据库设置', icon: 'dataBase', code: '930001' }
       },
       {
         path: 'system',
         component: () => import('@/views/systemSetup/system/index.vue'),
         name: 'system',
-        meta: { title: '系统参数', icon: 'system' }
+        meta: { title: '系统参数', icon: 'system', code: '930002' }
       }
     ]
   },
@@ -85,25 +88,25 @@ export const constantRouterMap = [
     redirect: '/personnel/employees',
     component: Layout,
     name: 'personnel',
-    meta: { title: '人事管理', icon: 'user' },
+    meta: { title: '人事管理', icon: 'user', code: '9400' },
     children: [
       {
         path: 'employees',
         component: () => import('@/views/personnel/employees/index.vue'),
         name: 'employees',
-        meta: { title: '员工', icon: 'employees' }
+        meta: { title: '员工', icon: 'employees', code: '940001' }
       },
       {
         path: 'department',
         component: () => import('@/views/personnel/department'),
         name: 'department',
-        meta: { title: '部门', icon: 'department' }
+        meta: { title: '部门', icon: 'department', code: '940002' }
       },
       {
         path: 'Role',
         component: () => import('@/views/personnel/role'),
         name: 'Role',
-        meta: { title: '角色', icon: 'role' }
+        meta: { title: '角色', icon: 'role', code: '940003' }
       }
       // {
       //   path: 'test',
@@ -112,8 +115,7 @@ export const constantRouterMap = [
       //   meta: { title: '调试用的页面', icon: 'test' }
       // }
     ]
-  },
-  { path: '*', redirect: '/404', hidden: true }
+  }
 ]
 
 export default new Router({
