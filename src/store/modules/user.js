@@ -89,7 +89,8 @@ const user = {
           const data = response.data
           if (data.userInfo) {
             Cookies.set('userName', data.userInfo.userName)
-            Cookies.set('menus', data.userInfo.menus)
+            localStorage.setItem('menus', JSON.stringify(data.userInfo.menus))
+            // Cookies.set('menus', data.userInfo.menus)
             commit('SET_MENU', true)
             const routes = getRoute(asyncRouterMap, data.userInfo.menus)
             routes.push({ path: '*', redirect: '/404', hidden: true })
@@ -125,6 +126,7 @@ const user = {
           commit('SET_SITEINFO', null)
           commit('SET_USERINFO', null)
           Cookies.set('userName', '')
+          localStorage.setItem('menus', '')
           removeToken()
           resolve()
         }).catch(error => {
@@ -139,6 +141,7 @@ const user = {
         commit('SET_SITEINFO', null)
         commit('SET_USERINFO', null)
         Cookies.set('userName', '')
+        localStorage.setItem('menus', '')
         removeToken()
         resolve()
       })
