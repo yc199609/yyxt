@@ -90,10 +90,11 @@ export default {
     onSubmit() {
       // UpdateRoleRights
       // console.log(this.$refs.tree.getCheckedNodes()) // 返回目前被选中的节点所组成的数组
-      const arr = []
+      let arr = []
       this.$refs.tree.getCheckedNodes().find(obj => {
         arr.push(obj.id)
       })
+      arr = [...this.$refs.tree.getHalfCheckedKeys(), ...arr]
       this.form.functionIds = arr
 
       this.$refs.form.validate((valid) => {
