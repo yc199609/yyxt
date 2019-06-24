@@ -101,6 +101,34 @@ export default {
         remark: ''
       },
       rules: {
+        remark: [
+          {
+            required: true,
+            message: '请输入备注',
+            trigger: 'blur'
+          }
+        ],
+        birthday: [
+          {
+            required: true,
+            message: '请选择生日',
+            trigger: 'change'
+          }
+        ],
+        pinYing: [
+          {
+            required: true,
+            message: '请输入简拼',
+            trigger: 'blur'
+          }
+        ],
+        nickName: [
+          {
+            required: true,
+            message: '请输入昵称',
+            trigger: 'blur'
+          }
+        ],
         name: [
           {
             type: 'string',

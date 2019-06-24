@@ -92,6 +92,7 @@ const user = {
             Cookies.set('menus', data.userInfo.menus)
             commit('SET_MENU', true)
             const routes = getRoute(asyncRouterMap, data.userInfo.menus)
+            routes.push({ path: '*', redirect: '/404', hidden: true })
             router.options.routes = [...router.options.routes, ...routes]
             router.addRoutes(routes)
           }
