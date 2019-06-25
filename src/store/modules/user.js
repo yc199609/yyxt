@@ -89,17 +89,17 @@ const user = {
           const data = response.data
           if (data.userInfo) {
             Cookies.set('userName', data.userInfo.userName)
-            localStorage.setItem('menus', JSON.stringify(data.userInfo.menus))
-            // Cookies.set('menus', data.userInfo.menus)
             commit('SET_MENU', true)
             const routes = getRoute(asyncRouterMap, data.userInfo.menus)
             routes.push({ path: '*', redirect: '/404', hidden: true })
             router.options.routes = [...router.options.routes, ...routes]
             router.addRoutes(routes)
+            commit('SET_SITEINFO', data.siteInfo)
+            commit('SET_USERINFO', data.userInfo)
+            resolve({ ...response, success: true })
+          } else {
+            resolve({ ...response, success: false })
           }
-          commit('SET_SITEINFO', data.siteInfo)
-          commit('SET_USERINFO', data.userInfo)
-          resolve(response)
         }).catch(error => {
           reject(error)
         })

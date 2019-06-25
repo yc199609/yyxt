@@ -21,7 +21,15 @@ router.beforeEach((to, from, next) => {
       } else {
         store.dispatch('GetInfo')
           .then(res => { // 拉取用户信息
-            next(to)
+            if (res.success) {
+              next(to)
+            } else {
+              store.dispatch('FedLogOut')
+                .then(() => {
+                  Message.error('Verification failed, please login again')
+                  next({ path: '/login' })
+                })
+            }
           })
           .catch((err) => {
             store.dispatch('FedLogOut')
