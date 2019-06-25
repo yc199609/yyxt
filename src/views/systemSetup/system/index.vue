@@ -1,7 +1,7 @@
 <template>
   <div class="container">
 
-    <Search @search='init' @changeKeyword='changeKeyword'/>
+    <Search :show-btn="buttonPermissions('93000201')" @search='init' @changeKeyword='changeKeyword'/>
 
     <el-card>
        <el-table :data="tableData" border class="table">
@@ -15,7 +15,7 @@
         </el-table-column>
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
-            <el-button type="warning" @click="editShow(scope.row)">
+            <el-button v-if="buttonPermissions('93000202')" type="warning" @click="editShow(scope.row)">
               修改
             </el-button>
           </template>
@@ -47,9 +47,11 @@
 <script>
 import Search from "@/components/Search";
 import { SystemConfigList, SystemConfigUpdate } from "@api/systemSetup/system";
+import { buttonPermissions } from '@/mixin'
 
 export default {
   name: "system",
+  mixins: [ buttonPermissions ],
   data() {
     return {
       keyword:'',
