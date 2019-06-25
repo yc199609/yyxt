@@ -7,130 +7,115 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 /* Layout */
-import Layout from '../views/layout/Layout'
+import Layout from '../layout'
 
 /**
-* hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
-* alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
-*                                if not set alwaysShow, only more than one route under the children
-*                                it will becomes nested mode, otherwise not show the root menu
-* redirect: noredirect           if `redirect:noredirect` will no redirect in the breadcrumb
-* name:'router-name'             the name is used by <keep-alive> (must set!!!)
+* hidden: true if `hidden:true` will not show in the sidebar(default is false)
+* alwaysShow: true if set true, will always show the root menu, whatever its child routes length
+* if not set alwaysShow, only more than one route under the children
+* it will becomes nested mode, otherwise not show the root menu
+* redirect: noredirect if `redirect:noredirect` will no redirect in the breadcrumb
+* name:'router-name' the name is used by <keep-alive> (must set!!!)
 * meta : {
-    title: 'title'               the name show in subMenu and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar
-    breadcrumb: false            if false, the item will hidden in breadcrumb(default is true)
-  }
+title: 'title' the name show in subMenu and breadcrumb (recommend set)
+icon: 'svg-name' the icon show in the sidebar
+breadcrumb: false if false, the item will hidden in breadcrumb(default is true)
+}
 **/
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
-
   {
     path: '/',
+    fullPath: '/dashboard',
     component: Layout,
     redirect: '/dashboard',
-    hidden: true,
+    name: '/dashboard',
+    meta: {
+      roles: ['test2', '18888888888'], // 设置该路由进入的权限，支持多个权限叠加
+      title: '首页',
+      icon: 'home'
+    },
     children: [{
       path: 'dashboard',
       component: () => import('@/views/dashboard/index')
     }]
-  },
+  }
+]
 
-  // {
-  //   path: '/example',
-  //   component: Layout,
-  //   redirect: '/example/table',
-  //   name: 'Example',
-  //   meta: { title: 'Example', icon: 'example' },
-  //   children: [
-  //     {
-  //       path: 'table',
-  //       name: 'Table',
-  //       component: () => import('@/views/table/index'),
-  //       meta: { title: 'Table', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'tree',
-  //       name: 'Tree',
-  //       component: () => import('@/views/tree/index'),
-  //       meta: { title: 'Tree', icon: 'tree' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/form',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'Form',
-  //       component: () => import('@/views/form/index'),
-  //       meta: { title: 'Form', icon: 'form' }
-  //     }
-  //   ]
-  // },
-
+export const asyncRouterMap = [
   {
-    path: '/nested',
+    path: '/OperationSystem',
     component: Layout,
-    redirect: '/nested/OperationSystem',
+    redirect: '/OperationSystem/organize',
+    alwaysShow: true,
     name: 'OperationSystem',
-    meta: {
-      title: '运营系统',
-      icon: 'nested'
-    },
+    meta: { title: '业务系统', icon: 'nested', code: '9200' },
     children: [
       {
-        path: 'OperationSystem',
-        component: () => import('@/views/nested/OperationSystem/index'), // Parent router-view
-        name: 'OperationSystem',
-        meta: { title: '机构' },
-        children: [
-          {
-            path: 'organize',
-            component: () => import('@/views/nested/OperationSystem/organize'),
-            name: 'Organize',
-            meta: { title: '机构列表' }
-          }
-        ]
-      },
-      {
-        path: 'systemSetup',
-        component: () => import('@/views/nested/systemSetup/index'),
-        name: 'systemSetup',
-        meta: { title: '系统设置' },
-        children: [
-          {
-            path: 'dataBase',
-            component: () => import('@/views/nested/systemSetup/dataBase'),
-            name: 'dataBase',
-            meta: { title: '数据库设置' }
-          },
-          {
-            path: 'system',
-            component: () => import('@/views/nested/systemSetup/system'),
-            name: 'system',
-            meta: { title: '系统参数' }
-          }
-        ]
+        path: 'organize',
+        component: () => import('@/views/OperationSystem/organize'),
+        name: 'organize',
+        meta: { title: '机构列表', icon: 'organize', code: '920001' }
       }
     ]
   },
-
-  // {
-  //   path: 'external-link',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-  //       meta: { title: 'External Link', icon: 'link' }
-  //     }
-  //   ]
-  // },
-
-  { path: '*', redirect: '/404', hidden: true }
+  {
+    path: '/systemSetup',
+    component: Layout,
+    alwaysShow: true,
+    redirect: '/systemSetup/dataBase',
+    name: 'systemSetup',
+    meta: { title: '系统设置', icon: 'form', code: '9300' },
+    children: [
+      {
+        path: 'dataBase',
+        component: () => import('@/views/systemSetup/dataBase/index.vue'),
+        name: 'dataBase',
+        meta: { title: '数据库设置', icon: 'dataBase', code: '930001' }
+      },
+      {
+        path: 'system',
+        component: () => import('@/views/systemSetup/system/index.vue'),
+        name: 'system',
+        meta: { title: '系统参数', icon: 'system', code: '930002' }
+      }
+    ]
+  },
+  {
+    path: '/personnel',
+    alwaysShow: true,
+    redirect: '/personnel/employees',
+    component: Layout,
+    name: 'personnel',
+    meta: { title: '人事管理', icon: 'user', code: '9400' },
+    children: [
+      {
+        path: 'employees',
+        component: () => import('@/views/personnel/employees/index.vue'),
+        name: 'employees',
+        meta: { title: '员工', icon: 'employees', code: '940001' }
+      },
+      {
+        path: 'department',
+        component: () => import('@/views/personnel/department'),
+        name: 'department',
+        meta: { title: '部门', icon: 'department', code: '940002' }
+      },
+      {
+        path: 'Role',
+        component: () => import('@/views/personnel/role'),
+        name: 'Role',
+        meta: { title: '角色', icon: 'role', code: '940003' }
+      }
+      // {
+      //   path: 'test',
+      //   component: () => import('@/views/personnel/test'),
+      //   name: 'test',
+      //   meta: { title: '调试用的页面', icon: 'test' }
+      // }
+    ]
+  }
 ]
 
 export default new Router({

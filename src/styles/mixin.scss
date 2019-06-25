@@ -26,3 +26,15 @@
   width: 100%;
   height: 100%;
 }
+
+@mixin fontSize($min, $max) {
+  @media screen and (max-width: 768px) {
+    font-size: #{$min}px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    font-size: #{$max}px;
+  }
+
+  font-size:calc(#{$min}px + (#{$max} - #{$min}) * (100vw - 768px) / (1440 - 768));
+}

@@ -1,12 +1,38 @@
-import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import {
+  login,
+  logout,
+  getInfo,
+  changePassword
+} from '@/api/login'
+
+import router, { asyncRouterMap } from '@/router'
+
+import Cookies from 'js-cookie'
+
+import {
+  getToken,
+  setToken,
+  removeToken
+} from '@/utils/auth'
 
 const user = {
   state: {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: [],
+    userInfo: [],
+    siteInfo: [],
+    getmenu: false
+  },
+
+  getters: {
+    getUserInfo: state => {
+      return state.userInfo
+    },
+    getSiteInfo: state => {
+      return state.siteInfo
+    }
   },
 
   mutations: {
@@ -21,19 +47,35 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_USERINFO: (state, userInfo) => {
+      state.userInfo = userInfo
+    },
+    SET_SITEINFO: (state, siteInfo) => {
+      state.siteInfo = siteInfo
+    },
+    SET_MENU: (state, getmenu) => {
+      state.getmenu = getmenu
     }
   },
 
   actions: {
     // 登录
     Login({ commit }, userInfo) {
-      const username = userInfo.username.trim()
+      const { cellPhone, password } = userInfo
       return new Promise((resolve, reject) => {
-        login(username, userInfo.password).then(response => {
-          const data = response.data
-          setToken(data.token)
-          commit('SET_TOKEN', data.token)
-          resolve()
+        login({ mobile: cellPhone, password: password }).then(response => {
+          const { data } = response
+          if (data.isNeedResetPassword === 0) {
+            const token = data.token
+            resolve({ isNeedResetPassword: true, token })
+            return
+          } else {
+            commit('SET_TOKEN', data.token)
+            setToken(data.token)
+            // this.$route.push({ '' })
+            resolve(response)
+          }
         }).catch(error => {
           reject(error)
         })
@@ -45,13 +87,18 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
           const data = response.data
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
-          } else {
-            reject('getInfo: roles must be a non-null array !')
+          if (data.userInfo) {
+            Cookies.set('userName', data.userInfo.userName)
+            localStorage.setItem('menus', JSON.stringify(data.userInfo.menus))
+            // Cookies.set('menus', data.userInfo.menus)
+            commit('SET_MENU', true)
+            const routes = getRoute(asyncRouterMap, data.userInfo.menus)
+            routes.push({ path: '*', redirect: '/404', hidden: true })
+            router.options.routes = [...router.options.routes, ...routes]
+            router.addRoutes(routes)
           }
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
+          commit('SET_SITEINFO', data.siteInfo)
+          commit('SET_USERINFO', data.userInfo)
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -59,12 +106,27 @@ const user = {
       })
     },
 
+    // 修改密码
+    changePassword({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        changePassword(state.token)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
+          commit('SET_SITEINFO', null)
+          commit('SET_USERINFO', null)
+          Cookies.set('userName', '')
+          localStorage.setItem('menus', '')
           removeToken()
           resolve()
         }).catch(error => {
@@ -76,12 +138,31 @@ const user = {
     // 前端 登出
     FedLogOut({ commit }) {
       return new Promise(resolve => {
-        commit('SET_TOKEN', '')
+        commit('SET_SITEINFO', null)
+        commit('SET_USERINFO', null)
+        Cookies.set('userName', '')
+        localStorage.setItem('menus', '')
         removeToken()
         resolve()
       })
     }
   }
+}
+
+function getRoute(map, menus) {
+  return map.filter((item) => {
+    if (item.children) {
+      item.children = getRoute(item.children, menus)
+    }
+    var flag = false
+    for (let len = menus.length, i = 0; i < len; i++) {
+      if (menus[i].code === item.meta.code) {
+        flag = true
+        break
+      }
+    }
+    return flag
+  })
 }
 
 export default user

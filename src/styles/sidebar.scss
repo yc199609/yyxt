@@ -2,7 +2,10 @@
 
   // 主体区域 Main container
   .main-container {
-    min-height: 100%;
+    background-color: #f7f8fa;
+    border-top: 1px solid transparent;
+    margin-top: 84px;
+    min-height: calc(100vh - 86px);
     transition: margin-left .28s;
     margin-left: $sideBarWidth;
     position: relative;
@@ -149,7 +152,7 @@
   // 适配移动端, Mobile responsive
   .mobile {
     .main-container {
-      margin-left: 0px;
+      margin-left: 54px;
     }
 
     .sidebar-container {
@@ -167,7 +170,6 @@
   }
 
   .withoutAnimation {
-
     .main-container,
     .sidebar-container {
       transition: none;

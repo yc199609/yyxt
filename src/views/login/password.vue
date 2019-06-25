@@ -1,107 +1,87 @@
 <template>
   <div class="all-container">
     <div class="all-container-padding bg">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="基本信息" name="first">
-          <el-form :model="userlist" :rules="rules" ref="EditorUserForms">
-            <el-form-item label="用户名" prop="username" :label-width="formLabelWidth">
-              <el-col :span="8">
-                <el-input v-model="userlist.username" disabled></el-input>
-              </el-col>
-            </el-form-item>
-            <el-form-item label="电话" prop="phone" :label-width="formLabelWidth">
-              <el-col :span="8">
-                <el-input v-model="userlist.phone" placeholder="请输入电话"></el-input>
-              </el-col>
-            </el-form-item>
-            <el-form-item label="图片验证码" prop="pictrue" :label-width="formLabelWidth" style="position: relative;">
-              <el-col :span="8">
-                <el-input v-model="userlist.pictrue" placeholder="请输入图片验证码" style="float: left;"></el-input>
-                <img src="" alt="" style="position: absolute; top: 0; margin-left: 10px;">
-              </el-col>
-            </el-form-item>
-            <el-form-item label="短信验证码" prop="smsv" :label-width="formLabelWidth" style="position: relative;">
-              <el-col :span="8">
-                <el-input v-model="userlist.smsv" placeholder="请输入短信验证码" style="float: left;"></el-input>
-                <el-button type="info" plain style="position: absolute; top: 0; margin-left: 10px;">点击获取验证码</el-button>
-              </el-col>
-            </el-form-item>
-          </el-form>
-          <div class="grid-content bg-purple">
-            <el-button type="primary" @click="EditorUserClick('userlist')">保存</el-button>
-          </div>
-        </el-tab-pane>
+      <el-form :model="userlist" :rules="rules" ref="EditorUserForms">
+        <el-form-item label="电话" prop="mobile" :label-width="formLabelWidth">
+          <el-col :span="8">
+            <el-input v-model="userlist.mobile" @blur="imgCode" placeholder="请输入电话"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="图片验证码" prop="pictrue" :label-width="formLabelWidth" style="position: relative;">
+          <el-col :span="8">
+            <el-input v-model="userlist.pictrue" placeholder="请输入图片验证码" style="float: left;"></el-input>
+            <img src="" @click="imgCode" ref="imgcode" alt="" style="position: absolute; top: 0; margin-left: 10px; border: 0">
+          </el-col>
+        </el-form-item>
+        <el-form-item label="短信验证码" prop="sms" :label-width="formLabelWidth" style="position: relative;">
+          <el-col :span="8">
+            <el-input v-model="userlist.sms" placeholder="请输入短信验证码" style="float: left;"></el-input>
+            <el-button :type="sendsms?'primary':'info'" plain style="position: absolute; top: 0; margin-left: 10px; border: 0"
+              @click="SendForgetPsw">{{sendCode}}</el-button>
+          </el-col>
+        </el-form-item>
 
-        <el-tab-pane label="修改密码" name="second">
-          <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
-            <el-form-item label="原密码" prop="pass" :label-width="formLabelWidth">
-              <el-col :span="8">
-                <el-input v-model="ruleForm.pass" placeholder="请输入原密码" type="password"></el-input>
-              </el-col>
-            </el-form-item>
-            <el-form-item label="新密码" prop="newpass" :label-width="formLabelWidth">
-              <el-col :span="8">
-                <el-input
-                  v-model="ruleForm.newpass"
-                  placeholder="请输入新密码"
-                  id="newkey"
-                  type="password"
-                ></el-input>
-              </el-col>
-            </el-form-item>
-            <el-form-item label="重复新密码" prop="checknewpass" :label-width="formLabelWidth">
-              <el-col :span="8">
-                <el-input
-                  v-model="ruleForm.checknewpass"
-                  placeholder="请再次输入新密码"
-                  id="newkey1"
-                  type="password"
-                ></el-input>
-              </el-col>
-            </el-form-item>
-          </el-form>
-          <div class="grid-content bg-purple">
-            <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
-          </div>
-        </el-tab-pane>
-      </el-tabs>
+        <br>
+
+        <el-form-item label="新密码" prop="password" :label-width="formLabelWidth">
+          <el-col :span="8">
+            <el-input v-model="userlist.password" placeholder="请输入新密码" id="newkey" type="password"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="重复新密码" prop="checknewpass" :label-width="formLabelWidth">
+          <el-col :span="8">
+            <el-input v-model="userlist.checknewpass" placeholder="请再次输入新密码" type="password"></el-input>
+          </el-col>
+        </el-form-item>
+      </el-form>
+      <div class="grid-content bg-purple">
+        <el-button type="primary" @click="EditorUserClick()">保存</el-button>
+      </div>
     </div>
   </div>
 </template>
 <script>
+import { sendForpwsSMS, updatePswBySMS } from "@/api/login";
+import axios from "axios";
+import { resolve, reject } from "q";
 export default {
+  name: "password",
   data() {
     /*****检验两次密码是否一致***/
     var validatePass = (rule, value, callback) => {
+      // console.log(value);
       if (value === "") {
         callback(new Error("请输入密码"));
+      } else if (value.length < 6){
+        callback(new Error("密码不能少于6位数"));
       } else {
-        if (this.ruleForm.checknewpass !== "") {
-          this.$refs.ruleForm.validateField("checknewpass");
-        }
         callback();
       }
     };
     var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
+      if (value == "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm.newpass) {
+      } else if (value !== this.userlist.password) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
       }
     };
     return {
-      // uploadParm: {}, //图片的上传
-      ruleForm: {}, //修改密码的表单
+      sendCode: "点击获取验证码",
+      sendsms: true,
       activeName: "first",
       loading: true,
-      baseUrl: process.env.BASE_API,
-      userlist: {}, //用户信息表单
+      userlist: {
+        mobile: "",
+        sms: "",
+        password: "",
+        checknewpass: ""
+      }, //信息表单
       formLabelWidth: "150px",
       /***校验***/
       rules: {
-        phone: [
+        mobile: [
           {
             required: true,
             message: "请输入电话号码"
@@ -111,116 +91,107 @@ export default {
             message: "手机格式不对"
           }
         ],
-        pass: [
+        pictrue: [
           {
             required: true,
-            trigger: "blur",
-            message: "请输入密码"
+            message: "请输入图片验证码"
           }
         ],
-        newpass: [
+        sms: [
+          {
+            required: true,
+            message: "请输入短信验证码"
+          }
+        ],
+        password: [
           {
             validator: validatePass,
+            required: true,
             trigger: "blur"
           }
         ],
         checknewpass: [
           {
             validator: validatePass2,
+            required: true,
             trigger: "blur"
           }
         ]
       }
     };
   },
-  created() {
-    // this.getUser();
-    // this.upload();
-  },
+  created() {},
   methods: {
-    //获取个人用户的信息
-    getUser() {
-      postData("接口", this.username).then(response => {
-        if (response.status === 200) {
-          this.userlist = response.data;
-          this.loading = false;
-          console.log(this.userlist, 9696);
-        } else {
-          this.$message({
-            message: "获取信息失败," + response.message,
-            type: "error"
-          });
+    // 电话失焦,拿到图片验证码
+    imgCode() {
+      var _that = this;
+      this.$refs.EditorUserForms.validateField("mobile", err => {
+        if (!err) {
+          // console.log(this.$refs.imgcode)
+          this.$refs.imgcode.setAttribute('src','/api/User/GetImageCode?mobile=' + this.userlist.mobile + '&rander=' + Math.random(1))
         }
       });
     },
-    //tab切换
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
-    //上传参数图片初始化
-    upload() {
-      var currentTimeStamp = new Date().getTime() / 1000;
-      if (
-        this.uploadParams == null ||
-        this.uploadParams.expire + 3 < currentTimeStamp
-      ) {
-        this.$store
-          .dispatch("GetUploadParams")
-          .then(req => {
-            this.uploadParm = req.data;
-          })
-          .catch(err => {
-            this.$message({ message: err.message, type: "warning" });
-          });
-      } else {
-        this.uploadParm = this.uploadParams;
-      }
-    },
-    //上传之前
-    beforeupload(file) {
-      this.uploadParm.key = this.uploadParm.dir + guid();
-      // console.log(this.uploadParm)
-    },
-    //修改密码
-    submitForm(ruleForm) {
-      var obj = {
-        username: this.username,
-        oldpwd: this.ruleForm.pass,
-        newpwd: this.ruleForm.newpass
-      };
-      console.log(obj);
-      postData("接口", obj).then(response => {
-        if (response.status == 200) {
-          this.$message({
-            message: "保存成功",
-            type: "success"
-          });
-        } else {
-          this.$message({
-            message: "修改失败" + response.message,
-            type: "error"
-          });
-        }
+    // 发送短信验证码
+    SendForgetPsw() {
+      var _that = this;
+      const mobile = _that.userlist.mobile
+      const imageCode = _that.userlist.pictrue
+      var promise1 = new Promise((resolve, reject) => {
+        this.$refs.EditorUserForms.validateField("mobile", err => {
+          if (!err) {
+            resolve();
+          }
+        });
       });
+      var promise2 = new Promise((resolve, reject) => {
+        this.$refs.EditorUserForms.validateField("pictrue", err => {
+          if (!err) {
+            resolve();
+          }
+        });
+      });
+      Promise.all([promise1, promise2]).then(() => {
+        if (_that.sendsms) {
+          _that.sendsms = false
+          var n = 60
+          _that.sendCode = n + "秒后重新获取验证码"
+          var timer = setInterval(() => {
+            n--
+            if (n <= 0) {
+              _that.sendCode = "重新获取验证码"
+              _that.sendsms = true
+              clearInterval(timer)
+            }else{
+              _that.sendCode = n + "秒后重新获取验证码"
+            }
+          }, 1000)
+          sendForpwsSMS(mobile, imageCode)
+            .then(response => {})
+            .catch(err => {
+              clearInterval(timer)
+              _that.sendsms = true
+              _that.sendCode = "重新获取"
+            })
+        }
+      })
     },
     // 编辑提交的方法
     EditorUserClick() {
       this.$refs.EditorUserForms.validate(valid => {
         if (valid) {
-          console.log(this.userlist);
-          putData("接口", this.userlist).then(response => {
-            if (response.status == 200) {
-              this.$message({
-                message: "编辑成功",
-                type: "success"
-              });
-            } else {
-              this.$message({
-                message: "修改失败" + response.message,
-                type: "error"
-              });
-            }
-          });
+          updatePswBySMS(this.userlist)
+            .then(response => {
+                this.$emit("hidden");
+                this.$notify({
+                  title: "成功",
+                  message: "密码修改成功",
+                  type: "success"
+                });
+            })
+            .catch(err => {
+              console.log(err);
+            });
         }
       });
     }

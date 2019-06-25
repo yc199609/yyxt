@@ -1,10 +1,12 @@
 <template>
   <div id="contanier" class="login-container">
+
     <div id="mask" ref="mask" class="mask">
       <div class="mask_container">
         <img src="./onloadgif.gif" alt="正在加载中">
       </div>
     </div>
+
     <el-form
       ref="loginForm"
       :model="loginForm"
@@ -18,7 +20,7 @@
         <lang-select class="set-language"/>
       </div>
 
-      <el-form-item
+      <!-- <el-form-item
         prop="organize"
         :rules="[
           { required: true, message: '机构名称不能为空'}
@@ -31,20 +33,25 @@
           v-model="loginForm.organize"
           name="organize"
           type="text"
-          autocomplete="off"
+          auto-complete="off"
           placeholder="organize"
         />
-      </el-form-item>
-      <el-form-item prop="username">
+      </el-form-item> -->
+      <el-form-item
+        prop="cellPhone"
+        :rules="[
+          { required: true, message: '电话号码不能为空'}
+        ]"
+      >
         <span class="svg-container">
           <svg-icon icon-class="user"/>
         </span>
         <el-input
-          v-model="loginForm.username"
-          name="username"
+          v-model="loginForm.cellPhone"
+          name="cellPhone"
           type="text"
           auto-complete="on"
-          placeholder="username"
+          placeholder="cellPhone"
         />
       </el-form-item>
       <el-form-item prop="password">
@@ -79,13 +86,6 @@
             @click="showDialogPassword=true"
           >{{ $t('login.forgetPassword') }}</el-button>
         </span>
-        <span>
-          <el-button
-            class="thirdparty-button"
-            type="primary"
-            @click="showDialogPhone=true"
-          >{{ $t('login.phone') }}</el-button>
-        </span>
       </div>
     </el-form>
 
@@ -93,17 +93,30 @@
       :title="$t('login.RetrievePassword')"
       :visible.sync="showDialogPassword"
       :modal-append-to-body="false"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
     >
-      <password/>
+      <password @hidden='hiddenColse'/>
     </el-dialog>
 
     <el-dialog
       :title="$t('login.phone')"
       :visible.sync="showDialogPhone"
       :modal-append-to-body="false"
+      :close-on-click-modal="false"
     >
       <phone/>
     </el-dialog>
+
+    <el-dialog
+      @close="initPasswordHidden"
+      :visible.sync="initView"
+      :modal-append-to-body="false"
+      :close-on-click-modal="false"
+      title="首次登录请重置密码">
+      <initPassword @submit='initPasswordSubmit' />
+    </el-dialog>
+
   </div>
 </template>
 
@@ -112,45 +125,35 @@ import { isvalidUsername } from "@/utils/validate";
 import LangSelect from "@/components/LangSelect";
 import password from "./password";
 import phone from "./phone";
+import { setToken } from '@/utils/auth'
+import initPassword from './initPassword'
 
 export default {
   name: "Login",
-  components: { LangSelect, password, phone },
+  components: { LangSelect, password, phone, initPassword},
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error("请输入正确的用户名"));
-      } else {
-        callback();
-      }
-    };
     const validatePass = (rule, value, callback) => {
-      if (value.length < 5) {
-        callback(new Error("密码不能小于5位"));
-      } else {
-        callback();
+      if (value.length < 6) {
+        callback(new Error("密码不能小于6位"));
       }
+      callback()
     };
     return {
       loginForm: {
-        organize: "Madik",
-        username: "admin",
-        password: "admin"
+        organize: "test2",
+        cellPhone: "18888888888",
+        password: "gosafenet.com"
       },
       loginRules: {
-        // organize: [
-        //   { required: true, trigger: "blur", validator: validateOrganize }
-        // ],
-        username: [
-          { required: true, trigger: "blur", validator: validateUsername }
-        ],
         password: [{ required: true, trigger: "blur", validator: validatePass }]
       },
       loading: false,
       pwdType: "password",
       showDialogPhone: false,
       showDialogPassword: false,
-      redirect: undefined
+      redirect: undefined,
+      initView: false,
+      token:''
     };
   },
   watch: {
@@ -163,16 +166,21 @@ export default {
   },
   created() {
     window.setTimeout(() => {
-      const contanier = document.getElementById("contanier");
-      const mask = document.getElementById("mask");
-      contanier.removeChild(mask);
-    }, 3000);
+      this.$store.dispatch("GetInfo", this.loginForm).then(res => {
+        const contanier = document.getElementById("contanier")
+        const mask = document.getElementById("mask")
+        contanier.removeChild(mask)
+      })
+    }, 1000)
   },
   mounted() {
     this.$refs.mask.style.height =
       document.getElementById("app").clientHeight + "px";
   },
   methods: {
+    hiddenColse() {
+      this.showDialogPassword = false
+    },
     showPwd() {
       if (this.pwdType === "password") {
         this.pwdType = "";
@@ -186,69 +194,41 @@ export default {
           this.loading = true;
           this.$store
             .dispatch("Login", this.loginForm)
-            .then(() => {
-              this.loading = false;
-              this.$router.push({ path: this.redirect || "/" });
+            .then(res => {
+              if (res&&res.isNeedResetPassword === true) {
+                this.initView = true
+                this.token = res.token
+              } else {
+                window.location.href = res.data.redirectUrl;
+              }
             })
             .catch(() => {
               this.loading = false;
             });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
+    },
+    initPasswordSubmit(){
+      this.initPasswordHidden()
+      this.$store.commit('SET_TOKEN', this.token)
+      setToken(this.token)
+      this.$router.push({ path: this.redirect || '/' })
+    },
+    initPasswordHidden(){
+      this.loading = false
+      this.initView = false
     }
   }
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 /* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
-$bg: #283443;
-$light_gray: #fff;
-$cursor: #fff;
-
-@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
-    color: $cursor;
-  }
-}
-
-/* reset element-ui css */
-.login-container {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-    .el-input__inner {
-      background-color: transparent !important;
-    }
-    input {
-      // background: transparent;
-      border: 0px;
-      -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $light_gray;
-      height: 47px;
-      caret-color: $cursor;
-
-      &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
-      }
-    }
-  }
-
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
-  }
+.login-form >>> .el-input__inner {
+  background-color: #283343;
+  border: none;
 }
 </style>
 
