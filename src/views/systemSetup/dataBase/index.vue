@@ -1,7 +1,7 @@
 <template>
   <div class="container">
 
-    <Search @search='init' @changeKeyword='changeKeyword'>
+    <Search :show-btn="buttonPermissions('93000101')" @search='init' @changeKeyword='changeKeyword'>
       <el-input placeholder="请输入关键字搜索" @keyup.enter.native="init" size="small" v-model="keyword" :clearable="true" slot="search"></el-input>
     </Search>
     
@@ -35,17 +35,17 @@
             <el-row>
               <el-col :span='8'>
                 <el-tooltip effect="dark" content="修改名称" placement="top">
-                  <el-button type="primary" icon="el-icon-edit-outline" @click="changNameDialog(scope.row)"></el-button>
+                  <el-button v-if="buttonPermissions('93000103')" type="primary" icon="el-icon-edit-outline" @click="changNameDialog(scope.row)"></el-button>
                 </el-tooltip>
               </el-col>
               <el-col :span='8'>
                 <el-tooltip effect="dark" content="修改配置" placement="top">
-                  <el-button type="warning" icon="el-icon-setting" @click="modifyDialog(scope.row)"></el-button>
+                  <el-button v-if="buttonPermissions('93000104')" type="warning" icon="el-icon-setting" @click="modifyDialog(scope.row)"></el-button>
                 </el-tooltip>
               </el-col>
               <el-col :span='8'>
                 <el-tooltip effect="dark" :content="scope.row.status===100?'停用':'启用'" placement="top">
-                  <el-button :type="scope.row.status===100?'danger':'success'" :icon="scope.row.status===100?'el-icon-remove-outline':'el-icon-circle-check-outline'"
+                  <el-button v-if="buttonPermissions('93000102')" :type="scope.row.status===100?'danger':'success'" :icon="scope.row.status===100?'el-icon-remove-outline':'el-icon-circle-check-outline'"
                     @click="offOrON(scope.row,scope.$index)"></el-button>
                 </el-tooltip>
               </el-col>
@@ -81,9 +81,11 @@ import {
 } from "@api/systemSetup/dataBase";
 import ModifyForm from "./ModifyForm";
 import Search from "@/components/Search";
+import { buttonPermissions } from '@/mixin'
 
 export default {
   name: "dataBase",
+  mixins: [ buttonPermissions ],
   data() {
     return {
       keyword: "",

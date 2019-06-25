@@ -14,9 +14,9 @@
           </section>
         </section>
 
-        <el-button type="success" plain size="small" icon="el-icon-search" @click="handleLoadAndQuery">搜索</el-button>
+        <el-button v-if="buttonPermissions('92000101')" type="success" plain size="small" icon="el-icon-search" @click="handleLoadAndQuery">搜索</el-button>
 
-        <el-button type="warning" plain size="small" @click="createdOrganizeDialog">创建机构</el-button>
+        <el-button v-if="buttonPermissions('92000102')" type="warning" plain size="small" @click="createdOrganizeDialog">创建机构</el-button>
       </section>
     </section>
 
@@ -32,17 +32,17 @@
             <el-row>
               <el-col :span='8' class="rowbutton">
                 <el-tooltip content="基本信息" placement="top" effect="dark">
-                  <el-button  type="info" icon="el-icon-document" @click="baseInfo(scope.row.id)"></el-button>
+                  <el-button v-if="buttonPermissions('92000105')"  type="info" icon="el-icon-document" @click="baseInfo(scope.row.id)"></el-button>
                 </el-tooltip>
               </el-col>
               <el-col :span='8' class="rowbutton">
                 <el-tooltip content="机构设置" placement="top" effect="dark">
-                  <el-button type="warning" icon="el-icon-setting" @click="setOrganize(scope.row.id)"></el-button>
+                  <el-button v-if="buttonPermissions('92000103')" type="warning" icon="el-icon-setting" @click="setOrganize(scope.row.id)"></el-button>
                 </el-tooltip>
               </el-col>
               <el-col :span='8' class="rowbutton">
                 <el-tooltip content="业务参数" placement="top" effect="dark">
-                  <el-button type="success" icon="el-icon-menu" @click="busParams(scope.row.id)"></el-button>
+                  <el-button v-if="buttonPermissions('92000104')" type="success" icon="el-icon-menu" @click="busParams(scope.row.id)"></el-button>
                 </el-tooltip>
               </el-col>
             </el-row>
@@ -76,6 +76,7 @@
 </template>
 
 <script>
+import { buttonPermissions } from '@/mixin'
 import baseInformation from "./baseInformation"
 import setupOrganize from "./setupOrganize"
 import businessParameters from "./businessParameters"
@@ -85,6 +86,7 @@ import { companyList, getBaseInfoById, getConfigById, getSystemInfoById } from "
 export default {
   name: 'organize',
   components: { baseInformation, setupOrganize, businessParameters, createdOrganize },
+  mixins: [buttonPermissions],
   data() {
     return {
       ret: "",

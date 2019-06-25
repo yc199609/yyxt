@@ -16,7 +16,7 @@
       <el-row>
         <el-col :offset="1">
           <strong>功能权限</strong>
-          <el-tree ref="tree" :props="defaultProps" :data="data" node-key="id" show-checkbox style="width: 50%"/>
+          <el-tree ref="tree" :check-strictly="true" :props="defaultProps" :data="data" node-key="id" show-checkbox style="width: 50%"/>
         </el-col>
       </el-row>
       <el-form-item class="buttonRow" style="text-align:center;">

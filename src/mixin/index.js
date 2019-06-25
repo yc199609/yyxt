@@ -96,3 +96,11 @@ export const success = {
     }
   }
 }
+
+export const buttonPermissions = {
+  methods: {
+    buttonPermissions(code) {
+      return this.$store.state.user.userInfo.functions.some(item => item.code === code)
+    }
+  }
+}

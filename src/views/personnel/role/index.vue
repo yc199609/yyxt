@@ -3,9 +3,9 @@
     <el-card>
       <div slot="header" class="clearfix">
         <span>角色列表</span>
-        <el-button style="float: right; padding: 3px 0" type="text" @click="insert"><i class="el-icon-plus"/> 新增角色</el-button>
+        <el-button v-if="buttonPermissions('940010302')" style="float: right; padding: 3px 0" type="text" @click="insert"><i class="el-icon-plus"/> 新增角色</el-button>
       </div>
-      <el-table :data="tableData" class="table" border>
+      <el-table v-if="buttonPermissions('940010301')" :data="tableData" class="table" border>
 
         <el-table-column align="center" prop="name" label="角色名称"/>
 
@@ -18,12 +18,12 @@
             <el-row>
               <el-col :offset="3" :span="8" class="ycbutton">
                 <el-tooltip effect="dark" content="编辑" placement="top">
-                  <el-button type="warning" icon="el-icon-edit-outline" @click="edit(scope.row.id)"/>
+                  <el-button v-if="buttonPermissions('940010303')" type="warning" icon="el-icon-edit-outline" @click="edit(scope.row.id)"/>
                 </el-tooltip>
               </el-col>
               <el-col :span="8" :offset="2" class="ycbutton">
                 <el-tooltip effect="dark" content="删除" placement="top">
-                  <el-button type="danger" icon="el-icon-delete" @click="del(scope.row.id)"/>
+                  <el-button v-if="buttonPermissions('940010304')" type="danger" icon="el-icon-delete" @click="del(scope.row.id)"/>
                 </el-tooltip>
               </el-col>
             </el-row>
@@ -40,14 +40,14 @@
 import Search from '@/components/Search'
 import { GetAll, deleteRole } from '@api/Personnel/role'
 import Detail from './details'
-import { keyword } from '@/mixin'
+import { keyword,buttonPermissions } from '@/mixin'
 export default {
   name: 'Role',
   components: {
     Search,
     Detail
   },
-  mixins: [keyword],
+  mixins: [keyword,buttonPermissions],
   data() {
     return {
       tableData: [],

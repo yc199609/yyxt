@@ -2,11 +2,11 @@
   <div class="container">
     <el-row :gutter="20">
       <!-- 左边的树 -->
-      <el-col :span="8">
+      <el-col v-if="buttonPermissions('940010205')" :span="8">
         <el-card style="min-height:80vh;">
           <div slot="header" class="cardHeader clearfix">
             <span style="font-size:18px;font-weight:700;">部门列表</span>
-            <el-button style="float:right;padding:3px 0;" type="text" @click="insert">
+            <el-button v-if="buttonPermissions('940010202')" style="float:right;padding:3px 0;" type="text" @click="insert">
               <i class="el-icon-plus"/> 新增部门
             </el-button>
           </div>
@@ -14,8 +14,8 @@
             <span slot-scope="{ node, data }" class="custom-tree-node">
               <span>{{ node.label }}</span>
               <span>
-                <el-button type="text" size="mini" @click.stop="viewDetail(data)">查看详情</el-button>
-                <el-button type="text" size="mini" @click.stop="deleteDep(data)">删除</el-button>
+                <el-button v-if="buttonPermissions('940010201')" type="text" size="mini" @click.stop="viewDetail(data)">查看详情</el-button>
+                <el-button v-if="buttonPermissions('940010204')" type="text" size="mini" @click.stop="deleteDep(data)">删除</el-button>
               </span>
             </span>
           </el-tree>
@@ -92,7 +92,8 @@
 
             <el-col :span="24">
               <el-form-item style="text-align:center;">
-                <el-button :type="mode==='edit'?'warning':'primary'" @click="submit"> {{ mode==='edit'?'确定修改':"确定新增" }}</el-button>
+                <el-button v-if="mode==='edit'&&buttonPermissions('940010203')" type="warning" @click="submit">确定修改</el-button>                
+                <el-button v-if="mode!=='edit'&&buttonPermissions('940010202')" type="primary" @click="submit">确定新增</el-button>
               </el-form-item>
             </el-col>
 
@@ -105,10 +106,10 @@
 
 <script>
 import { GetAll, updateinfo, Create, Delete } from '@api/Personnel/department'
-import { success } from '@/mixin'
+import { success,buttonPermissions } from '@/mixin'
 import validate from './validate'
 export default {
-  mixins: [success, validate],
+  mixins: [success, validate, buttonPermissions],
   data() {
     return {
       parentProp: {
