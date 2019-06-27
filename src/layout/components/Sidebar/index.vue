@@ -32,7 +32,6 @@ export default {
     variables() {
       return variables
     },
-    // 展开折叠状态
     isCollapse() {
       return !this.sidebar.opened
     }

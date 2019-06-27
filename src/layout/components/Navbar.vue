@@ -2,68 +2,60 @@
   <div class="navbar">
     <h3 :class="sidebar.opened?'h3':'h3 h3hidden'">
       <div class="imgBox">
-        <img :src="require('@/assets/icon/logo-sm.png')" width="30px" height="30px" class="titleImg" />
+        <img :src="require('@/assets/icon/logo-sm.png')" width="30px" height="30px" class="titleImg" >
       </div>
       <span class="SystemTitle">联桥网云运营系统</span>
     </h3>
     <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />
     <breadcrumb />
-
-    <div>
-      <lang-select class="right-menu-item hover-effect" />
-      <el-dropdown class="avatar-container" trigger="click">
-        <div class="avatar-wrapper">
-          <img :src="require('@/assets/icon/avatar.gif')" class="user-avatar" alt="">
-          {{userName}}
-          <i class="el-icon-caret-bottom" />
-        </div>
-        <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link class="inlineBlock" to="/">
-            <el-dropdown-item>
-              {{ $t('loginOut.home') }}
-            </el-dropdown-item>
-          </router-link>
-
-          <span class="inlineBlock" @click="resetMobile">
-            <el-dropdown-item>
-              修改手机号
-            </el-dropdown-item>
-          </span>
-          
-          <span class="inlineBlock" @click="resetPassword">
-            <el-dropdown-item>
-              修改密码
-            </el-dropdown-item>
-          </span>
-
-          <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">{{ $t('loginOut.loginOut') }}</span>
+    <el-dropdown class="avatar-container" trigger="click">
+      <div class="avatar-wrapper">
+        <img :src="require('@/assets/icon/avatar.gif')" class="user-avatar">
+        <span class="username">{{ userName }}</span>
+        <i class="el-icon-caret-bottom" />
+      </div>
+      <el-dropdown-menu slot="dropdown" class="user-dropdown">
+        <router-link class="inlineBlock" to="/">
+          <el-dropdown-item>
+            {{ $t('loginOut.home') }}
           </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
+        </router-link>
+
+        <span class="inlineBlock" @click="resetMobile">
+          <el-dropdown-item>
+            修改手机号
+          </el-dropdown-item>
+        </span>
+
+        <span class="inlineBlock" @click="resetPassword">
+          <el-dropdown-item>
+            修改密码
+          </el-dropdown-item>
+        </span>
+
+        <el-dropdown-item divided>
+          <span style="display:block;" @click="logout">{{ $t('loginOut.loginOut') }}</span>
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+
+    <lang-select class="right-menu-item hover-effect" />
 
     <resetMobile ref="resetMobile" />
     <resetPassword ref="resetPassword" />
-
   </div>
 </template>
 
 <script>
-import Cookies from "js-cookie";
-import { mapGetters } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb";
-import Hamburger from "@/components/Hamburger";
-import LangSelect from "@/components/LangSelect";
-import resetMobile from "@/components/user/resetMobile";
-import resetPassword from "@/components/user/resetPassword";
+import Cookies from 'js-cookie'
+import { mapGetters } from 'vuex'
+import Breadcrumb from '@/components/Breadcrumb'
+import Hamburger from '@/components/Hamburger'
+import LangSelect from '@/components/LangSelect'
+import resetMobile from '@/components/user/resetMobile'
+import resetPassword from '@/components/user/resetPassword'
 
 export default {
-  data() {
-    return {
-      userName: ""
-    };
-  },
   components: {
     Breadcrumb,
     Hamburger,
@@ -71,8 +63,16 @@ export default {
     resetMobile,
     resetPassword
   },
+  data() {
+    return {
+      userName: ''
+    }
+  },
   computed: {
-    ...mapGetters(["sidebar", "avatar"])
+    ...mapGetters(['sidebar', 'avatar'])
+  },
+  mounted() {
+    this.userName = Cookies.get('userName')
   },
   methods: {
     resetPassword() {
@@ -82,18 +82,15 @@ export default {
       this.$refs.resetMobile.init()
     },
     toggleSideBar() {
-      this.$store.dispatch("app/toggleSideBar");
+      this.$store.dispatch('app/toggleSideBar')
     },
     logout() {
-      this.$store.dispatch("LogOut").then(() => {
-        location.reload(); // 为了重新实例化vue-router对象 避免bug
-      });
+      this.$store.dispatch('LogOut').then(() => {
+        location.reload() // 为了重新实例化vue-router对象 避免bug
+      })
     }
-  },
-  mounted() {
-    this.userName = Cookies.get("userName");
   }
-};
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
@@ -149,7 +146,7 @@ export default {
   .right-menu-item {
     position: fixed;
     top: 0;
-    right: 140px;
+    right: 10px;
     line-height: 50px;
     display: inline-block;
     padding: 0 8px;
@@ -176,12 +173,16 @@ export default {
     .avatar-wrapper {
       cursor: pointer;
       margin-top: 12px;
+      margin-right: 30px;
       position: relative;
       line-height: initial;
       .user-avatar {
         width: 30px;
         height: 30px;
         border-radius: 10px;
+      }
+      .username {
+        margin-top: 10px;
       }
       .el-icon-caret-bottom {
         position: absolute;
@@ -194,8 +195,3 @@ export default {
 }
 </style>
 
-<style scoped>
-  .inlineBlock >>> .el-button--text{
-    color: black ;
-  }
-</style>
