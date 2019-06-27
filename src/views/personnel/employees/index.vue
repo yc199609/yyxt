@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <Search @search="init" @changeKeyword="changeKeyword">
-      <el-button type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
+    <Search :show-btn="buttonPermissions('94000101')" @search="init" @changeKeyword="changeKeyword">
+      <el-button v-if="buttonPermissions('94000102')" type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
     </Search>
 
     <el-card>
@@ -24,13 +24,13 @@
 
               <el-col :offset="3" :span="8" class="ycbutton">
                 <el-tooltip effect="dark" content="编辑" placement="top">
-                  <el-button type="warning" icon="el-icon-edit-outline" @click="edit(scope.row.id)"/>
+                  <el-button v-if="buttonPermissions('94000103')" type="warning" icon="el-icon-edit-outline" @click="edit(scope.row.id)"/>
                 </el-tooltip>
               </el-col>
 
               <el-col :span="8" :offset="2" class="ycbutton">
                 <el-tooltip effect="dark" content="删除" placement="top">
-                  <el-button type="danger" icon="el-icon-delete" @click="del(scope.row.id)"/>
+                  <el-button v-if="buttonPermissions('94000104')" type="danger" icon="el-icon-delete" @click="del(scope.row.id)"/>
                 </el-tooltip>
               </el-col>
 
@@ -58,14 +58,14 @@
 import Search from '@/components/Search'
 import { GetEmployeesByName, DeleteEmployee } from '@api/Personnel/employees'
 import Detail from './details/index'
-import { pagging, keyword } from '@/mixin'
+import { pagging, keyword, buttonPermissions } from '@/mixin'
 export default {
   name: 'Employees',
   components: {
     Search,
     Detail
   },
-  mixins: [pagging, keyword],
+  mixins: [pagging, keyword,buttonPermissions],
   data() {
     return {
       tableData: [],

@@ -14,7 +14,7 @@
         </section>
       </section>
 
-      <el-button type="success" plain size="small" icon="el-icon-search" @click="search">搜索</el-button>
+      <el-button v-if="showBtn" type="success" plain size="small" icon="el-icon-search" @click="search">搜索</el-button>
       <slot></slot>
     </section>
   </section>
@@ -76,6 +76,7 @@
 <script>
 export default {
   name:'Search',
+  props: ['showBtn'],
   data(){
     return{
       keyword:''
