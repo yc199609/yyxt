@@ -17,14 +17,10 @@
           <template slot-scope="scope">
             <el-row>
               <el-col :offset="3" :span="8" class="ycbutton">
-                <el-tooltip effect="dark" content="编辑" placement="top">
-                  <el-button v-if="buttonPermissions('940010303')" type="warning" icon="el-icon-edit-outline" @click="edit(scope.row.id)"/>
-                </el-tooltip>
+                <el-button v-if="buttonPermissions('940010303')" type="text" icon="el-icon-edit-outline" @click="edit(scope.row.id)">编辑</el-button>
               </el-col>
               <el-col :span="8" :offset="2" class="ycbutton">
-                <el-tooltip effect="dark" content="删除" placement="top">
-                  <el-button v-if="buttonPermissions('940010304')" type="danger" icon="el-icon-delete" @click="del(scope.row.id)"/>
-                </el-tooltip>
+                <el-button v-if="buttonPermissions('940010304')" type="text" icon="el-icon-delete" @click="del(scope.row.id)">删除</el-button>
               </el-col>
             </el-row>
           </template>
@@ -40,14 +36,14 @@
 import Search from '@/components/Search'
 import { GetAll, deleteRole } from '@api/Personnel/role'
 import Detail from './details'
-import { keyword,buttonPermissions } from '@/mixin'
+import { keyword, buttonPermissions } from '@/mixin'
 export default {
   name: 'Role',
   components: {
     Search,
     Detail
   },
-  mixins: [keyword,buttonPermissions],
+  mixins: [keyword, buttonPermissions],
   data() {
     return {
       tableData: [],
@@ -80,17 +76,28 @@ export default {
       this.init()
     },
     del(id) {
-      deleteRole(id)
-        .then(res => {
-          this.$message({
-            type: 'success',
-            message: '删除成功',
-            duration: 500,
-            onClose: () => {
-              this.init()
-            }
+      this.$confirm('此设备类型将永久被删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteRole(id)
+          .then(res => {
+            this.$message({
+              type: 'success',
+              message: '删除成功',
+              duration: 500,
+              onClose: () => {
+                this.init()
+              }
+            })
           })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
         })
+      })
     }
   }
 }
