@@ -69,13 +69,13 @@ export default {
   },
   methods: {
     handleCheckChange(e, checked) {
-      this.$refs.tree.getCheckedNodes().forEach(item => {
-        if (item.parentId !== -1) {
-          this.$refs.tree.setChecked(item.parentId, true)
-        }
-      })
       if (checked) {
         this.$refs.tree.store.nodesMap[e.id].expanded = true
+        this.$refs.tree.setChecked(e.parentId, true)
+      } else {
+        e.children.forEach(item => {
+          this.$refs.tree.setChecked(item.id, false)
+        })
       }
     },
     init(id) {
