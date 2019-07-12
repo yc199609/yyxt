@@ -16,7 +16,7 @@
       <el-row>
         <el-col :offset="1">
           <strong>功能权限</strong>
-          <el-tree ref="tree" :props="defaultProps" :check-strictly="true" :data="data" :default-checked-keys="checkedKeys" node-key="id" show-checkbox style="width: 50%"/>
+          <el-tree ref="tree" :props="defaultProps" :check-strictly="true" :data="data" :default-checked-keys="checkedKeys" @check-change="handleCheckChange" node-key="id" show-checkbox style="width: 50%"/>
         </el-col>
       </el-row>
       <el-form-item class="buttonRow" style="text-align:center;">
@@ -27,7 +27,6 @@
   </el-dialog>
 </template>
 <script>
-// eslint-disable-next-line no-unused-vars
 import { GetById, Create, UpdateInfo, GetAllFunction, UpdateRoleRights, SaveRoleRights } from '@api/Personnel/role'
 
 export default {
@@ -69,6 +68,16 @@ export default {
     }
   },
   methods: {
+    handleCheckChange(e, checked) {
+      if (checked) {
+        this.$refs.tree.store.nodesMap[e.id].expanded = true
+        this.$refs.tree.setChecked(e.parentId, true)
+      } else {
+        e.children.forEach(item => {
+          this.$refs.tree.setChecked(item.id, false)
+        })
+      }
+    },
     init(id) {
       this.id = id
       this.type = id == null ? 'insert' : 'edit'
