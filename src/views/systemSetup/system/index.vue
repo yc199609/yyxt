@@ -32,7 +32,7 @@
     <el-dialog title="修改参数" :visible.sync="dialogEditVisible" :closeOnClickModal="false"  @close="$refs.form1.clearValidate()">
       <el-form ref="form1" v-model="editForm">
         <el-form-item label="参数值" label-width="120px">
-          <el-input :maxlength="50" v-model="editForm.value"></el-input>
+          <el-input :maxlength="100" v-model="editForm.value"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
