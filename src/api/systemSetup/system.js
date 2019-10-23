@@ -1,7 +1,8 @@
 import request from '@/utils/request'
 const Api = {
   SystemConfigList: '/api/Operation/SystemConfig/List',
-  SystemConfigUpdate: '/api/Operation/SystemConfig/Update'
+  SystemConfigUpdate: '/api/Operation/SystemConfig/Update',
+  InitTableID: '/api/Operation/SystemConfig/InitTableID'
 }
 
 /**
@@ -36,5 +37,16 @@ export function SystemConfigUpdate(obj) {
       'Content-Type': 'application/json'
     },
     data: obj
+  })
+}
+
+// 初始化缓存中的数据库表格Id值
+export function InitTableID() {
+  return request({
+    url: Api.InitTableID,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    }
   })
 }
