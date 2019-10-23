@@ -30,26 +30,26 @@
         <el-table-column align="center" prop="operation" label="操作">
           <template slot-scope="scope">
             <el-row>
-              <el-col :span='6' class="rowbutton">
+              <el-col :span='8' class="rowbutton">
                 <el-tooltip content="基本信息" placement="top" effect="dark">
                   <el-button v-if="buttonPermissions('92000105')"  type="info" icon="el-icon-document" @click="baseInfo(scope.row.id)"></el-button>
                 </el-tooltip>
               </el-col>
-              <el-col :span='6' class="rowbutton">
+              <el-col :span='8' class="rowbutton">
                 <el-tooltip content="机构设置" placement="top" effect="dark">
                   <el-button v-if="buttonPermissions('92000103')" type="warning" icon="el-icon-setting" @click="setOrganize(scope.row.id)"></el-button>
                 </el-tooltip>
               </el-col>
-              <el-col :span='6' class="rowbutton">
+              <el-col :span='8' class="rowbutton">
                 <el-tooltip content="业务参数" placement="top" effect="dark">
                   <el-button v-if="buttonPermissions('92000104')" type="success" icon="el-icon-menu" @click="busParams(scope.row.id)"></el-button>
                 </el-tooltip>
               </el-col>
-              <el-col :span='6' class="rowbutton">
+              <!-- <el-col :span='6' class="rowbutton">
                 <el-tooltip content="功能树" placement="top" effect="dark">
                   <el-button type="primary" icon="el-icon-star-off" @click="handleChooseFn(scope.row.id)"></el-button>
                 </el-tooltip>
-              </el-col>
+              </el-col> -->
             </el-row>
           </template>
         </el-table-column>
@@ -77,12 +77,10 @@
 
     <createdOrganize @render="init" ref="createdOrganize"/>
 
-    <FnTree v-if="fntreeVisible" ref="fntree" />
   </div>
 </template>
 
 <script>
-import FnTree from './fnTree'
 import { buttonPermissions } from '@/mixin'
 import baseInformation from "./baseInformation"
 import setupOrganize from "./setupOrganize"
@@ -92,11 +90,10 @@ import { companyList, getBaseInfoById, getConfigById, getSystemInfoById } from "
 
 export default {
   name: 'organize',
-  components: { baseInformation, setupOrganize, businessParameters, createdOrganize, FnTree },
+  components: { baseInformation, setupOrganize, businessParameters, createdOrganize },
   mixins: [buttonPermissions],
   data() {
     return {
-      fntreeVisible: false,
       ret: "",
       retData: [],
       businessData: [],
@@ -114,12 +111,6 @@ export default {
     this.init()
   },
   methods: {
-    handleChooseFn(id){
-      this.fntreeVisible = true
-      this.$nextTick(()=>{
-        this.$refs.fntree.init(id)
-      })
-    },
     init() {
       // 获取机构列表信息
       companyList({
