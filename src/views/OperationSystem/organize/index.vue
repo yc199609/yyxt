@@ -45,11 +45,6 @@
                   <el-button v-if="buttonPermissions('92000104')" type="success" icon="el-icon-menu" @click="busParams(scope.row.id)"></el-button>
                 </el-tooltip>
               </el-col>
-              <!-- <el-col :span='6' class="rowbutton">
-                <el-tooltip content="功能树" placement="top" effect="dark">
-                  <el-button type="primary" icon="el-icon-star-off" @click="handleChooseFn(scope.row.id)"></el-button>
-                </el-tooltip>
-              </el-col> -->
             </el-row>
           </template>
         </el-table-column>

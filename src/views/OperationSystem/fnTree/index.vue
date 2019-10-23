@@ -89,61 +89,9 @@ export default {
   data(){
     return {
       visible: false,
-      data: [
-        {
-          id: "01",
-          name: "人事管理",
-          code: "01",
-          parentId: "-1",
-          children:[
-            {
-              id:"0101",
-              name:"员工",
-              code: "0101",
-              parentId:"01",
-              children:[]
-            },
-            {
-              id:"0102",
-              name:"部门",
-              code: "0102",
-              parentId:"01",
-              children:[]
-            },
-            {
-              id:"0103",
-              name:"角色",
-              code: "0103",
-              parentId:"01",
-              children:[]
-            },
-          ]
-        },
-        {
-          id:"02",
-          name: "设备管理",
-          code: "02",
-          parentId: "-1",
-          children:[
-            {
-              id:"0201",
-              name:'设备机构',
-              code:"0201",
-              parentId:"02",
-              children:[]
-            }
-          ]
-        },
-        {
-          id:"03",
-          name: "设备数据",
-          code: "03",
-          parentId: "-1"
-        }
-      ],
+      data: [],
       mode: '',
-      form:{
-      },
+      form:{},
       options:[
         {
           functionId:-1,

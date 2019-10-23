@@ -5,7 +5,7 @@
     <div class="routers">
       <vuescroll :ops="ops">
         <router-link
-          v-for="tag in visitedViews"
+          v-for="tag in visitedViews||[]"
           ref="tag"
           :key="tag.path"
           :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
@@ -88,7 +88,7 @@ export default {
       return this.$store.state.tagsView.visitedViews
     },
     routes() {
-      return this.$store.state.permission.routes
+      return this.$store.state.permission.routes||[]
     },
     sidebar: function() {
       return this.$store.state.app.sidebar
@@ -120,7 +120,7 @@ export default {
       return false
     },
     moveToCurrentTag() {
-      const tags = this.$refs.tag
+      const tags = this.$refs.tag||[]
       this.$nextTick(() => {
         for (const tag of tags) {
           if (tag.to.path === this.$route.path) {
