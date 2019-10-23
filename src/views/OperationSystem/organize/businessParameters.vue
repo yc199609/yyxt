@@ -25,10 +25,11 @@
           label="值"
         >
           <template slot-scope="{row}">
-            <template v-if="row.edit">
+            {{((row.value).length > 10) ? (row.value).substring(0, 8) + '......' : row.value}}
+            <!-- <template v-if="row.edit">
               <el-input v-model="row.value"></el-input>
             </template>
-            <span v-else>{{row.value}}</span>
+            <span v-else>{{row.value}}</span> -->
           </template>
         </el-table-column>
         <el-table-column
@@ -42,11 +43,16 @@
           label="操作"
         >
           <template slot-scope="{row}">
-            <el-button
+            <!-- <el-button
               :type="row.edit?'success':'warning'"
               icon="el-icon-edit"
               @click="modify(row)"
-            >{{row.edit?"保存":"修改"}}</el-button>
+            >{{row.edit?"保存":"修改"}}</el-button> -->
+            <el-button
+              type="warning"
+              icon="el-icon-edit"
+              @click="modify(row)"
+            >修改值</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -63,6 +69,20 @@
     ></el-pagination>
 
     <AddParams ref="addParams" :idParam="idParam" @init="init(idParam)"/>
+
+    <el-dialog
+      title="请在下方输入要修改的值"
+      :visible.sync="dialogVisible"
+      :closeOnClickModal="false"
+      :modal-append-to-body="false"
+      :append-to-body="true">
+      <el-input type="textarea" v-model="value"></el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible=false">取 消</el-button>
+        <el-button type="primary" @click="subSure">确 定</el-button>
+      </span>
+    </el-dialog>
+
 
   </el-dialog>
 </template>
@@ -81,6 +101,9 @@ export default {
       pageSize: 20,
       totalCount: 1,
       idParam: '',
+      dialogVisible: false,
+      value: '',
+      row: {}
     }
   },
   components: {
@@ -99,25 +122,33 @@ export default {
         })
     },
     modify(row) {
+      this.dialogVisible = true
+      this.value = row.value
+      this.row = row
       // 修改业务参数值
-      if(row.edit){
-        //保存
-        updateConfigItem(row)
-        .then(res => {
-          this.$message({
-            type:'success',
-            message:"成功",
-            duration:500,
-            onClose:()=>{
-              this.$set(row,'edit',false)
-            }
-          })
-        })
-      }else{
-        // 修改
-        this.$set(row,'edit',true)
-      }
+      // if(row.edit){
+      //   //保存
+      //   updateConfigItem(row)
+      //   .then(res => {
+      //     this.$message({
+      //       type:'success',
+      //       message:"成功",
+      //       duration:500,
+      //       onClose:()=>{
+      //         this.$set(row,'edit',false)
+      //       }
+      //     })
+      //   })
+      // }else{
+      //   // 修改
+      //   this.$set(row,'edit',true)
+      // }
 
+    },
+    subSure() {
+      this.row.value = this.value // 将改变后的值放入对象
+      updateConfigItem(this.row)
+      this.dialogVisible = false
     },
     render(){
       this.$emit('render')
