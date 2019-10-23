@@ -9,7 +9,8 @@ const api = {
   updateBaseInfo: '/api/Operation/Company/UpdateBaseInfo',
   companyCreate: '/api/Operation/Company/Create',
   getSystemInfoById: '/api/Operation/Company/GetSystemInfoById',
-  updateSystemInfo: '/api/Operation/Company/UpdateSystemInfo'
+  updateSystemInfo: '/api/Operation/Company/UpdateSystemInfo',
+  createConfigItem: '/api/Operation/Company/CreateConfigItem'
 }
 
 // 机构列表
@@ -118,6 +119,18 @@ export function getSystemInfoById(id) {
 export function updateSystemInfo(obj) {
   return request({
     url: api.updateSystemInfo,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: obj
+  })
+}
+
+// 创建业务参数
+export function createConfigItem(obj) {
+  return request({
+    url: api.createConfigItem,
     method: 'post',
     headers: {
       'Content-Type': 'application/json'

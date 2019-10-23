@@ -3,6 +3,8 @@
 
     <Search :show-btn="buttonPermissions('93000201')" @search='init' @changeKeyword='changeKeyword'/>
 
+    <el-button style="position: absolute; top: 40px; right: 5vw" type="primary" icon="el-icon-refresh" plain @click="initTableValue">初始化缓存中的数据库表格Id值</el-button>
+
     <el-card>
        <el-table :data="tableData" border class="table">
         <el-table-column align="center" prop="code" label="代码">
@@ -32,7 +34,7 @@
     <el-dialog title="修改参数" :visible.sync="dialogEditVisible" :closeOnClickModal="false"  @close="$refs.form1.clearValidate()">
       <el-form ref="form1" v-model="editForm">
         <el-form-item label="参数值" label-width="120px">
-          <el-input :maxlength="50" v-model="editForm.value"></el-input>
+          <el-input :maxlength="100" v-model="editForm.value"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -46,7 +48,7 @@
 
 <script>
 import Search from "@/components/Search";
-import { SystemConfigList, SystemConfigUpdate } from "@api/systemSetup/system";
+import { SystemConfigList, SystemConfigUpdate, InitTableID } from "@api/systemSetup/system";
 import { buttonPermissions } from '@/mixin'
 
 export default {
@@ -73,6 +75,15 @@ export default {
     Search
   },
   methods: {
+    initTableValue() {
+      InitTableID().then(res => {
+         this.$message({
+          type: "success",
+          message: "初始化成功",
+          duration: 500
+        });
+      })
+    },
     changeKeyword(val){
       this.keyword = val
     },
