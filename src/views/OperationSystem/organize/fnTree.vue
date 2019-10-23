@@ -59,7 +59,7 @@
     </div>
     <div slot="footer" class="fnbuttonBox">
       <el-button class="btn">取消</el-button>
-      <el-button>确定</el-button>
+      <el-button type="primary">确定</el-button>
     </div>
   </el-dialog>
 </template>

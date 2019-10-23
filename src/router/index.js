@@ -57,6 +57,12 @@ export const asyncRouterMap = [
         component: () => import('@/views/OperationSystem/organize'),
         name: 'organize',
         meta: { title: '机构列表', icon: 'organize', code: '920001' }
+      },
+      {
+        path: 'fnTree',
+        component: () => import('@/views/OperationSystem/fnTree'),
+        name: 'fnTree',
+        meta: { title: '功能树', icon: 'organize', code: '920001' }
       }
     ]
   },

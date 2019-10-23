@@ -47,7 +47,7 @@
               </el-col>
               <el-col :span='6' class="rowbutton">
                 <el-tooltip content="功能树" placement="top" effect="dark">
-                  <el-button type="primary" icon="el-icon-menu" @click="handleChooseFn(scope.row.id)"></el-button>
+                  <el-button type="primary" icon="el-icon-star-off" @click="handleChooseFn(scope.row.id)"></el-button>
                 </el-tooltip>
               </el-col>
             </el-row>
