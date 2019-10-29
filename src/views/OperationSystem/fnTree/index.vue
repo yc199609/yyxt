@@ -161,6 +161,9 @@ export default {
     },
     submitInsert(){
       const functionParentId = this.form.functionParentId instanceof Array?this.form.functionParentId[this.form.functionParentId.length-1]:this.form.functionParentId
+
+      const menuParentId = this.form.menuParentId instanceof Array?this.form.menuParentId[this.form.menuParentId.length-1]:this.form.menuParentId
+
       let opType
       if(this.form.menuName&&this.form.functionName){
         opType = 3
@@ -173,6 +176,7 @@ export default {
       createMenuFunction({
         ...this.form,
         functionParentId,
+        menuParentId,
         system:1,
         opType
       }).then(res=>{
@@ -187,6 +191,10 @@ export default {
       })
     },
     submitModify(){
+      const functionParentId = this.form.functionParentId instanceof Array?this.form.functionParentId[this.form.functionParentId.length-1]:this.form.functionParentId
+
+      const menuParentId = this.form.menuParentId instanceof Array?this.form.menuParentId[this.form.menuParentId.length-1]:this.form.menuParentId
+
       let opType
       if(this.form.menuName&&this.form.functionName){
         opType = 3
@@ -195,7 +203,7 @@ export default {
       }else if(this.form.functionName){
         opType = 2
       }
-      let data = {...this.form,opType}
+      let data = {...this.form,opType,functionParentId,menuParentId}
       delete data.nodes
       updateMenuFunction(data)
         .then(res=>{
