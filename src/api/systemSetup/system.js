@@ -2,7 +2,8 @@ import request from '@/utils/request'
 const Api = {
   SystemConfigList: '/api/Operation/SystemConfig/List',
   SystemConfigUpdate: '/api/Operation/SystemConfig/Update',
-  InitTableID: '/api/Operation/SystemConfig/InitTableID'
+  InitTableID: '/api/Operation/SystemConfig/InitTableID',
+  Create: '/api/Operation/SystemConfig/Create'
 }
 
 /**
@@ -48,5 +49,17 @@ export function InitTableID() {
     headers: {
       'Content-Type': 'application/json'
     }
+  })
+}
+
+// 新增系统参数
+export function Create(obj) {
+  return request({
+    url: Api.Create,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: obj
   })
 }
