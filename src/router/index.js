@@ -121,6 +121,28 @@ export const asyncRouterMap = [
       //   meta: { title: '调试用的页面', icon: 'test' }
       // }
     ]
+  },
+  {
+    path: '/instructions',
+    alwaysShow: true,
+    redirect: '/instructions/',
+    component: Layout,
+    name: 'instructions',
+    meta: { title: '指令管理', icon: 'user', code: '9200' },
+    children: [
+      {
+        path: 'type',
+        component: () => import('@/views/instructions/type/index.vue'),
+        name: 'type',
+        meta: { title: '指令类型', icon: 'employees', code: '9200' }
+      },
+      {
+        path: 'field',
+        component: () => import('@/views/instructions/field/index.vue'),
+        name: 'field',
+        meta: { title: '指令指标', icon: 'field', code: '9200' }
+      }
+    ]
   }
 ]
 
