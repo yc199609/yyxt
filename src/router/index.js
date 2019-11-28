@@ -163,6 +163,12 @@ export const asyncRouterMap = [
         component: () => import('@/views/instructions/field'),
         name: 'field',
         meta: { title: '指标字段', icon: 'instructions-field', code: '9200' }
+      },
+      {
+        path: 'template',
+        component: () => import('@/views/instructions/template'),
+        name: 'template',
+        meta: { title: '批量添加模版', icon: 'instructions-template', code: '9200' }
       }
     ]
   }
