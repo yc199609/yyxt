@@ -10,7 +10,7 @@
         <el-table-column align="center" prop="name" label="类名称"/>
         <el-table-column align="center" prop="code" label="类型编码"/>
         <el-table-column align="center" prop="description" label="描述"/>
-        <el-table-column align="center" prop="isOnboard" label="是否板载传感器"/>
+        <el-table-column align="center" prop="isOnboard" label="是否板载传感器(0为否, 1为是)"/>
 
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
@@ -49,7 +49,7 @@
 </template>
 <script>
 import Search from '@/components/Search'
-import { GetAll } from '@api/instructions'
+import { GetAll, Delete, GetList } from '@api/instructions'
 import { pagging, keyword, buttonPermissions } from '@/mixin'
 import Detail from './details'
 
@@ -62,10 +62,12 @@ export default {
   mixins: [pagging, keyword,buttonPermissions],
   data() {
     return {
-      tableData: [
-        {name: '123'}
-      ],
-      detailShow: false
+      tableData: [],
+      detailShow: false,
+      keyword: "",
+      pageIndex: 1,
+      pageSize: 20,
+      totalCount: 30
     }
   },
   mounted() {
@@ -73,9 +75,22 @@ export default {
   },
   methods: {
     init() {
-      GetAll().then(res => {
+      GetList({
+        keyword: this.keyword,
+        pageIndex: this.pageIndex,
+        pageSize: this.pageSize
+      }).then(res => {
         this.$set(this, 'tableData', res.data.items)
+        this.pageIndex = res.data.pageIndex;
+        this.pageSize = res.data.pageSize;
+        this.totalCount = res.data.totalCount;
       })
+      // GetAll().then(res => {
+      //   this.$set(this, 'tableData', res.data)
+      // })
+    },
+    changeKeyword(val){
+      this.keyword = val
     },
     insert() {
       this.detailShow = true
@@ -94,12 +109,12 @@ export default {
       this.init()
     },
     del(id) {
-      this.$confirm('此操作将删除该员工, 是否继续?', '提示', {
+      this.$confirm('此操作将删除该指令类型, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        DeleteEmployee(id).then(res => {
+        Delete({ id: id }).then(res => {
           this.$message({
             type: 'success',
             message: '删除成功',

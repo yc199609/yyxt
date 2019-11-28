@@ -18,19 +18,21 @@
         <el-input v-model="ruleForm.description"></el-input>
       </el-form-item>
 
-      <el-form-item label="是否板载传感器">
-        <el-input v-model="ruleForm.isOnboard"></el-input>
+      <el-form-item label="是否板载传感器(0为否, 1为是)">
+        <el-input-number :min="0" :max="1" v-model="ruleForm.isOnboard"></el-input-number>
       </el-form-item>
     </el-form>
     
     <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      <el-button @click="handleClose">取 消</el-button>
+      <el-button type="primary" @click="submit">确 定</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
+import { UpdateInfo, create } from '@api/instructions'
+
 export default {
   data() {
     return {
@@ -45,17 +47,37 @@ export default {
       this.dialogVisible = true
       if (row) {
         this.title = '修改'
-        this.row = this.ruleForm
+        this.ruleForm = row
       } else {
         this.title = '新增'
       }
     },
     handleClose(done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done();
+      this.dialogVisible = false
+      this.ruleForm = {}
+      done();
+    },
+    submit() {
+      if (this.title == '修改') {
+        UpdateInfo(this.ruleForm).then(res => {
+          this.$message({
+            type: 'success',
+            message: '修改成功',
+            duration: 500,
+          })
         })
-        .catch(_ => {});
+      } else if (this.title == '新增') {
+        create(this.ruleForm).then(res => {
+          this.$message({
+            type: 'success',
+            message: '新增成功',
+            duration: 500,
+          })
+        })
+      }
+      this.dialogVisible = false
+      this.$parent.init()
+      this.ruleForm = {}
     }
   }
 }
