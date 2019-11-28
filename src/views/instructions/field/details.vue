@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { UpdateInfo, create } from '@api/instructions/type'
+import { UpdateInfo, create } from '@api/instructions/field'
 
 export default {
   data() {
@@ -78,8 +78,12 @@ export default {
     submit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          var formula = this.ruleForm.formula
+          if (formula === undefined) {
+            formula = ''
+          }
           if (this.title == '修改') {
-            UpdateInfo(this.ruleForm).then(res => {
+            UpdateInfo({ formula: formula, ...this.ruleForm }).then(res => {
               this.$message({
                 type: 'success',
                 message: '修改成功',
@@ -87,7 +91,7 @@ export default {
               })
             })
           } else if (this.title == '新增') {
-            create(this.ruleForm).then(res => {
+            create({ formula: formula, ...this.ruleForm }).then(res => {
               this.$message({
                 type: 'success',
                 message: '新增成功',

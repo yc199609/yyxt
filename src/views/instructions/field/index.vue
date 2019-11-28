@@ -68,7 +68,7 @@
 </template>
 <script>
 import Search from '@/components/Search'
-import { GetList } from '@api/instructions/field'
+import { GetList, Delete } from '@api/instructions/field'
 import { pagging, keyword, buttonPermissions } from '@/mixin'
 import Detail from './details'
 
