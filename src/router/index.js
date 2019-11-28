@@ -123,24 +123,46 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/protocol',
+    alwaysShow: true,
+    redirect: '/protocol/communication',
+    component: Layout,
+    name: 'protocol',
+    meta: { title: '协议管理', icon: 'user', code: '9200' },
+    children: [
+      {
+        path: 'communication',
+        component: () => import('@/views/protocol/communication'),
+        name: 'communication',
+        meta: { title: '通信协议管理', icon: 'protocol-communication', code: '9200' }
+      },
+      {
+        path: 'cmd',
+        component: () => import('@/views/protocol/cmd'),
+        name: 'cmd',
+        meta: { title: '协议指令', icon: 'protocol-cmd', code: '9200' }
+      }
+    ]
+  },
+  {
     path: '/instructions',
     alwaysShow: true,
-    redirect: '/instructions/',
+    redirect: '/instructions',
     component: Layout,
     name: 'instructions',
-    meta: { title: '指令管理', icon: 'user', code: '9200' },
+    meta: { title: '指标管理', icon: 'instructions', code: '9200' },
     children: [
       {
         path: 'type',
-        component: () => import('@/views/instructions/type/index.vue'),
+        component: () => import('@/views/instructions/type'),
         name: 'type',
-        meta: { title: '指标类型', icon: 'employees', code: '9200' }
+        meta: { title: '指标类型', icon: 'instructions-type', code: '9200' }
       },
       {
         path: 'field',
-        component: () => import('@/views/instructions/field/index.vue'),
+        component: () => import('@/views/instructions/field'),
         name: 'field',
-        meta: { title: '指令指标', icon: 'field', code: '9200' }
+        meta: { title: '指标字段', icon: 'instructions-field', code: '9200' }
       }
     ]
   }
