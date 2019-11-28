@@ -134,7 +134,7 @@ export const asyncRouterMap = [
         path: 'type',
         component: () => import('@/views/instructions/type/index.vue'),
         name: 'type',
-        meta: { title: '指令类型', icon: 'employees', code: '9200' }
+        meta: { title: '指标类型', icon: 'employees', code: '9200' }
       },
       {
         path: 'field',
