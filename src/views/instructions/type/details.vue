@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { UpdateInfo, create } from '@api/instructions'
+import { UpdateInfo, create } from '@api/instructions/type'
 
 export default {
   data() {

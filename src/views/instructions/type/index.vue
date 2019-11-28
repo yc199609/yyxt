@@ -49,7 +49,7 @@
 </template>
 <script>
 import Search from '@/components/Search'
-import { GetAll, Delete, GetList } from '@api/instructions'
+import { GetAll, Delete, GetList } from '@api/instructions/type'
 import { pagging, keyword, buttonPermissions } from '@/mixin'
 import Detail from './details'
 
