@@ -123,24 +123,24 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/instructions',
+    path: '/protocol',
     alwaysShow: true,
-    redirect: '/instructions/',
+    redirect: '/protocol/communication',
     component: Layout,
-    name: 'instructions',
-    meta: { title: '指令管理', icon: 'user', code: '9200' },
+    name: 'protocol',
+    meta: { title: '协议管理', icon: 'user', code: '9200' },
     children: [
       {
-        path: 'type',
-        component: () => import('@/views/instructions/type/index.vue'),
-        name: 'type',
-        meta: { title: '指令类型', icon: 'employees', code: '9200' }
+        path: 'communication',
+        component: () => import('@/views/protocol/communication'),
+        name: 'communication',
+        meta: { title: '通信协议管理', icon: 'protocol-communication', code: '9200' }
       },
       {
-        path: 'field',
-        component: () => import('@/views/instructions/field/index.vue'),
-        name: 'field',
-        meta: { title: '指令指标', icon: 'field', code: '9200' }
+        path: 'cmd',
+        component: () => import('@/views/protocol/cmd'),
+        name: 'cmd',
+        meta: { title: '协议指令', icon: 'protocol-cmd', code: '9200' }
       }
     ]
   }
