@@ -128,7 +128,7 @@ export const asyncRouterMap = [
     redirect: '/protocol/communication',
     component: Layout,
     name: 'protocol',
-    meta: { title: '协议管理', icon: 'user', code: '9200' },
+    meta: { title: '协议管理', icon: 'protocol', code: '9200' },
     children: [
       {
         path: 'communication',
