@@ -171,6 +171,28 @@ export const asyncRouterMap = [
         meta: { title: '批量添加模版', icon: 'instructions-template', code: '9200' }
       }
     ]
+  },
+  {
+    path: '/bizLog',
+    alwaysShow: true,
+    redirect: '/bizLog',
+    component: Layout,
+    name: 'bizLog',
+    meta: { title: '日志管理', icon: 'rizhiguanli', code: '9200' },
+    children: [
+      {
+        path: 'dms',
+        component: () => import('@/views/bizLog/dms'),
+        name: 'dms',
+        meta: { title: '业务系统-日志记录', icon: 'rizhijilu', code: '9200' }
+      },
+      {
+        path: 'opt',
+        component: () => import('@/views/bizLog/opt'),
+        name: 'opt',
+        meta: { title: '运营系统-日志记录', icon: 'rizhijilu', code: '9200' }
+      }
+    ]
   }
 ]
 
