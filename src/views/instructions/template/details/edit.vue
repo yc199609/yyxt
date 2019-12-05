@@ -1,0 +1,238 @@
+<template>
+  <el-dialog
+    :append-to-body="true" 
+    :modal-append-to-body="false" 
+    :visible.sync="visible" 
+    :close-on-click-modal="false" 
+    title="视图模板编辑" 
+    @close="onClose"
+  >
+    <el-form ref="form" :model="form" label-position="top">
+      <el-form-item label="视图名称" prop="viewName" >
+        <el-input v-model="form.viewName" />
+      </el-form-item>
+
+      <el-form-item label="视图类型" prop="viewTypeId" >
+        <el-select v-model="form.viewTypeId" placeholder="请选择">
+          <el-option
+            label="状态视图"
+            :value="10">
+          </el-option>
+          <el-option
+            label="温度曲线"
+            :value="100">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="描述">
+        <el-input type="textarea" v-model="form.remark" />
+      </el-form-item>
+
+      <el-form-item label="所选协议">
+        <el-select v-model="form.protocalId" placeholder="请选择" @change="protocalChange">
+          <el-option
+            v-for="item in protocalList"
+            :key="item.id"
+            :label="item.protocalName"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="所选指令">
+        <el-select v-model="form.cmdId" placeholder="请选择" @change="(e)=>{cmd=e;cmdChange()}">
+          <el-option
+            v-for="item in cmdList"
+            :key="item.id"
+            :label="item.cmdCode"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+       <el-form-item label="选择指标">
+          <el-table
+            ref="multipleTable"
+            :data="codeList"
+            class="table"
+            border
+            @select="handleChoose"
+            @select-all="handleChooseAll"
+          >
+            <el-table-column type="selection" width="40"/>
+            <el-table-column label="指标代码" align="center" prop="code"/>
+            <el-table-column label="指标名称" align="center" prop="name"/>
+          </el-table>
+
+          <el-pagination
+            :current-page="pageIndex"
+            :page-sizes="[10 ,20, 30, 40, 50, 100]"
+            :page-size="pageSize"
+            :total="totalCount"
+            layout="total, prev, pager, next, jumper"
+            @current-change="handleCurrentChange"/>
+        </el-form-item>
+
+      <div>
+        <Json-editor ref="jsonEditor" v-model="json" />
+      </div>
+    </el-form>
+
+    <div slot="footer">
+      <el-button @click="cancel">取 消</el-button>
+      <el-button @click="submit">确 定</el-button>
+    </div>
+
+  </el-dialog>
+</template>
+<script>
+import { UpdateInfo,GetById } from '@api/instructions/template'
+import { GetAll } from '@api/protocol/communication'  //获取全部通信协议
+import { GetByProtocalId } from '@api/protocol/cmd' //根据协议id获取指令
+import { GetByCmdId } from '@api/instructions/field' //根据指令id,获取指令字段
+import JsonEditor from '@/components/jsonEditor'
+export default {
+  data(){
+    return{
+      json:{},
+      visible:false,
+      form:{
+        protocalId:'',
+        cmdId:"",
+        viewName:"",
+        viewTypeId:'',
+        remark:""
+      },
+      protocalList:[],
+      cmdList:[],
+      codeList:[],
+      chooseArray: [],
+      pageIndex: 1,
+      pageSize: 10,
+      totalCount: 30,
+    }
+  },
+  components:{
+    JsonEditor
+  },
+  methods:{
+    handleCurrentChange(val) {
+      this.pageIndex = val
+      this.cmdChange()
+    },
+    handleChooseAll(selection) {
+      const chooseIds = this.chooseArray.map(item => item.id)
+      if (selection.length > 0) { // 全选
+        const intersection = selection.filter(v => !chooseIds.includes(v.id))
+        this.chooseArray = this.chooseArray.concat(intersection)
+      } else { // 全取消
+        this.chooseArray = this.chooseArray.filter(v => !this.codeList.map(item => item.id).includes(v.id))
+      }
+    },
+    handleChoose(selection, row) {
+      // 判断是新增选中还是取消选中
+      const flag = selection.some((item) => item.id === row.id)
+      if (flag) {
+        const ishas = this.chooseArray.some(item => item.id === row.id)
+        if (!ishas) {
+          this.chooseArray.push(row)
+        }
+      } else {
+        const index = this.chooseArray.findIndex((item) => item.id === row.id)
+        this.chooseArray.splice(index, 1)
+      }
+    },
+    toggleSelection(rows) {
+      const intersection = this.codeList.filter(v => rows.map(item => item.id).includes(v.id))
+      intersection.forEach(row => {
+        this.$nextTick(() => {
+          this.$refs.multipleTable.toggleRowSelection(row, true)
+        })
+      })
+    },
+    init(id){
+      this.visible = true
+      GetById(id)
+        .then(res=>{
+          let cmdId
+          if(res.data.cmdFields&&res.data.cmdFields.length>0){
+            cmdId = res.data.cmdFields[0].cmdId
+          }
+          this.$set(this,'form',{...res.data,cmdId})
+          this.json = JSON.parse(res.data.jsonData)
+          this.chooseArray = res.data.cmdFields.map(item=>({...item,id:item.cmdId}))
+          GetAll()
+            .then(res=>{
+              this.$set(this,'protocalList',res.data)
+            })
+
+          GetByProtocalId(this.form.protocalId)
+            .then(res=>{
+              this.$set(this,'cmdList',res.data)
+            })
+
+          GetByCmdId({
+            cmdId: this.form.cmdId,
+            pageIndex: this.pageIndex,
+            pageSize: this.pageSize
+          })
+            .then(res=>{
+              this.$set(this, 'codeList', res.data.items)
+              this.totalCount = res.data.totalCount
+              this.pageIndex = res.data.pageIndex
+              this.pageSize = res.data.pageSize
+              this.toggleSelection(this.chooseArray)
+            })
+        })
+    },
+    cancel() {
+      this.visible = false
+    },
+    submit(){
+      const data = {
+        ...this.form,
+        jsonData:JSON.stringify(JSON.parse(this.json)),
+        cmdFields:this.chooseArray
+      }
+      UpdateInfo(data)
+        .then(res=>{
+          this.$message({
+            type: "success",
+            message: "新增成功",
+            duration: 500,
+            onClose:()=>{
+              this.cancel()
+            }
+          })
+        })
+    },
+    onClose() {
+      this.$emit('reload')
+    },
+    cmdChange(){
+      GetByCmdId({
+        cmdId: this.form.cmdId,
+        pageIndex: this.pageIndex,
+        pageSize: this.pageSize
+      })
+        .then(res=>{
+          this.$set(this, 'codeList', res.data.items)
+          this.totalCount = res.data.totalCount
+          this.pageIndex = res.data.pageIndex
+          this.pageSize = res.data.pageSize
+          this.toggleSelection(this.chooseArray)
+        })
+    },
+    protocalChange(e){
+      GetByProtocalId(e)
+        .then(res=>{
+          this.$set(this,'cmdList',res.data)
+          this.codeList = []
+          this.cmd = ''
+          this.chooseArray = []
+        })
+    },
+  }
+}
+</script>>

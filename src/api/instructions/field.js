@@ -4,7 +4,8 @@ const api = {
   GetList: '/api/terminal/CmdField/GetList',
   create: '/api/terminal/CmdField/create',
   UpdateInfo: '/api/terminal/CmdField/UpdateInfo',
-  Delete: '/api/terminal/CmdField/delete'
+  Delete: '/api/terminal/CmdField/delete',
+  GetByCmdId: '/api/terminal/CmdField/GetByCmdId'
 }
 
 // 根据关键字模糊查询
@@ -49,5 +50,17 @@ export function Delete(id) {
       'Content-Type': 'application/json'
     },
     data: id
+  })
+}
+
+// 根据指令id,获取字段
+export function GetByCmdId(obj) {
+  return request({
+    url: api.GetByCmdId,
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    params: obj
   })
 }

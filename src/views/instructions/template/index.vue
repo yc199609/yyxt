@@ -1,34 +1,31 @@
 <template>
   <!-- 批量添加模版 -->
   <div class="container">
-    <Search @search="init" @changeKeyword="changeKeyword">
+    <Search :show-btn="true" @search="init" @changeKeyword="changeKeyword">
       <el-button type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
     </Search>
 
     <el-card>
       <el-table :data="tableData" class="table" border>
 
-        <el-table-column align="center" prop="name" label="类名称"/>
-        <el-table-column align="center" prop="code" label="影射字段"/>
-        <el-table-column align="center" prop="formula" label="公式"/>
-        <el-table-column align="center" prop="fieldDescription" label="字段描述"/>
-        <el-table-column align="center" prop="cmdId" label="指令Id"/>
-
+        <el-table-column align="center" prop="viewId" label="视图模板Id"/>
+        <el-table-column align="center" prop="viewName" label="视图模板名称"/>
+        <el-table-column align="center" prop="viewTypeName" label="视图类型名称"/>
+        <el-table-column align="center" prop="remark" label="备注"/>
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-row>
-              <el-col :offset="3" :span="8" class="ycbutton">
+              <el-col :offset="3" :span="8">
                 <el-tooltip effect="dark" content="编辑" placement="top">
-                  <el-button type="warning" icon="el-icon-edit-outline" @click="edit(scope.row)"/>
+                  <el-button type="warning" icon="el-icon-edit-outline" @click="edit(scope.row.viewId)"/>
                 </el-tooltip>
               </el-col>
 
-              <el-col :span="8" :offset="2" class="ycbutton">
+              <el-col :span="8" :offset="2">
                 <el-tooltip effect="dark" content="删除" placement="top">
-                  <el-button type="danger" icon="el-icon-delete" @click="del(scope.row.id)"/>
+                  <el-button type="danger" icon="el-icon-delete" @click="del(scope.row.viewId)"/>
                 </el-tooltip>
               </el-col>
-
             </el-row>
           </template>
         </el-table-column>
@@ -46,30 +43,39 @@
         @current-change="handleCurrentChange"/>
     </div>
 
-    <Detail v-if="detailShow" ref="detail" @reload="editHidden" />
+    <Insert v-if="insertShow" ref="insert" @reload="insertHidden" />
+    <Edit v-if="editShow" ref="edit" @reload='editHidden' />
   </div>
 </template>
 <script>
 import Search from '@/components/Search'
 import { GetList, Delete } from '@api/instructions/template'
 import { pagging, keyword, buttonPermissions } from '@/mixin'
-import Detail from './details'
+import Insert from './details/insert'
+import Edit from './details/edit'
 
 export default {
   name: 'Employees',
   components: {
     Search,
-    Detail
+    Insert,
+    Edit
   },
   mixins: [pagging, keyword,buttonPermissions],
   data() {
     return {
-      tableData: [],
-      detailShow: false,
-      keyword: "",
-      pageIndex: 1,
-      pageSize: 20,
-      totalCount: 30
+      tableData: [
+        {
+          viewId:1,
+          viewName:'视图模板名称',
+          viewTypeId:'视图类型Id',
+          viewTypeName:'视图类型名称',
+          jsonContent:'json模板',
+          remark:'备注'
+        }
+      ],
+      insertShow: false,
+      editShow: false
     }
   },
   mounted() {
@@ -78,45 +84,45 @@ export default {
   methods: {
     init() {
       GetList({
-        keyword: this.keyword,
+        ...this.keyword && {
+          keyword: this.keyword
+        },
         pageIndex: this.pageIndex,
         pageSize: this.pageSize
       }).then(res => {
         this.$set(this, 'tableData', res.data.items)
-        this.pageIndex = res.data.pageIndex;
-        this.pageSize = res.data.pageSize;
-        this.totalCount = res.data.totalCount;
+        this.totalCount = res.data.totalCount
+        this.pageIndex = res.data.pageIndex
+        this.pageSize = res.data.pageSize
       })
-      // GetAll().then(res => {
-      //   this.$set(this, 'tableData', res.data)
-      // })
-    },
-    changeKeyword(val){
-      this.keyword = val
     },
     insert() {
-      this.detailShow = true
+      this.insertShow = true
       this.$nextTick(() => {
-        this.$refs.detail.init()
+        this.$refs.insert.init()
       })
     },
-    edit(row) {
-      this.detailShow = true
+    edit(id) {
+      this.editShow = true
       this.$nextTick(() => {
-        this.$refs.detail.init(row)
+        this.$refs.edit.init(id)
       })
+    },
+    insertHidden(){
+      this.insertShow = false
+      this.init()
     },
     editHidden() {
-      this.detailShow = false
+      this.editShow = false
       this.init()
     },
     del(id) {
-      this.$confirm('此操作将删除该指令类型, 是否继续?', '提示', {
+      this.$confirm('此操作将删除该模板, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        Delete({ id: id }).then(res => {
+        Delete(id).then(res => {
           this.$message({
             type: 'success',
             message: '删除成功',

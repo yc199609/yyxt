@@ -141,6 +141,12 @@ export const asyncRouterMap = [
         component: () => import('@/views/protocol/cmd'),
         name: 'cmd',
         meta: { title: '协议指令', icon: 'protocol-cmd', code: '9200' }
+      },
+      {
+        path: 'sdsd',
+        component: () => import('@/views/protocol/sdsd'),
+        name: 'sdsd',
+        meta: { title: 'sdsd', code: '9200' }
       }
     ]
   },
