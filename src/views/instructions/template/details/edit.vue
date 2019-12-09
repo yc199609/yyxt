@@ -161,7 +161,7 @@ export default {
           }
           this.$set(this,'form',{...res.data,cmdId})
           this.json = JSON.parse(res.data.jsonData)
-          this.chooseArray = res.data.cmdFields.map(item=>({...item,id:item.cmdId}))
+          this.chooseArray = res.data.cmdFields.map(item=>({...item,id:item.fieldId}))
           GetAll()
             .then(res=>{
               this.$set(this,'protocalList',res.data)
