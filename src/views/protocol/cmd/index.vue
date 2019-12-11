@@ -127,8 +127,8 @@ export default {
       })
     },
     toField(row) {
-      console.log(row.protocalId, row.cmdCode)
-      this.$router.push({path:'/instructions/field', query:{ protocalId: row.protocalId, cmdCode: row.cmdCode }})
+      console.log(row.id, row.cmdCode)
+      this.$router.push({path:'/instructions/field', query:{ id: row.id, cmdCode: row.cmdCode }})
     }
   }
 }

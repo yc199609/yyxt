@@ -1,9 +1,10 @@
 <template>
   <div class="container">
-    <div v-if="$route.query.protocalId">
+    <div v-if="$route.query.id">
       <Search :show-btn="true" @search="init" @changeKeyword="changeKeyword">
         <el-button type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
-      </Search>
+        <h2 style="margin-left: 100px">" {{ $route.query.cmdCode }} 号协议 "</h2>
+      </Search> 
 
       <el-card>
 
@@ -105,9 +106,8 @@ export default {
   },
   methods: {
     init() {
-      console.log(this.$route.query.protocalId)
       GetByCmdId({
-        cmdId: this.$route.query.protocalId,
+        cmdId: this.$route.query.id,
         keyword: this.keyword,
         pageIndex: this.pageIndex,
         pageSize: this.pageSize
