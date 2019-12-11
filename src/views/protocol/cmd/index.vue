@@ -13,7 +13,13 @@
 
         <el-table-column align="center" prop="cmdCode" label="指令协议"/>
 
-        <el-table-column align="center" prop="protocalId" label="所属协议"/>
+        <el-table-column align="center" prop="protocalId" label="所属协议">
+          <template slot-scope="scope">
+            {{
+              communication.find(item=>item.id == scope.row.protocalId).protocalName
+            }}
+          </template>
+        </el-table-column>
 
         <el-table-column align="center" prop="description" label="描述"/>
 
@@ -53,6 +59,7 @@
 <script>
 import Search from '@/components/Search'
 import { GetList, Delete } from '@/api/protocol/cmd'
+import { GetAll } from '@/api/protocol/communication'
 import Detail from './details/index'
 import { pagging, keyword, buttonPermissions } from '@/mixin'
 export default {
@@ -65,7 +72,8 @@ export default {
   data() {
     return {
       tableData: [],
-      detailShow: false
+      detailShow: false,
+      communication: []
     }
   },
   mounted() {
@@ -73,6 +81,10 @@ export default {
   },
   methods: {
     init() {
+      GetAll()
+        .then(res=>{
+          this.communication = res.data
+        })
       GetList({
         ...this.keyword && {
           keyword: this.keyword

@@ -16,7 +16,14 @@
         <el-input v-model="form.cmdCode" />
       </el-form-item>
       <el-form-item label="所属协议" prop="protocalId">
-        <el-input v-model="form.protocalId" />
+        <el-select v-model="form.protocalId" placeholder="请选择">
+          <el-option
+            v-for="item in communication"
+            :key="item.id"
+            :label="item.protocalName"
+            :value="item.id">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="描述" prop="description">
         <el-input v-model="form.description" />
@@ -30,6 +37,7 @@
   </el-dialog>
 </template>
 <script>
+import { GetAll } from '@/api/protocol/communication'
 import { GetById, UpdateInfo, create } from '@/api/protocol/cmd'
 export default {
   data() {
@@ -38,6 +46,7 @@ export default {
       mode: 'insert',
       id: '',
       form: {},
+      communication: [],
       rules:{
         cmdName:[
           {
@@ -69,6 +78,12 @@ export default {
         ]
       }
     }
+  },
+  mounted(){
+    GetAll()
+      .then(res=>{
+        this.communication = res.data
+      })
   },
   methods: {
     init(id) {
