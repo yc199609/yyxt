@@ -9,6 +9,10 @@
       <el-form-item label="字段名" prop="name">
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
+
+      <el-form-item label="指标类型id" prop="sensorTypeId">
+        <el-input v-model="ruleForm.sensorTypeId"></el-input>
+      </el-form-item>
       
       <el-form-item label="字段值类型(1为开关量, 2为整数, 3为浮点数, 4为字符串, 5为表达式, 6为数组, 7为坐标点, 8为坐标点数组)" prop="valueType">
         <el-input-number :min="1" :max="8" v-model="ruleForm.valueType"></el-input-number>

@@ -1,74 +1,86 @@
 <template>
   <div class="container">
-    <Search @search="init" @changeKeyword="changeKeyword">
-      <el-button type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
-    </Search>
+    <div v-if="$route.query.id">
+      <Search :show-btn="true" @search="init" @changeKeyword="changeKeyword">
+        <el-button type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
+        <h2 style="margin-left: 100px">" {{ $route.query.cmdCode }} 号协议 "</h2>
+      </Search> 
 
-    <el-card>
-      <el-table :data="tableData" class="table" border>
+      <el-card>
 
-        <el-table-column align="center" prop="name" label="类名称"/>
-        <el-table-column align="center" prop="valueType" label="字段值类型">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.valueType === 1" type="success">开关量</el-tag>
-            <el-tag v-else-if="scope.row.valueType === 2" type="success">整数</el-tag>
-            <el-tag v-else-if="scope.row.valueType === 3" type="success">浮点数</el-tag>
-            <el-tag v-else-if="scope.row.valueType === 4" type="success">字符串</el-tag>
-            <el-tag v-else-if="scope.row.valueType === 5" type="success">表达式</el-tag>
-            <el-tag v-else-if="scope.row.valueType === 6" type="success">数组</el-tag>
-            <el-tag v-else-if="scope.row.valueType === 7" type="success">坐标点</el-tag>
-            <el-tag v-else-if="scope.row.valueType === 8" type="success">坐标点数组</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" prop="code" label="影射字段"/>
-        <el-table-column align="center" prop="hasFormula" label="是否有公式">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.hasFormula === 0">无公式</el-tag>
-            <el-tag v-else-if="scope.row.hasFormula === 1" type="success">有公式</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" prop="formula" label="公式"/>
-        <el-table-column align="center" prop="fieldDescription" label="字段描述"/>
-        <el-table-column align="center" prop="cmdId" label="指令Id"/>
+        <el-table :data="tableData" class="table" border>
 
-        <el-table-column align="center" label="操作">
-          <template slot-scope="scope">
-            <el-row>
-              <el-col :offset="3" :span="8" class="ycbutton">
-                <el-tooltip effect="dark" content="编辑" placement="top">
-                  <el-button type="warning" icon="el-icon-edit-outline" @click="edit(scope.row)"/>
-                </el-tooltip>
-              </el-col>
+          <el-table-column align="center" prop="cmdId" label="cmdId"/>
+          <el-table-column align="center" prop="sensorTypeId" label="指标类型Id"/>
+          <!-- <el-table-column align="center" prop="sensorTypeName" label="指标类型名称"/> -->
+          <el-table-column align="center" prop="name" label="类名称"/>
+          <el-table-column align="center" prop="valueType" label="字段值类型">
+            <template slot-scope="scope">
+              <el-tag v-if="scope.row.valueType === 1" type="success">开关量</el-tag>
+              <el-tag v-else-if="scope.row.valueType === 2" type="success">整数</el-tag>
+              <el-tag v-else-if="scope.row.valueType === 3" type="success">浮点数</el-tag>
+              <el-tag v-else-if="scope.row.valueType === 4" type="success">字符串</el-tag>
+              <el-tag v-else-if="scope.row.valueType === 5" type="success">表达式</el-tag>
+              <el-tag v-else-if="scope.row.valueType === 6" type="success">数组</el-tag>
+              <el-tag v-else-if="scope.row.valueType === 7" type="success">坐标点</el-tag>
+              <el-tag v-else-if="scope.row.valueType === 8" type="success">坐标点数组</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="code" label="影射字段"/>
+          <el-table-column align="center" prop="hasFormula" label="是否有公式">
+            <template slot-scope="scope">
+              <el-tag v-if="scope.row.hasFormula === 0">无公式</el-tag>
+              <el-tag v-else-if="scope.row.hasFormula === 1" type="success">有公式</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="formula" label="公式"/>
+          <el-table-column align="center" prop="fieldDescription" label="字段描述"/>
+          <el-table-column align="center" prop="cmdId" label="指令Id"/>
 
-              <el-col :span="8" :offset="2" class="ycbutton">
-                <el-tooltip effect="dark" content="删除" placement="top">
-                  <el-button type="danger" icon="el-icon-delete" @click="del(scope.row.id)"/>
-                </el-tooltip>
-              </el-col>
+          <el-table-column align="center" label="操作">
+            <template slot-scope="scope">
+              <el-row>
+                <el-col :offset="3" :span="8" class="ycbutton">
+                  <el-tooltip effect="dark" content="编辑" placement="top">
+                    <el-button type="warning" icon="el-icon-edit-outline" @click="edit(scope.row)"/>
+                  </el-tooltip>
+                </el-col>
 
-            </el-row>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
+                <el-col :span="8" :offset="2" class="ycbutton">
+                  <el-tooltip effect="dark" content="删除" placement="top">
+                    <el-button type="danger" icon="el-icon-delete" @click="del(scope.row.id)"/>
+                  </el-tooltip>
+                </el-col>
 
-    <div class="paginationContainer">
-      <el-pagination
-        :current-page="pageIndex"
-        :page-sizes="[5 ,20, 30, 40, 50]"
-        :page-size="pageSize"
-        :total="totalCount"
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"/>
+              </el-row>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-card>
+
+      <div class="paginationContainer">
+        <el-pagination
+          :current-page="pageIndex"
+          :page-sizes="[5 ,20, 30, 40, 50]"
+          :page-size="pageSize"
+          :total="totalCount"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"/>
+      </div>
+
+      <Detail v-if="detailShow" ref="detail" @reload="editHidden" />
     </div>
 
-    <Detail v-if="detailShow" ref="detail" @reload="editHidden" />
+    <div v-else>
+      <h3>广哥Say: 亲, 请使用规范的操作流程哦 ! </h3>
+      <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 正确的进入方式, 点击 “协议管理” -- 点击“协议指令” -- 点击 “操作指标字段”</h5>
+    </div>
   </div>
 </template>
 <script>
 import Search from '@/components/Search'
-import { GetList, Delete } from '@api/instructions/field'
+import { GetList, Delete, GetByCmdId } from '@api/instructions/field'
 import { pagging, keyword, buttonPermissions } from '@/mixin'
 import Detail from './details'
 
@@ -94,7 +106,8 @@ export default {
   },
   methods: {
     init() {
-      GetList({
+      GetByCmdId({
+        cmdId: this.$route.query.id,
         keyword: this.keyword,
         pageIndex: this.pageIndex,
         pageSize: this.pageSize
