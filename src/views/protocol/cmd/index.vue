@@ -20,14 +20,20 @@
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-row>
-              <el-col :offset="3" :span="8">
+              <el-col :span="8">
                 <el-tooltip effect="dark" content="编辑" placement="top">
-                  <el-button type="warning" icon="el-icon-edit-outline" @click="edit(scope.row.id)"/>
+                  <el-button type="warning" icon="el-icon-edit-outline" size="small" round @click="edit(scope.row.id)"/>
                 </el-tooltip>
               </el-col>
-              <el-col :span="8" :offset="2">
+              <el-col :span="8" >
                 <el-tooltip effect="dark" content="删除" placement="top">
-                  <el-button type="danger" icon="el-icon-delete" @click="del(scope.row.id)"/>
+                  <el-button type="danger" icon="el-icon-delete" size="small" round @click="del(scope.row.id)"/>
+                </el-tooltip>
+              </el-col>
+
+              <el-col :span="8" >
+                <el-tooltip effect="dark" content="指标字段" placement="top">
+                  <el-button type="primary" icon="el-icon-document" size="small" round @click="toField(scope.row)"/>
                 </el-tooltip>
               </el-col>
             </el-row>
@@ -119,6 +125,10 @@ export default {
           })
         })
       })
+    },
+    toField(row) {
+      console.log(row.protocalId, row.cmdCode)
+      this.$router.push({path:'/instructions/field', query:{ protocalId: row.protocalId, cmdCode: row.cmdCode }})
     }
   }
 }
