@@ -11,7 +11,9 @@
         <el-table :data="tableData" class="table" border>
 
           <el-table-column align="center" prop="cmdId" label="cmdId"/>
-          <el-table-column align="center" prop="sensorTypeId" label="指标类型Id"/>
+          <el-table-column align="center" prop="sensorTypeName" label="指标类型名称">
+            <!-- {{$ref.detail.sensorType}} -->
+          </el-table-column>
           <!-- <el-table-column align="center" prop="sensorTypeName" label="指标类型名称"/> -->
           <el-table-column align="center" prop="name" label="类名称"/>
           <el-table-column align="center" prop="valueType" label="字段值类型">
@@ -117,9 +119,7 @@ export default {
         this.pageSize = res.data.pageSize;
         this.totalCount = res.data.totalCount;
       })
-      // GetAll().then(res => {
-      //   this.$set(this, 'tableData', res.data)
-      // })
+
     },
     changeKeyword(val){
       this.keyword = val

@@ -5,16 +5,24 @@
     width="30%"
     :before-close="handleClose">
 
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm" label-position="top" label-width="110px">
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm" label-position="top" >
       <el-form-item label="字段名" prop="name">
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
-
-      <el-form-item label="指标类型id" prop="sensorTypeId">
-        <el-input v-model="ruleForm.sensorTypeId"></el-input>
-      </el-form-item>
       
-      <el-form-item label="字段值类型(1为开关量, 2为整数, 3为浮点数, 4为字符串, 5为表达式, 6为数组, 7为坐标点, 8为坐标点数组)" prop="valueType">
+      <el-form-item label="指标类型" prop="sensorTypeId">
+        <!-- <el-input v-model="ruleForm.name"></el-input> -->
+        <el-select v-model="ruleForm.sensorTypeId" placeholder="请选择">
+          <el-option
+            v-for="item in sensorType"
+            :key="item.name"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="字段值类型(1为 `开关量`, 2为 `整数`, 3为 `浮点数`, 4为 `字符串`, 5为 `表达式`, 6为 `数组`, 7为 `坐标点`, 8为 `坐标点数组`)" prop="valueType">
         <el-input-number :min="1" :max="8" v-model="ruleForm.valueType"></el-input-number>
       </el-form-item>
 
@@ -48,6 +56,7 @@
 
 <script>
 import { UpdateInfo, create } from '@api/instructions/field'
+import { GetAll } from '@api/instructions/type'
 
 export default {
   data() {
@@ -62,7 +71,8 @@ export default {
         fieldDescription: { required: true, message: '字段描述不能为空', trigger: 'blur' },
         cmdId: { required: true, message: '指令Id', trigger: 'blur' }
       },
-      title: '新增'
+      title: '新增',
+      sensorType: []
     };
   },
   methods: {
@@ -74,6 +84,10 @@ export default {
       } else {
         this.title = '新增'
       }
+
+      GetAll().then(res => {
+        this.sensorType = res.data
+      })
     },
     handleClose(done) {
       this.dialogVisible = false
@@ -86,6 +100,11 @@ export default {
           if (formula === undefined) {
             formula = ''
           }
+          this.sensorType.map(item => {
+            if (item.id == this.ruleForm.sensorTypeId) {
+              this.ruleForm.sensorTypeName = item.name
+            }
+          })
           if (this.title == '修改') {
             UpdateInfo({ formula: formula, ...this.ruleForm }).then(res => {
               this.$message({
