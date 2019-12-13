@@ -30,7 +30,7 @@
       </el-form-item>
 
       <el-form-item label="所选协议">
-        <el-select v-model="form.protocalId" placeholder="请选择" @change="protocalChange">
+        <el-select v-model="form.protocalId"  placeholder="请选择" @change="protocalChange">
           <el-option
             v-for="item in protocalList"
             :key="item.id"
@@ -40,8 +40,12 @@
         </el-select>
       </el-form-item>
 
+      
+
+
+
       <el-form-item label="所选指令">
-        <el-select v-model="form.cmdId" placeholder="请选择" @change="(e)=>{cmd=e;cmdChange()}">
+        <el-select v-model="form.cmdIds" multiple placeholder="请选择" @change="(e)=>{cmd=e;cmdChange()}">
           <el-option
             v-for="item in cmdList"
             :key="item.id"
@@ -51,9 +55,12 @@
         </el-select>
       </el-form-item>
 
-       <el-form-item label="选择指标">
+
+      <el-tabs v-model="activeCmd">
+        <el-tab-pane v-for="item in form.cmdIds" :key="item" :label="cmdList.find(cur=>cur.id==item)||{}.cmdCode">
           <el-table
-            ref="multipleTable"
+            v-if="activeCmd==item"
+            :ref="'multipleTable' + item"
             :data="codeList"
             class="table"
             border
@@ -71,8 +78,11 @@
             :page-size="pageSize"
             :total="totalCount"
             layout="total, prev, pager, next, jumper"
-            @current-change="handleCurrentChange"/>
-        </el-form-item>
+            @current-change="handleCurrentChange"
+          />
+
+        </el-tab-pane>
+      </el-tabs>
 
       <div>
         <Json-editor ref="jsonEditor" v-model="json" />
@@ -95,11 +105,12 @@ import JsonEditor from '@/components/jsonEditor'
 export default {
   data(){
     return{
+      activeCmd:'',
       json:{},
       visible:false,
       form:{
         protocalId:'',
-        cmdId:"",
+        cmdIds:"",
         viewName:"",
         viewTypeId:'',
         remark:""
@@ -155,11 +166,9 @@ export default {
       this.visible = true
       GetById(id)
         .then(res=>{
-          let cmdId
-          if(res.data.cmdFields&&res.data.cmdFields.length>0){
-            cmdId = res.data.cmdFields[0].cmdId
-          }
-          this.$set(this,'form',{...res.data,cmdId})
+          const cmdIds = res.data.cmdFields.map(item=>item.cmdId)
+          this.activeCmd = cmdIds[0]||''.toString()
+          this.$set(this,'form',{...res.data,cmdIds})
           this.json = JSON.parse(res.data.jsonData)
 
           this.chooseArray = res.data.cmdFields.map(item=>({...item,id:item.fieldId}))
@@ -175,11 +184,12 @@ export default {
             })
 
           GetByCmdId({
-            cmdId: this.form.cmdId,
+            cmdId: cmdIds[0],
             pageIndex: this.pageIndex,
             pageSize: this.pageSize
           })
             .then(res=>{
+              console.log(res)
               this.$set(this, 'codeList', res.data.items)
               this.totalCount = res.data.totalCount
               this.pageIndex = res.data.pageIndex

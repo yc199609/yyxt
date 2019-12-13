@@ -23,38 +23,43 @@
           </el-form-item>
 
           <el-form-item label="选择指令">
-            <el-select v-model="cmd" placeholder="请选择" @change="(e)=>{cmd=e;cmdChange()}">
+            <el-select v-model="cmd" multiple placeholder="请选择">
               <el-option
-                v-for="item in cmdList"
-                :key="item.id"
+                v-for="(item,index) in cmdList"
+                :key="index"
                 :label="item.cmdCode"
                 :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
 
-          <el-form-item label="选择指标">
-            <el-table
-              ref="multipleTable"
-              :data="codeList"
-              class="table"
-              border
-              @select="handleChoose"
-              @select-all="handleChooseAll"
-            >
-              <el-table-column type="selection" width="40"/>
-              <el-table-column label="指标代码" align="center" prop="code"/>
-              <el-table-column label="指标名称" align="center" prop="name"/>
-            </el-table>
+          <el-tabs v-model="activeCmd">
+            <el-tab-pane v-for="item in cmd" :key='item' :label="cmdList.find(cur=>cur.id==item).cmdCode" :name="item.toString()">
+              {{'multipleTable'+item}}
+              <el-table
+                v-if="activeCmd==item"
+                :ref="'multipleTable'+item"
+                :data="codeList"
+                class="table"
+                border
+                @select="handleChoose"
+                @select-all="handleChooseAll"
+              >
+                <el-table-column type="selection" width="40"/>
+                <el-table-column label="指标代码" align="center" prop="code"/>
+                <el-table-column label="指标名称" align="center" prop="name"/>
+              </el-table>
 
-            <el-pagination
-              :current-page="pageIndex"
-              :page-sizes="[10 ,20, 30, 40, 50, 100]"
-              :page-size="pageSize"
-              :total="totalCount"
-              layout="total, prev, pager, next, jumper"
-              @current-change="handleCurrentChange"/>
-          </el-form-item>
+              <el-pagination
+                :current-page="pageIndex"
+                :page-sizes="[10 ,20, 30, 40, 50, 100]"
+                :page-size="pageSize"
+                :total="totalCount"
+                layout="total, prev, pager, next, jumper"
+                @current-change="handleCurrentChange"/>
+
+            </el-tab-pane>
+          </el-tabs>
 
         </el-form>
       </el-tab-pane>
@@ -81,7 +86,7 @@
             </el-input>
           </el-form-item>
           <el-form-item label="所选指标">
-            <el-table :data="chooseArray" border>
+            <el-table :data="Object.keys(yc).reduce((per,next)=>per.concat(yc[next]),[])" border>
               <el-table-column align="center" prop="id" label="序号" />
               <el-table-column align="center" prop="name" label="指标名称" />
               <el-table-column align="center" prop="code" label="指标代号" />
@@ -113,6 +118,7 @@ import JsonEditor from '@/components/jsonEditor'
 export default {
   data() {
     return {
+      activeCmd: '',
       json: {},
       visible: false,
       activeName: 'first',
@@ -121,7 +127,7 @@ export default {
       cmdList:[],
       codeList:[],
       protocal:"",
-      cmd:'',
+      cmd:[],
       form1:{},
       form2:{
         viewName:"",
@@ -133,12 +139,45 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       totalCount: 30,
+      yc:{},
+      console:console
     };
   },
   components:{
     JsonEditor
   },
+  watch:{
+    cmd:function(val,oldval){
+      if(val.length>oldval.length){
+        var c =  val.filter(function(v){ return oldval.indexOf(v) == -1 })
+        this.yc[c] = []
+        if(oldval.length==0){
+          this.activeCmd = c.toString()
+        }
+      }else{
+        var d = oldval.filter(function(v){ return val.indexOf(v) == -1 })
+        delete this.yc[d]
+      }
+    },
+    activeCmd:function(val,oldval){
+      this.cmdChange()
+    }
+  },
   methods: {
+    cmdChange(){
+      GetByCmdId({
+        cmdId:this.activeCmd,
+        pageIndex:this.pageIndex,
+        pageSize:this.pageSize
+      })
+        .then(res=>{
+          this.$set(this, 'codeList', res.data.items)
+          this.totalCount = res.data.totalCount
+          this.pageIndex = res.data.pageIndex
+          this.pageSize = res.data.pageSize
+          this.toggleSelection(this.yc[this.activeCmd])
+        })
+    },
     next(){
       this.step = true
       this.$nextTick(()=>{
@@ -150,48 +189,34 @@ export default {
       this.cmdChange()
     },
     handleChooseAll(selection) {
-      const chooseIds = this.chooseArray.map(item => item.id)
+      const chooseIds = this.yc[this.activeCmd].map(item => item.id)
       if (selection.length > 0) { // 全选
         const intersection = selection.filter(v => !chooseIds.includes(v.id))
-        this.chooseArray = this.chooseArray.concat(intersection)
+        this.yc[this.activeCmd] = this.yc[this.activeCmd].concat(intersection)
       } else { // 全取消
-        this.chooseArray = this.chooseArray.filter(v => !this.codeList.map(item => item.id).includes(v.id))
+        this.yc[this.activeCmd] = this.yc[this.activeCmd].filter(v => !this.codeList.map(item => item.id).includes(v.id))
       }
     },
     handleChoose(selection, row) {
       // 判断是新增选中还是取消选中
       const flag = selection.some((item) => item.id === row.id)
       if (flag) {
-        const ishas = this.chooseArray.some(item => item.id === row.id)
+        const ishas = this.yc[this.activeCmd].some(item => item.id === row.id)
         if (!ishas) {
-          this.chooseArray.push(row)
+          this.yc[this.activeCmd].push(row)
         }
       } else {
-        const index = this.chooseArray.findIndex((item) => item.id === row.id)
-        this.chooseArray.splice(index, 1)
+        const index = this.yc[this.activeCmd].findIndex((item) => item.id === row.id)
+        this.yc[this.activeCmd].splice(index, 1)
       }
     },
     toggleSelection(rows) {
       const intersection = this.codeList.filter(v => rows.map(item => item.id).includes(v.id))
       intersection.forEach(row => {
         this.$nextTick(() => {
-          this.$refs.multipleTable.toggleRowSelection(row, true)
+          this.$refs['multipleTable' + this.activeCmd][0].toggleRowSelection(row, true)
         })
       })
-    },
-    cmdChange(){
-      GetByCmdId({
-        cmdId:this.cmd,
-        pageIndex:this.pageIndex,
-        pageSize:this.pageSize
-      })
-        .then(res=>{
-          this.$set(this, 'codeList', res.data.items)
-          this.totalCount = res.data.totalCount
-          this.pageIndex = res.data.pageIndex
-          this.pageSize = res.data.pageSize
-          this.toggleSelection(this.chooseArray)
-        })
     },
     protocalChange(e){
       GetByProtocalId(e)
@@ -216,17 +241,15 @@ export default {
       this.visible = false
     },
     submit(){
-      // this.$refs.form.validate(valid=>{
-      //   if(valid){
-      //     this[this.mode]()
-      //   }
-      // });
 
+      const array = Object.keys(this.yc).reduce((per,next)=>per.concat({cmdId:next,fieldIds:this.yc[next].map(item=>item.id)}),[])
+      this.json = JSON.stringify(this.json)
       const formdata = {
         ...this.form2,
         jsonData: JSON.stringify(JSON.parse(this.json)),
-        cmdFields:this.chooseArray.map(item=>({cmdId:item.cmdId,fieldId:item.id}))
+        cmdFields:array
       }
+
       create(formdata)
         .then(res=>{
           this.$message({
