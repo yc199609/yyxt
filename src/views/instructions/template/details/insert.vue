@@ -35,7 +35,7 @@
 
           <el-tabs v-model="activeCmd">
             <el-tab-pane v-for="item in cmd" :key='item' :label="cmdList.find(cur=>cur.id==item).cmdCode" :name="item.toString()">
-              {{'multipleTable'+item}}
+   
               <el-table
                 v-if="activeCmd==item"
                 :ref="'multipleTable'+item"
