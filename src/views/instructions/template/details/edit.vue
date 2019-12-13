@@ -212,7 +212,7 @@ export default {
       Object.keys(this.choose)
         .forEach(item => {
           const obj = {
-            cmdId:item,
+            cmdId:Number(item),
             fieldIds:this.choose[item].map(cur=>cur.id)
           }
           cmdFields.push(obj)
