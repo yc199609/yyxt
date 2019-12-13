@@ -223,7 +223,7 @@ export default {
 
       const data = {
         ...this.form,
-        jsonData:JSON.stringify(JSON.parse(this.json)),
+        jsonData:JSON.parse(this.json),
         cmdFields:cmdFields
       }
       UpdateInfo(data)

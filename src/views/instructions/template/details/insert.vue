@@ -244,7 +244,7 @@ export default {
       const array = Object.keys(this.yc).reduce((per,next)=>per.concat({cmdId:next,fieldIds:this.yc[next].map(item=>item.id)}),[])
       const formdata = {
         ...this.form2,
-        jsonData: JSON.stringify(JSON.parse(this.json)),
+        jsonData: JSON.parse(this.json),
         cmdFields:array
       }
 
