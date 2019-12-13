@@ -213,30 +213,30 @@ export default {
         .forEach(item => {
           const obj = {
             cmdId:item,
-            field:this.choose[item].map(cur=>cur.id)
+            fieldIds:this.choose[item].map(cur=>cur.id)
           }
           cmdFields.push(obj)
         })
 
       // console.log(this.form)
-      // console.log(this.json)
+      // console.log(JSON.stringify(this.json) )
 
-      // const data = {
-      //   ...this.form,
-      //   jsonData:JSON.stringify(JSON.parse(this.json)),
-      //   cmdFields:this.chooseArray.map(item=>({...item,fieldId:item.id}))
-      // }
-      // UpdateInfo(data)
-      //   .then(res=>{
-      //     this.$message({
-      //       type: "success",
-      //       message: "新增成功",
-      //       duration: 500,
-      //       onClose:()=>{
-      //         this.cancel()
-      //       }
-      //     })
-      //   })
+      const data = {
+        ...this.form,
+        jsonData:JSON.stringify(JSON.parse(this.json)),
+        cmdFields:cmdFields
+      }
+      UpdateInfo(data)
+        .then(res=>{
+          this.$message({
+            type: "success",
+            message: "新增成功",
+            duration: 500,
+            onClose:()=>{
+              this.cancel()
+            }
+          })
+        })
     },
     onClose() {
       this.$emit('reload')
