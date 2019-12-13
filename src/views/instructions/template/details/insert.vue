@@ -241,9 +241,7 @@ export default {
       this.visible = false
     },
     submit(){
-
       const array = Object.keys(this.yc).reduce((per,next)=>per.concat({cmdId:next,fieldIds:this.yc[next].map(item=>item.id)}),[])
-      this.json = JSON.stringify(this.json)
       const formdata = {
         ...this.form2,
         jsonData: JSON.stringify(JSON.parse(this.json)),

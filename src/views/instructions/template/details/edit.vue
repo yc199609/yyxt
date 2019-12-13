@@ -41,11 +41,8 @@
       </el-form-item>
 
       
-
-
-
       <el-form-item label="所选指令">
-        <el-select v-model="form.cmdIds" multiple placeholder="请选择" @change="(e)=>{cmd=e;cmdChange()}">
+        <el-select v-model="cmdIds" multiple placeholder="请选择">
           <el-option
             v-for="item in cmdList"
             :key="item.id"
@@ -57,7 +54,8 @@
 
 
       <el-tabs v-model="activeCmd">
-        <el-tab-pane v-for="item in form.cmdIds" :key="item" :label="cmdList.find(cur=>cur.id==item)||{}.cmdCode">
+        <el-tab-pane v-for="item in cmdIds" :key="item" :label="(cmdList.find(cur=>cur.id==item)||{}).cmdCode" :name="item.toString()">
+
           <el-table
             v-if="activeCmd==item"
             :ref="'multipleTable' + item"
@@ -110,7 +108,6 @@ export default {
       visible:false,
       form:{
         protocalId:'',
-        cmdIds:"",
         viewName:"",
         viewTypeId:'',
         remark:""
@@ -118,47 +115,66 @@ export default {
       protocalList:[],
       cmdList:[],
       codeList:[],
-      chooseArray: [],
+      choose: {},
       pageIndex: 1,
       pageSize: 10,
       totalCount: 30,
+      cmdIds:[],
     }
   },
   components:{
     JsonEditor
   },
+  watch:{
+    activeCmd:function(val,oldVal){
+      this.pageIndex = 1
+      this.cmdChange(val)
+    },
+    cmdIds:function(val,oldval){
+      if(val.length>oldval.length){
+        var c =  val.filter(function(v){ return oldval.indexOf(v) == -1 })
+        this.choose[c] = []
+        if(oldval.length==0){
+          this.activeCmd = c.toString()
+        }
+      }else{
+        var d = oldval.filter(function(v){ return val.indexOf(v) == -1 })
+        delete this.choose[d]
+      }
+    }
+  },
   methods:{
     handleCurrentChange(val) {
       this.pageIndex = val
-      this.cmdChange()
+      this.cmdChange(this.activeCmd)
     },
     handleChooseAll(selection) {
-      const chooseIds = this.chooseArray.map(item => item.id)
+      const chooseIds = this.choose[this.activeCmd].map(item => item.id)
       if (selection.length > 0) { // 全选
         const intersection = selection.filter(v => !chooseIds.includes(v.id))
-        this.chooseArray = this.chooseArray.concat(intersection)
+        this.choose[this.activeCmd] = this.choose[this.activeCmd].concat(intersection)
       } else { // 全取消
-        this.chooseArray = this.chooseArray.filter(v => !this.codeList.map(item => item.id).includes(v.id))
+        this.choose[this.activeCmd] = this.choose[this.activeCmd].filter(v => !this.codeList.map(item => item.id).includes(v.id))
       }
     },
     handleChoose(selection, row) {
       // 判断是新增选中还是取消选中
       const flag = selection.some((item) => item.id === row.id)
       if (flag) {
-        const ishas = this.chooseArray.some(item => item.id === row.id)
+        const ishas = this.choose[this.activeCmd].some(item => item.id === row.id)
         if (!ishas) {
-          this.chooseArray.push(row)
+          this.choose[this.activeCmd].push(row)
         }
       } else {
-        const index = this.chooseArray.findIndex((item) => item.id === row.id)
-        this.chooseArray.splice(index, 1)
+        const index = this.choose[this.activeCmd].findIndex((item) => item.id === row.id)
+        this.choose[this.activeCmd].splice(index, 1)
       }
     },
     toggleSelection(rows) {
       const intersection = this.codeList.filter(v => rows.map(item => item.id).includes(v.id))
       intersection.forEach(row => {
         this.$nextTick(() => {
-          this.$refs.multipleTable.toggleRowSelection(row, true)
+          this.$refs['multipleTable' + this.activeCmd][0].toggleRowSelection(row, true)
         })
       })
     },
@@ -166,65 +182,68 @@ export default {
       this.visible = true
       GetById(id)
         .then(res=>{
-          const cmdIds = res.data.cmdFields.map(item=>item.cmdId)
-          this.activeCmd = cmdIds[0]||''.toString()
-          this.$set(this,'form',{...res.data,cmdIds})
-          this.json = JSON.parse(res.data.jsonData)
-
-          this.chooseArray = res.data.cmdFields.map(item=>({...item,id:item.fieldId}))
+          res.data.cmdFields.forEach(item=>{
+            this.cmdIds.push(item.cmdId)
+          })
+          this.activeCmd = (this.cmdIds[0]||'').toString()
+          this.$set(this,'form',res.data)
+          this.json = JSON.parse(res.data.jsonData,null,0)
+          res.data.cmdFields.forEach(item=>{
+            this.choose[item.cmdId] = item.fields.map(cur=>({...cur,id:cur.fieldId}))
+          })
 
           GetAll()
             .then(res=>{
               this.$set(this,'protocalList',res.data)
             })
-
           GetByProtocalId(this.form.protocalId)
             .then(res=>{
               this.$set(this,'cmdList',res.data)
             })
 
-          GetByCmdId({
-            cmdId: cmdIds[0],
-            pageIndex: this.pageIndex,
-            pageSize: this.pageSize
-          })
-            .then(res=>{
-              console.log(res)
-              this.$set(this, 'codeList', res.data.items)
-              this.totalCount = res.data.totalCount
-              this.pageIndex = res.data.pageIndex
-              this.pageSize = res.data.pageSize
-              this.toggleSelection(this.chooseArray)
-            })
         })
     },
     cancel() {
       this.visible = false
     },
     submit(){
-      const data = {
-        ...this.form,
-        jsonData:JSON.stringify(JSON.parse(this.json)),
-        cmdFields:this.chooseArray.map(item=>({...item,fieldId:item.id}))
-      }
-      UpdateInfo(data)
-        .then(res=>{
-          this.$message({
-            type: "success",
-            message: "新增成功",
-            duration: 500,
-            onClose:()=>{
-              this.cancel()
-            }
-          })
+      let cmdFields = []
+
+      Object.keys(this.choose)
+        .forEach(item => {
+          const obj = {
+            cmdId:item,
+            field:this.choose[item].map(cur=>cur.id)
+          }
+          cmdFields.push(obj)
         })
+
+      // console.log(this.form)
+      // console.log(this.json)
+
+      // const data = {
+      //   ...this.form,
+      //   jsonData:JSON.stringify(JSON.parse(this.json)),
+      //   cmdFields:this.chooseArray.map(item=>({...item,fieldId:item.id}))
+      // }
+      // UpdateInfo(data)
+      //   .then(res=>{
+      //     this.$message({
+      //       type: "success",
+      //       message: "新增成功",
+      //       duration: 500,
+      //       onClose:()=>{
+      //         this.cancel()
+      //       }
+      //     })
+      //   })
     },
     onClose() {
       this.$emit('reload')
     },
-    cmdChange(){
+    cmdChange(v){
       GetByCmdId({
-        cmdId: this.form.cmdId,
+        cmdId: v,
         pageIndex: this.pageIndex,
         pageSize: this.pageSize
       })
@@ -233,7 +252,7 @@ export default {
           this.totalCount = res.data.totalCount
           this.pageIndex = res.data.pageIndex
           this.pageSize = res.data.pageSize
-          this.toggleSelection(this.chooseArray)
+          this.toggleSelection(this.choose[v])
         })
     },
     protocalChange(e){
