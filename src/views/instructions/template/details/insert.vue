@@ -76,11 +76,16 @@
                 :value="10">
               </el-option>
               <el-option
-                label="温度曲线"
+                label="曲线视图"
                 :value="100">
               </el-option>
             </el-select>
           </el-form-item>
+        
+          <el-form-item label="视图编码">
+            <el-input v-model="form2.viewCode" />
+          </el-form-item>
+
           <el-form-item label="描述">
             <el-input type="textarea" v-model="form2.remark">
             </el-input>
@@ -132,7 +137,8 @@ export default {
       form2:{
         viewName:"",
         viewTypeId:'',
-        remark:''
+        remark:'',
+        viewCode:''
       },
       rules1:{},
       chooseArray: [],
