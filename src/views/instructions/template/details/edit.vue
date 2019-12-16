@@ -22,6 +22,10 @@
             label="曲线视图"
             :value="100">
           </el-option>
+          <el-option
+            label="看板视图"
+            :value="200">
+          </el-option>
         </el-select>
       </el-form-item>
 
