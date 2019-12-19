@@ -5,7 +5,7 @@ const api = {
   GetAll: '/api/terminal/SensorTemplate/GetAll',
   GetById: '/api/terminal/SensorTemplate/GetById',
   del: '/api/terminal/SensorTemplate/delete',
-  UpdateInfo: '/api/teminal/SensorTemplate/UpdateInfo',
+  UpdateInfo: '/api/Terminal/SensorTemplate/UpdateInfo',
   create: '/api/terminal/SensorTemplate/create'
 }
 

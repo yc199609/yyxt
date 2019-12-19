@@ -83,6 +83,7 @@ export default {
   name:"Detail",
   data(){
     return {
+      id:undefined,
       mode:"insert",
       name:'',
       activeCmd:'',
@@ -145,6 +146,7 @@ export default {
           })
       }else{
         UpdateInfo({
+          id:this.id,
           protocalId:this.protocal,
           name:this.name,
           items:sdd
@@ -218,6 +220,7 @@ export default {
     init(id){
       this.visible = true
       if(id){
+        this.id = id
         this.mode = 'edit'
         GetById(id)
           .then(res=>{
