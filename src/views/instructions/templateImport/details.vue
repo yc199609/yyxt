@@ -22,7 +22,6 @@
           />
         </el-select>
       </el-form-item>
-
       <el-form-item label="指令">
         <el-select v-model="cmds"  multiple placeholder="请选择">
           <el-option
