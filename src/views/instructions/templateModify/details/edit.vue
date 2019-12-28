@@ -37,6 +37,22 @@
         <el-input type="textarea" v-model="form.remark" />
       </el-form-item>
 
+      <el-form-item label="数值上限">
+        <el-input v-model="form.maxNumber" />
+      </el-form-item>
+
+      <el-form-item label="数值下限">
+        <el-input  v-model="form.minNumber" />
+      </el-form-item>
+
+      <el-form-item label="数值单位">
+        <el-input v-model="form.unit" />
+      </el-form-item>
+
+      <el-form-item label="视图排序（越小越前）">
+        <el-input v-model="form.sort" />
+      </el-form-item>
+
       <el-form-item label="所选协议">
         <el-select v-model="form.protocalId"  placeholder="请选择" @change="protocalChange">
           <el-option
@@ -118,7 +134,11 @@ export default {
         protocalId:'',
         viewName:"",
         viewTypeId:'',
-        remark:""
+        remark:"",
+        maxNumber:undefined,
+        minNumber:undefined,
+        unit:undefined,
+        sort:undefined
       },
       protocalList:[],
       cmdList:[],

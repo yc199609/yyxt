@@ -90,12 +90,28 @@
             <el-input v-model="form2.viewCode" />
           </el-form-item>
 
+          <el-form-item label="数值上限">
+            <el-input v-model="form2.maxNumber" />
+          </el-form-item>
+
+          <el-form-item label="数值下限">
+            <el-input  v-model="form2.minNumber" />
+          </el-form-item>
+
+          <el-form-item label="数值单位">
+            <el-input v-model="form2.unit" />
+          </el-form-item>
+
+          <el-form-item label="视图排序（越小越前）">
+            <el-input v-model="form2.sort" />
+          </el-form-item>
+
           <el-form-item label="描述">
             <el-input type="textarea" v-model="form2.remark">
             </el-input>
           </el-form-item>
           <el-form-item label="所选指标">
-            <el-table :data="Object.keys(yc).reduce((per,next)=>per.concat(yc[next]),[])" border>
+            <el-table :data="Object.keys(chooseData).reduce((per,next)=>per.concat(chooseData[next]),[])" border>
               <el-table-column align="center" prop="id" label="序号" />
               <el-table-column align="center" prop="name" label="指标名称" />
               <el-table-column align="center" prop="code" label="指标代号" />
@@ -142,15 +158,18 @@ export default {
         viewName:"",
         viewTypeId:'',
         remark:'',
-        viewCode:''
+        viewCode:'',
+        maxNumber:undefined,
+        minNumber:undefined,
+        unit:undefined,
+        sort:undefined
       },
       rules1:{},
       chooseArray: [],
       pageIndex: 1,
       pageSize: 10,
       totalCount: 30,
-      yc:{},
-      console:console
+      chooseData:{},
     };
   },
   components:{
@@ -160,13 +179,13 @@ export default {
     cmd:function(val,oldval){
       if(val.length>oldval.length){
         var c =  val.filter(function(v){ return oldval.indexOf(v) == -1 })
-        this.yc[c] = []
+        this.chooseData[c] = []
         if(oldval.length==0){
           this.activeCmd = c.toString()
         }
       }else{
         var d = oldval.filter(function(v){ return val.indexOf(v) == -1 })
-        delete this.yc[d]
+        delete this.chooseData[d]
       }
     },
     activeCmd:function(val,oldval){
@@ -185,7 +204,7 @@ export default {
           this.totalCount = res.data.totalCount
           this.pageIndex = res.data.pageIndex
           this.pageSize = res.data.pageSize
-          this.toggleSelection(this.yc[this.activeCmd])
+          this.toggleSelection(this.chooseData[this.activeCmd])
         })
     },
     next(){
@@ -199,25 +218,25 @@ export default {
       this.cmdChange()
     },
     handleChooseAll(selection) {
-      const chooseIds = this.yc[this.activeCmd].map(item => item.id)
+      const chooseIds = this.chooseData[this.activeCmd].map(item => item.id)
       if (selection.length > 0) { // 全选
         const intersection = selection.filter(v => !chooseIds.includes(v.id))
-        this.yc[this.activeCmd] = this.yc[this.activeCmd].concat(intersection)
+        this.chooseData[this.activeCmd] = this.chooseData[this.activeCmd].concat(intersection)
       } else { // 全取消
-        this.yc[this.activeCmd] = this.yc[this.activeCmd].filter(v => !this.codeList.map(item => item.id).includes(v.id))
+        this.chooseData[this.activeCmd] = this.chooseData[this.activeCmd].filter(v => !this.codeList.map(item => item.id).includes(v.id))
       }
     },
     handleChoose(selection, row) {
       // 判断是新增选中还是取消选中
       const flag = selection.some((item) => item.id === row.id)
       if (flag) {
-        const ishas = this.yc[this.activeCmd].some(item => item.id === row.id)
+        const ishas = this.chooseData[this.activeCmd].some(item => item.id === row.id)
         if (!ishas) {
-          this.yc[this.activeCmd].push(row)
+          this.chooseData[this.activeCmd].push(row)
         }
       } else {
-        const index = this.yc[this.activeCmd].findIndex((item) => item.id === row.id)
-        this.yc[this.activeCmd].splice(index, 1)
+        const index = this.chooseData[this.activeCmd].findIndex((item) => item.id === row.id)
+        this.chooseData[this.activeCmd].splice(index, 1)
       }
     },
     toggleSelection(rows) {
@@ -251,7 +270,7 @@ export default {
       this.visible = false
     },
     submit(){
-      const array = Object.keys(this.yc).reduce((per,next)=>per.concat({cmdId:next,fieldIds:this.yc[next].map(item=>item.id)}),[])
+      const array = Object.keys(this.chooseData).reduce((per,next)=>per.concat({cmdId:next,fieldIds:this.chooseData[next].map(item=>item.id)}),[])
       const formdata = {
         ...this.form2,
         jsonData: JSON.parse(this.json),
