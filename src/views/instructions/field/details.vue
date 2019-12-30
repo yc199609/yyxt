@@ -45,6 +45,20 @@
       <el-form-item label="指令Id" prop="cmdId">
         <el-input v-model="ruleForm.cmdId"></el-input>
       </el-form-item>
+
+      <el-form-item label="数值上限" prop="maxNumber">
+        <el-input v-model="ruleForm.maxNumber"></el-input>
+      </el-form-item>
+
+      <el-form-item label="数值下限" prop="minNumber">
+        <el-input v-model="ruleForm.minNumber"></el-input>
+      </el-form-item>
+
+      <el-form-item label="数值单位" prop="unit">
+        <el-input v-model="ruleForm.unit"></el-input>
+      </el-form-item>
+
+
     </el-form>
     
     <span slot="footer" class="dialog-footer">

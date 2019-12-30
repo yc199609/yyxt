@@ -37,7 +37,7 @@
         <el-input type="textarea" v-model="form.remark" />
       </el-form-item>
 
-      <el-form-item label="数值上限">
+      <!-- <el-form-item label="数值上限">
         <el-input v-model="form.maxNumber" />
       </el-form-item>
 
@@ -47,7 +47,7 @@
 
       <el-form-item label="数值单位">
         <el-input v-model="form.unit" />
-      </el-form-item>
+      </el-form-item> -->
 
       <el-form-item label="视图排序（越小越前）">
         <el-input v-model="form.sort" />
