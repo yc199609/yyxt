@@ -45,6 +45,7 @@
                 @select="handleChoose"
                 @select-all="handleChooseAll"
               >
+
                 <el-table-column type="selection" width="40"/>
                 <el-table-column label="指标代码" align="center" prop="code"/>
                 <el-table-column label="指标名称" align="center" prop="name"/>
@@ -90,18 +91,6 @@
             <el-input v-model="form2.viewCode" />
           </el-form-item>
 
-          <!-- <el-form-item label="数值上限">
-            <el-input v-model="form2.maxNumber" />
-          </el-form-item>
-
-          <el-form-item label="数值下限">
-            <el-input  v-model="form2.minNumber" />
-          </el-form-item>
-
-          <el-form-item label="数值单位">
-            <el-input v-model="form2.unit" />
-          </el-form-item> -->
-
           <el-form-item label="视图排序（越小越前）">
             <el-input v-model="form2.sort" />
           </el-form-item>
@@ -110,13 +99,44 @@
             <el-input type="textarea" v-model="form2.remark">
             </el-input>
           </el-form-item>
+
           <el-form-item label="所选指标">
-            <el-table :data="Object.keys(chooseData).reduce((per,next)=>per.concat(chooseData[next]),[])" border>
+            <el-table :data="ssdff" border>
               <el-table-column align="center" prop="id" label="序号" />
               <el-table-column align="center" prop="name" label="指标名称" />
               <el-table-column align="center" prop="code" label="指标代号" />
+
+              <el-table-column label="指令" align="center" prop="cmdId">
+                <template slot-scope="scope">
+                  <div>
+                    {{
+                      cmdList.find(item=>item.id===scope.row.cmdId).cmdCode
+                    }}
+                  </div>
+                </template>
+              </el-table-column>
+
+              <el-table-column label="数值上限" align="center" prop="maxNumber">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.maxNumber" />
+                </template>
+              </el-table-column>
+
+              <el-table-column label="数值下限" align="center" prop="minNumber">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.minNumber" />
+                </template>
+              </el-table-column>
+
+              <el-table-column label="数值单位" align="center" prop="unit">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.unit" />
+                </template>
+              </el-table-column>
             </el-table>
+
           </el-form-item>
+
         </el-form>
         <div v-if="activeName==='second'">
           <Json-editor ref="jsonEditor" v-model="json" />
@@ -143,6 +163,8 @@ import JsonEditor from '@/components/jsonEditor'
 export default {
   data() {
     return {
+      ssdff:[],
+      tabsView:true,
       activeCmd: '',
       json: {},
       visible: false,
@@ -212,6 +234,8 @@ export default {
       this.$nextTick(()=>{
         this.activeName = 'second'
       })
+      const ssdff = Object.keys(this.chooseData).reduce((per,next)=>per.concat(this.chooseData[next]),[])
+      this.$set(this,'ssdff',[...ssdff])
     },
     handleCurrentChange(val) {
       this.pageIndex = val
@@ -270,11 +294,12 @@ export default {
       this.visible = false
     },
     submit(){
-      const array = Object.keys(this.chooseData).reduce((per,next)=>per.concat({cmdId:next,fieldIds:this.chooseData[next].map(item=>item.id)}),[])
+      const cmdFields = this.formatter(this.ssdff)
+
       const formdata = {
         ...this.form2,
         jsonData: JSON.parse(this.json),
-        cmdFields:array
+        cmdFields
       }
 
       create(formdata)
@@ -288,7 +313,22 @@ export default {
             }
           })
         })
-    }
+    },
+    formatter(arr){
+      const cmdIds = []
+      arr.forEach(item=>{
+        let sds = cmdIds.find(cur=>cur.cmdId == item.cmdId)
+        if(sds){
+          sds.fieldIds.push({...item,fieldId:item.id})
+        }else{
+          cmdIds.push({
+            cmdId:item.cmdId,
+            fieldIds:[item]
+          })
+        }
+      })
+      return cmdIds
+    },
   }
 }
 </script>

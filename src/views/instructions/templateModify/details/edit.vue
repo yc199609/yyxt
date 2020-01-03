@@ -37,18 +37,6 @@
         <el-input type="textarea" v-model="form.remark" />
       </el-form-item>
 
-      <!-- <el-form-item label="数值上限">
-        <el-input v-model="form.maxNumber" />
-      </el-form-item>
-
-      <el-form-item label="数值下限">
-        <el-input  v-model="form.minNumber" />
-      </el-form-item>
-
-      <el-form-item label="数值单位">
-        <el-input v-model="form.unit" />
-      </el-form-item> -->
-
       <el-form-item label="视图排序（越小越前）">
         <el-input v-model="form.sort" />
       </el-form-item>
@@ -77,7 +65,7 @@
       </el-form-item>
 
 
-      <el-tabs v-model="activeCmd">
+      <el-tabs v-model="activeCmd" v-if="tabsView">
         <el-tab-pane v-for="item in cmdIds" :key="item" :label="(cmdList.find(cur=>cur.id==item)||{}).cmdCode" :name="item.toString()">
 
           <el-table
@@ -106,11 +94,48 @@
         </el-tab-pane>
       </el-tabs>
 
+      <el-table v-else :data="sss" border>
+        <el-table-column label="指令" align="center" prop="cmdId">
+          <template slot-scope="scope">
+            <div>
+              {{
+                cmdList.find(item=>item.id===scope.row.cmdId).cmdCode
+              }}
+            </div>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="指标代码" align="center" prop="fieldCode"/>
+        <el-table-column label="指标名称" align="center" prop="fieldName"/>
+
+        <el-table-column label="数值上限" align="center" prop="maxNumber">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.maxNumber" />
+          </template>
+        </el-table-column>
+
+        <el-table-column label="数值下限" align="center" prop="minNumber">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.minNumber" />
+          </template>
+        </el-table-column>
+
+        <el-table-column label="数值单位" align="center" prop="unit">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.unit" />
+          </template>
+        </el-table-column>
+
+      </el-table>
+
+      <el-button v-if="tabsView" @click="fieldsSubmit">
+        确定指标
+      </el-button>
+
       <div>
         <Json-editor ref="jsonEditor" v-model="json" />
       </div>
     </el-form>
-
     <div slot="footer">
       <el-button @click="cancel">取 消</el-button>
       <el-button @click="submit">确 定</el-button>
@@ -127,6 +152,7 @@ import JsonEditor from '@/components/jsonEditor'
 export default {
   data(){
     return{
+      tabsView:true,
       activeCmd:'',
       json:{},
       visible:false,
@@ -148,6 +174,7 @@ export default {
       pageSize: 10,
       totalCount: 30,
       cmdIds:[],
+      sss:[]
     }
   },
   components:{
@@ -172,6 +199,21 @@ export default {
     }
   },
   methods:{
+    fieldsSubmit(){
+      let cmdFields = []
+      Object.keys(this.choose).forEach(item => {
+        this.choose[item].forEach(cur=>{
+          const obj = {
+            ...cur,
+            cmdId:Number(item),
+            fieldIds:cur.id
+          }
+          cmdFields.push(obj)
+        })
+      })
+      this.$set(this,'sss',[...cmdFields])
+      this.tabsView = false
+    },
     handleCurrentChange(val) {
       this.pageIndex = val
       this.cmdChange(this.activeCmd)
@@ -235,19 +277,16 @@ export default {
       this.visible = false
     },
     submit(){
-      let cmdFields = []
-
-      Object.keys(this.choose)
-        .forEach(item => {
-          const obj = {
-            cmdId:Number(item),
-            fieldIds:this.choose[item].map(cur=>cur.id)
-          }
-          cmdFields.push(obj)
+      if(this.tabsView){
+        this.$message({
+          type:"error",
+          message:"请确认字段",
+          duration:500
         })
+        return
+      }
 
-      // console.log(this.form)
-      // console.log(JSON.stringify(this.json) )
+      let cmdFields = this.formatter(this.sss)
 
       const data = {
         ...this.form,
@@ -265,6 +304,21 @@ export default {
             }
           })
         })
+    },
+    formatter(arr){
+      const cmdIds = []
+      arr.forEach(item=>{
+        let sds = cmdIds.find(cur=>cur.cmdId == item.cmdId)
+        if(sds){
+          sds.fieldIds.push(item)
+        }else{
+          cmdIds.push({
+            cmdId:item.cmdId,
+            fieldIds:[item]
+          })
+        }
+      })
+      return cmdIds
     },
     onClose() {
       this.$emit('reload')
