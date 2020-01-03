@@ -203,10 +203,19 @@ export default {
       let cmdFields = []
       Object.keys(this.choose).forEach(item => {
         this.choose[item].forEach(cur=>{
+
           const obj = {
             ...cur,
             cmdId:Number(item),
-            fieldIds:cur.id
+            fieldIds:cur.id,
+            ...cur.name && {
+              fieldName:cur.name
+            },
+            ...cur.code && {
+              fieldCode:cur.code,
+            },
+
+            fieldId:cur.id
           }
           cmdFields.push(obj)
         })
