@@ -42,7 +42,7 @@
       </el-form-item>
 
       <el-form-item label="所选协议">
-        <el-select v-model="form.protocalId"  placeholder="请选择" @change="protocalChange">
+        <el-select :disabled="!tabsView" v-model="form.protocalId"  placeholder="请选择" @change="protocalChange">
           <el-option
             v-for="item in protocalList"
             :key="item.id"
@@ -52,9 +52,8 @@
         </el-select>
       </el-form-item>
 
-      
       <el-form-item label="所选指令">
-        <el-select v-model="cmdIds" multiple placeholder="请选择">
+        <el-select :disabled="!tabsView" v-model="cmdIds" multiple placeholder="请选择">
           <el-option
             v-for="item in cmdList"
             :key="item.id"
@@ -63,7 +62,6 @@
           </el-option>
         </el-select>
       </el-form-item>
-
 
       <el-tabs v-model="activeCmd" v-if="tabsView">
         <el-tab-pane v-for="item in cmdIds" :key="item" :label="(cmdList.find(cur=>cur.id==item)||{}).cmdCode" :name="item.toString()">
@@ -140,14 +138,13 @@
       <el-button @click="cancel">取 消</el-button>
       <el-button @click="submit">确 定</el-button>
     </div>
-
   </el-dialog>
 </template>
 <script>
 import { UpdateInfo,GetById } from '@api/instructions/template'
 import { GetAll } from '@api/protocol/communication'  //获取全部通信协议
 import { GetByProtocalId } from '@api/protocol/cmd' //根据协议id获取指令
-import { GetByCmdId } from '@api/instructions/field' //根据指令id,获取指令字段
+import { GetByCmdId, GetCmdFieldByViewId } from '@api/instructions/field' //根据指令id,获取指令字段
 import JsonEditor from '@/components/jsonEditor'
 export default {
   data(){
@@ -174,7 +171,8 @@ export default {
       pageSize: 10,
       totalCount: 30,
       cmdIds:[],
-      sss:[]
+      sss:[],
+      viewId:undefined
     }
   },
   components:{
@@ -201,27 +199,35 @@ export default {
   methods:{
     fieldsSubmit(){
       let cmdFields = []
-      Object.keys(this.choose).forEach(item => {
-        this.choose[item].forEach(cur=>{
-
-          const obj = {
-            ...cur,
-            cmdId:Number(item),
-            fieldIds:cur.id,
-            ...cur.name && {
-              fieldName:cur.name
-            },
-            ...cur.code && {
-              fieldCode:cur.code,
-            },
-
-            fieldId:cur.id
-          }
-          cmdFields.push(obj)
+      Object.keys(this.choose)
+        .forEach(item => {
+          this.choose[item].forEach(cur=>{
+            const obj = {
+              ...cur,
+              cmdId:Number(item),
+              ...cur.name && {
+                fieldName:cur.name
+              },
+              ...cur.code && {
+                fieldCode:cur.code,
+              },
+              fieldId:cur.id
+            }
+            cmdFields.push(obj)
+          })
         })
-      })
-      this.$set(this,'sss',[...cmdFields])
-      this.tabsView = false
+      GetCmdFieldByViewId(this.viewId)
+        .then(res=>{
+          res.data.items.forEach(item => {
+            let dirtyData = cmdFields.find(cur=>cur.fieldId == item.id)
+            dirtyData = {
+              ...dirtyData,
+              ...item
+            }
+          })
+          this.$set(this, 'sss',[...cmdFields])
+          this.tabsView = false
+        })
     },
     handleCurrentChange(val) {
       this.pageIndex = val
@@ -258,6 +264,7 @@ export default {
       })
     },
     init(id){
+      this.viewId = id
       this.visible = true
       GetById(id)
         .then(res=>{

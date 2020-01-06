@@ -8,7 +8,7 @@
     @close="onClose"
     >
     <el-tabs v-model="activeName" type="card">
-      <el-tab-pane label="选择模板指标" name="first">
+      <el-tab-pane :disabled="step" label="选择模板指标" name="first">
         <el-form ref="form1" :model="form1" label-position="top" :rules="rules1">
 
           <el-form-item label="选择协议" prop="">
