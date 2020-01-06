@@ -149,8 +149,8 @@
 import { selectTable, common } from './mixin'
 import { UpdateInfo,GetById } from '@api/instructions/template'
 import { GetByProtocalId } from '@api/protocol/cmd'
-import { GetAll } from '@api/protocol/communication'  //获取全部通信协议
-import { GetByCmdId, GetCmdFieldByViewId } from '@api/instructions/field' //根据指令id,获取指令字段
+import { GetAll } from '@api/protocol/communication'  //  获取全部通信协议
+import { GetByCmdId, GetCmdFieldByViewId } from '@api/instructions/field' //  根据指令id,获取指令字段
 export default {
   mixins:[selectTable, common],
   data(){
