@@ -8,8 +8,8 @@
     @close="onClose"
     >
     <el-tabs v-model="activeName" type="card">
-      <el-tab-pane label="选择模板指标" name="first">
-        <el-form ref="form1" :model="form1" label-position="top" :rules="rules1">
+      <el-tab-pane :disabled="step" label="选择模板指标" name="first">
+        <el-form label-position="top">
 
           <el-form-item label="选择协议" prop="">
             <el-select v-model="protocal" placeholder="请选择" @change="protocalChange">
@@ -23,7 +23,7 @@
           </el-form-item>
 
           <el-form-item label="选择指令">
-            <el-select v-model="cmd" multiple placeholder="请选择">
+            <el-select v-model="cmdIds" multiple placeholder="请选择">
               <el-option
                 v-for="(item,index) in cmdList"
                 :key="index"
@@ -34,7 +34,7 @@
           </el-form-item>
 
           <el-tabs v-model="activeCmd">
-            <el-tab-pane v-for="item in cmd" :key='item' :label="cmdList.find(cur=>cur.id==item).cmdCode" :name="item.toString()">
+            <el-tab-pane v-for="item in cmdIds" :key='item' :label="cmdList.find(cur=>cur.id==item).cmdCode" :name="item.toString()">
    
               <el-table
                 v-if="activeCmd==item"
@@ -101,7 +101,7 @@
           </el-form-item>
 
           <el-form-item label="所选指标">
-            <el-table :data="ssdff" border>
+            <el-table :data="fieldsList" border>
               <el-table-column align="center" prop="id" label="序号" />
               <el-table-column align="center" prop="name" label="指标名称" />
               <el-table-column align="center" prop="code" label="指标代号" />
@@ -153,29 +153,17 @@
 </template>
 
 <script>
+import { selectTable, common } from './mixin'
 import { create } from '@api/instructions/template'
 import { GetAll } from '@api/protocol/communication'  //获取全部通信协议
-import { GetByProtocalId } from '@api/protocol/cmd' //根据协议id获取指令
-import { GetByCmdId } from '@api/instructions/field' //根据指令id,获取指令字段
-
-import JsonEditor from '@/components/jsonEditor'
-
 export default {
+  mixins:[selectTable, common],
   data() {
     return {
-      ssdff:[],
-      tabsView:true,
-      activeCmd: '',
-      json: {},
-      visible: false,
+      fieldsList:[],
       activeName: 'first',
       step: false,
-      protocalList:[],
-      cmdList:[],
-      codeList:[],
       protocal:"",
-      cmd:[],
-      form1:{},
       form2:{
         viewName:"",
         viewTypeId:'',
@@ -186,99 +174,16 @@ export default {
         unit:undefined,
         sort:undefined
       },
-      rules1:{},
-      chooseArray: [],
-      pageIndex: 1,
-      pageSize: 10,
-      totalCount: 30,
-      chooseData:{},
     };
   },
-  components:{
-    JsonEditor
-  },
-  watch:{
-    cmd:function(val,oldval){
-      if(val.length>oldval.length){
-        var c =  val.filter(function(v){ return oldval.indexOf(v) == -1 })
-        this.chooseData[c] = []
-        if(oldval.length==0){
-          this.activeCmd = c.toString()
-        }
-      }else{
-        var d = oldval.filter(function(v){ return val.indexOf(v) == -1 })
-        delete this.chooseData[d]
-      }
-    },
-    activeCmd:function(val,oldval){
-      this.cmdChange()
-    }
-  },
   methods: {
-    cmdChange(){
-      GetByCmdId({
-        cmdId:this.activeCmd,
-        pageIndex:this.pageIndex,
-        pageSize:this.pageSize
-      })
-        .then(res=>{
-          this.$set(this, 'codeList', res.data.items)
-          this.totalCount = res.data.totalCount
-          this.pageIndex = res.data.pageIndex
-          this.pageSize = res.data.pageSize
-          this.toggleSelection(this.chooseData[this.activeCmd])
-        })
-    },
     next(){
       this.step = true
       this.$nextTick(()=>{
         this.activeName = 'second'
       })
-      const ssdff = Object.keys(this.chooseData).reduce((per,next)=>per.concat(this.chooseData[next]),[])
-      this.$set(this,'ssdff',[...ssdff])
-    },
-    handleCurrentChange(val) {
-      this.pageIndex = val
-      this.cmdChange()
-    },
-    handleChooseAll(selection) {
-      const chooseIds = this.chooseData[this.activeCmd].map(item => item.id)
-      if (selection.length > 0) { // 全选
-        const intersection = selection.filter(v => !chooseIds.includes(v.id))
-        this.chooseData[this.activeCmd] = this.chooseData[this.activeCmd].concat(intersection)
-      } else { // 全取消
-        this.chooseData[this.activeCmd] = this.chooseData[this.activeCmd].filter(v => !this.codeList.map(item => item.id).includes(v.id))
-      }
-    },
-    handleChoose(selection, row) {
-      // 判断是新增选中还是取消选中
-      const flag = selection.some((item) => item.id === row.id)
-      if (flag) {
-        const ishas = this.chooseData[this.activeCmd].some(item => item.id === row.id)
-        if (!ishas) {
-          this.chooseData[this.activeCmd].push(row)
-        }
-      } else {
-        const index = this.chooseData[this.activeCmd].findIndex((item) => item.id === row.id)
-        this.chooseData[this.activeCmd].splice(index, 1)
-      }
-    },
-    toggleSelection(rows) {
-      const intersection = this.codeList.filter(v => rows.map(item => item.id).includes(v.id))
-      intersection.forEach(row => {
-        this.$nextTick(() => {
-          this.$refs['multipleTable' + this.activeCmd][0].toggleRowSelection(row, true)
-        })
-      })
-    },
-    protocalChange(e){
-      GetByProtocalId(e)
-        .then(res=>{
-          this.$set(this,'cmdList',res.data)
-          this.codeList = []
-          this.cmd = ''
-          this.chooseArray = []
-        })
+      const fieldsList = Object.keys(this.chooseData).reduce((per,next)=>per.concat(this.chooseData[next]),[])
+      this.$set(this,'fieldsList',[...fieldsList])
     },
     init() {
       this.visible = true
@@ -287,21 +192,13 @@ export default {
             this.$set(this,'protocalList',res.data)
           })
     },
-    onClose() {
-      this.$emit('reload')
-    },
-    cancel() {
-      this.visible = false
-    },
     submit(){
-      const cmdFields = this.formatter(this.ssdff)
-
+      const cmdFields = this.formatter(this.fieldsList)
       const formdata = {
         ...this.form2,
         jsonData: JSON.parse(this.json),
         cmdFields
       }
-
       create(formdata)
         .then(res=>{
           this.$message({
@@ -313,21 +210,6 @@ export default {
             }
           })
         })
-    },
-    formatter(arr){
-      const cmdIds = []
-      arr.forEach(item=>{
-        let sds = cmdIds.find(cur=>cur.cmdId == item.cmdId)
-        if(sds){
-          sds.fieldIds.push({...item,fieldId:item.id})
-        }else{
-          cmdIds.push({
-            cmdId:item.cmdId,
-            fieldIds:[item]
-          })
-        }
-      })
-      return cmdIds
     },
   }
 }

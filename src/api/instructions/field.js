@@ -5,7 +5,8 @@ const api = {
   create: '/api/terminal/CmdField/create',
   UpdateInfo: '/api/terminal/CmdField/UpdateInfo',
   Delete: '/api/terminal/CmdField/delete',
-  GetByCmdId: '/api/terminal/CmdField/GetByCmdId'
+  GetByCmdId: '/api/terminal/CmdField/GetByCmdId',
+  GetCmdFieldByViewId: '/api/terminal/CmdField/GetCmdFieldByViewId'
 }
 
 // 根据关键字模糊查询
@@ -62,5 +63,19 @@ export function GetByCmdId(obj) {
       'Content-Type': 'application/json'
     },
     params: obj
+  })
+}
+
+// 根据视图Id获取指令上限下限
+export function GetCmdFieldByViewId(viewId) {
+  return request({
+    url: api.GetCmdFieldByViewId,
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    params: {
+      viewId
+    }
   })
 }
