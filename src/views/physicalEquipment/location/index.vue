@@ -8,10 +8,6 @@
       <el-table :data="tableData" class="table" border>
 
         <el-table-column align="center" prop="id" label="自增加主键ID"/>
-        <el-table-column align="center" prop="deviceid" label="物理设备Id"/>
-        <el-table-column align="center" prop="name" label="指标代码"/>
-        <el-table-column align="center" prop="code" label="设备指标代码"/>
-        <el-table-column align="center" prop="description" label="部件描述"/>
 
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
@@ -50,7 +46,7 @@
 </template>
 <script>
 import Search from '@/components/Search'
-import { GetByDeviceId, GetList, del } from '@api/physicalEquipment/IndicatorManage'
+import { GetByDeviceId, GetList, del } from '@api/physicalEquipment/location'
 import { pagging, keyword, buttonPermissions } from '@/mixin'
 import Detail from './details'
 // IndicatorManage  physicalEquipment

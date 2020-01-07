@@ -117,15 +117,22 @@ export default {
       const s = f.reduce((pre,next)=>{
         return pre.concat(this.choose[next])
       },[])
+      // console.log(item)
+      s.map(item => {
+        console.log(item)
+      })
       const sdd = s.map(item=>({
-        cmdId:item.cmdId,
-        fieldId:item.id,
+        // id: item.id,
+        deviceId: 5,
+        cmdFieldId: item.id,
+        name: item.name,
+        code: item.code,
+        description: item.fieldDescription,
       }))
       if(this.mode=='insert'){
         create({
-          protocalId:this.protocal,
-          name:this.name,
-          items:sdd
+          deviceId: 5,
+          items: sdd
         })
           .then(res=>{
             this.$message({
