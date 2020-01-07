@@ -199,6 +199,22 @@ export const asyncRouterMap = [
         meta: { title: '运营系统-日志记录', icon: 'rizhijilu', code: '9200' }
       }
     ]
+  },
+  {
+    path: '/physicalEquipment',
+    alwaysShow: true,
+    redirect: '/physicalEquipment',
+    component: Layout,
+    name: 'physicalEquipment',
+    meta: { title: '物理设备', icon: 'physicalEquipment', code: '9200' },
+    children: [
+      {
+        path: 'IndicatorManage',
+        component: () => import('@/views/physicalEquipment/IndicatorManage'),
+        name: 'IndicatorManage',
+        meta: { title: '物理设备-指标管理', icon: 'IndicatorManage', code: '9200' }
+      }
+    ]
   }
 ]
 
