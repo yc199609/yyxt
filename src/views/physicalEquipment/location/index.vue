@@ -7,7 +7,11 @@
     <el-card>
       <el-table :data="tableData" class="table" border>
 
-        <el-table-column align="center" prop="id" label="自增加主键ID"/>
+        <el-table-column align="center" prop="id" label="部位Id"/>
+        <el-table-column align="center" prop="name" label="部位名称"/>
+        <el-table-column align="center" prop="code" label="部位代号"/>
+        <el-table-column align="center" prop="description" label="部位描述"/>
+        <el-table-column align="center" prop="deviceTypeId" label="设备类型Id"/>
 
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
@@ -30,7 +34,7 @@
       </el-table>
     </el-card>
 
-    <div class="paginationContainer">
+    <!-- <div class="paginationContainer">
       <el-pagination
         :current-page="pageIndex"
         :page-sizes="[5 ,20, 30, 40, 50]"
@@ -39,19 +43,19 @@
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"/>
-    </div>
+    </div> -->
 
     <Detail v-if="detailShow" ref="detail" @reload="editHidden" />
   </div>
 </template>
 <script>
 import Search from '@/components/Search'
-import { GetByDeviceId, GetList, del } from '@api/physicalEquipment/location'
+import { GetDeviceLocationByDeviceTypeId } from '@api/physicalEquipment/location'
 import { pagging, keyword, buttonPermissions } from '@/mixin'
 import Detail from './details'
-// IndicatorManage  physicalEquipment
+
 export default {
-  name: 'Employees',
+  name: 'Location',
   components: {
     Search,
     Detail
@@ -72,20 +76,9 @@ export default {
   },
   methods: {
     init() {
-      GetByDeviceId({ id: 5 }).then(res => {
-        this.$set(this, 'tableData', res.data.items)
+      GetDeviceLocationByDeviceTypeId({ deviceTypeId: 5 }).then(res => {
+        this.$set(this, 'tableData', res.data)
       })
-      // GetList({
-      //   keyword: this.keyword,
-      //   pageIndex: this.pageIndex,
-      //   pageSize: this.pageSize
-      // }).then(res => {
-      //   this.$set(this, 'tableData', res.data.items)
-      //   this.pageIndex = res.data.pageIndex;
-      //   this.pageSize = res.data.pageSize;
-      //   this.totalCount = res.data.totalCount;
-      // })
-
     },
     changeKeyword(val){
       this.keyword = val
