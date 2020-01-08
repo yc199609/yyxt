@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { UpdateInfo, create } from '@api/physicalEquipment/location'
+import { create } from '@api/physicalEquipment/location' // UpdateInfo,
 
 export default {
   data() {
@@ -60,13 +60,13 @@ export default {
     },
     submit() {
       if (this.title == '修改') {
-        UpdateInfo(this.ruleForm).then(res => {
-          this.$message({
-            type: 'success',
-            message: '修改成功',
-            duration: 500,
-          })
-        })
+        // UpdateInfo(this.ruleForm).then(res => {
+        //   this.$message({
+        //     type: 'success',
+        //     message: '修改成功',
+        //     duration: 500,
+        //   })
+        // })
       } else if (this.title == '新增') {
         create(this.ruleForm).then(res => {
           this.$message({
