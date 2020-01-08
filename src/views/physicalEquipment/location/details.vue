@@ -18,21 +18,9 @@
         <el-input v-model="ruleForm.description"></el-input>
       </el-form-item>
 
-      <!-- deviceTypeId	 -->
       <el-form-item label="设备类型Id">
         <el-input-number v-model="ruleForm.deviceTypeId"></el-input-number>
       </el-form-item>
-      <!-- <el-form-item label="设备类型Id">
-        <el-select v-model="cmds"  multiple placeholder="请选择">
-          <el-option
-            v-for="item in cmdList"
-            :key="item.id"
-            :label="item.cmdCode"
-            :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item> -->
-      
     </el-form>
     
     <span slot="footer" class="dialog-footer">
