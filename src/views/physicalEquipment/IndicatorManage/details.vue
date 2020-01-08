@@ -72,7 +72,7 @@
 import { GetByCmdId } from '@api/instructions/field' //根据指令id,获取指令字段
 import { GetAll } from '@/api/protocol/communication' //获取全部通信协议
 import { GetByProtocalId } from '@api/protocol/cmd' //根据协议id获取指令
-import { create, GetById, UpdateInfo } from '@api/physicalEquipment/IndicatorManage'
+import { create, UpdateInfo, GetById } from '@api/physicalEquipment/IndicatorManage'
 
 export default {
   name:"Detail",
@@ -101,6 +101,7 @@ export default {
     cmds:function(val,oldval) {
       if(val.length>oldval.length){
         var c = val.filter(function(v){ return oldval.indexOf(v) == -1 })
+        console.log(c , 'c ', val)
         this.choose[c] = []
         if(oldval.length==0){
           this.activeCmd = c.toString()
@@ -116,11 +117,13 @@ export default {
       const f = Object.keys(this.choose)
       const s = f.reduce((pre,next)=>{
         return pre.concat(this.choose[next])
-      },[])
-      // console.log(item)
-      s.map(item => {
-        console.log(item)
-      })
+      },[]);
+      const a = this.$parent.tableData
+      a.forEach(item => {
+        s.push(item)
+      });
+console.log(s, 's')
+return;
       const sdd = s.map(item=>({
         // id: item.id,
         deviceId: 5,
@@ -224,6 +227,7 @@ export default {
         this.mode = 'edit'
         GetById(id)
           .then(res=>{
+            console.log(res)
             this.name = res.data.name
             res.data.items.forEach(item=>{
               if(!this.cmds.includes(item.cmdId)){

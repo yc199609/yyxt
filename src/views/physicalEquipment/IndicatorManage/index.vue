@@ -8,7 +8,6 @@
       <el-table :data="tableData" class="table" border>
 
         <el-table-column align="center" prop="id" label="自增加主键ID"/>
-        <el-table-column align="center" prop="deviceid" label="物理设备Id"/>
         <el-table-column align="center" prop="name" label="指标代码"/>
         <el-table-column align="center" prop="code" label="设备指标代码"/>
         <el-table-column align="center" prop="description" label="部件描述"/>
@@ -50,7 +49,7 @@
 </template>
 <script>
 import Search from '@/components/Search'
-import { GetByDeviceId, GetList, del } from '@api/physicalEquipment/IndicatorManage'
+import { GetList, del } from '@api/physicalEquipment/IndicatorManage'
 import { pagging, keyword, buttonPermissions } from '@/mixin'
 import Detail from './details'
 // IndicatorManage  physicalEquipment
@@ -66,9 +65,9 @@ export default {
       tableData: [],
       detailShow: false,
       keyword: "",
-      // pageIndex: 1,
-      // pageSize: 20,
-      // totalCount: 30
+      pageIndex: 1,
+      pageSize: 20,
+      totalCount: 30
     }
   },
   mounted() {
@@ -76,19 +75,17 @@ export default {
   },
   methods: {
     init() {
-      GetByDeviceId({ id: 5 }).then(res => {
+      GetList({
+        pdeviceId: 5,
+        keyword: this.keyword,
+        pageIndex: this.pageIndex,
+        pageSize: this.pageSize
+      }).then(res => {
         this.$set(this, 'tableData', res.data.items)
+        this.pageIndex = res.data.pageIndex;
+        this.pageSize = res.data.pageSize;
+        this.totalCount = res.data.totalCount;
       })
-      // GetList({
-      //   keyword: this.keyword,
-      //   pageIndex: this.pageIndex,
-      //   pageSize: this.pageSize
-      // }).then(res => {
-      //   this.$set(this, 'tableData', res.data.items)
-      //   this.pageIndex = res.data.pageIndex;
-      //   this.pageSize = res.data.pageSize;
-      //   this.totalCount = res.data.totalCount;
-      // })
 
     },
     changeKeyword(val){
@@ -116,7 +113,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        del({ id: id }).then(res => {
+        del(id).then(res => {
           this.$message({
             type: 'success',
             message: '删除成功',

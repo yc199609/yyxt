@@ -92,6 +92,7 @@ export const common = {
     formatter(arr) {
       const _cmdIds = []
       arr.forEach(item => {
+        // eslint-disable-next-line eqeqeq
         const sds = _cmdIds.find(cur => cur.cmdId == item.cmdId)
         if (sds) {
           sds.fieldIds.push({ ...item, fieldId: item.id })
