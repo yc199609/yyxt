@@ -9,7 +9,7 @@
   >
     <el-form>
       <el-form-item label="终端code">
-        <el-input :disabled="mode==='unbund'" v-model="form.code"></el-input>
+        <el-input :disabled="mode==='unbund'" v-model="form.terminalCode"></el-input>
       </el-form-item>
       <el-form-item v-if="mode==='unbund'" label="绑定时间">
         <el-input :disabled="mode==='unbund'" v-model="form.bindTime"></el-input>
@@ -35,7 +35,7 @@ export default {
     mode: undefined,
     visible:false,
     form:{
-      code: undefined,
+      terminalCode: undefined,
       remark: undefined,
       bindTime: undefined
     },
