@@ -213,6 +213,18 @@ export const asyncRouterMap = [
         component: () => import('@/views/physicalEquipment/IndicatorManage'),
         name: 'IndicatorManage',
         meta: { title: '物理设备-指标管理', icon: 'IndicatorManage', code: '9200' }
+      },
+      {
+        path: 'physicalEquipmentManager',
+        component: () => import('@/views/physicalEquipment/physicalEquipmentManager'),
+        name: 'physicalEquipmentManager',
+        meta: { title: '物理设备管理', icon: 'IndicatorManage', code: '9200' }
+      },
+      {
+        path: 'physicalEquipmentType',
+        component: () => import('@/views/physicalEquipment/physicalEquipmentType'),
+        name: 'physicalEquipmentManager',
+        meta: { title: '物理设备类型', icon: 'IndicatorManage', code: '9200' }
       }
     ]
   }
