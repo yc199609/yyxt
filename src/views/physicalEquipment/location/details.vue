@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { UpdateInfo, create } from '@api/physicalEquipment/location'
+import { create } from '@api/physicalEquipment/location'
 
 export default {
   data() {
