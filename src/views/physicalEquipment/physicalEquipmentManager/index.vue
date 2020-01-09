@@ -5,17 +5,17 @@
     </Search>
     <el-card>
       <el-table border :data="tableData">
-        <el-table-column label="设备编码" prop="code" />
-        <el-table-column label="设备名称" prop="name" />
-        <el-table-column label="设备类型名称" prop="typeName" />
-        <el-table-column label="操作">
+        <el-table-column label="设备编码" prop="code" align="center" width="300" />
+        <el-table-column label="设备名称" prop="name" width="150" align="center" />
+        <el-table-column label="设备类型名称" prop="typeName" width="150" align="center" />
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <div>
-              <el-button @click="handleBaseInfo(scope.row.id)">基础信息</el-button>
-              <el-button @click="handleBindCompany(scope.row)">绑定机构</el-button>
-              <el-button @click="handlePParts(scope.row)">设备部位</el-button>
-              <el-button @click="handleIManage(scope.row.id)">指标管理</el-button>
-              <el-button @click="handleDetele(scope.row.id)">删除</el-button>
+              <el-button type="text" icon="el-icon-info" @click="handleBaseInfo(scope.row.id)">基础信息</el-button>
+              <el-button type="text" icon="el-icon-circle-plus" @click="handleBindCompany(scope.row)">绑定机构</el-button>
+              <el-button type="text" icon="el-icon-s-grid" @click="handlePParts(scope.row)">设备部位</el-button>
+              <el-button type="text" icon="el-icon-s-custom" @click="handleIManage(scope.row.id)">指标管理</el-button>
+              <el-button type="text" icon="el-icon-delete" @click="handleDetele(scope.row.id)">删除</el-button>
             </div>
           </template>
         </el-table-column>
