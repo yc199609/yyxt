@@ -13,7 +13,7 @@
         <el-table-column align="center" prop="description" label="部位描述"/>
         <el-table-column align="center" prop="deviceTypeId" label="设备类型Id"/>
 
-        <el-table-column align="center" label="操作">
+        <!-- <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-row>
               <el-col :offset="3" :span="8" class="ycbutton">
@@ -30,7 +30,8 @@
 
             </el-row>
           </template>
-        </el-table-column>
+        </el-table-column> -->
+        
       </el-table>
     </el-card>
 

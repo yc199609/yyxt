@@ -162,7 +162,8 @@ export const asyncRouterMap = [
         path: 'field',
         component: () => import('@/views/instructions/field'),
         name: 'field',
-        meta: { title: '指标字段', icon: 'instructions-field', code: '9200' }
+        meta: { title: '指标字段', icon: 'instructions-field', code: '9200' },
+        hidden: true // 注释指标字段
       },
       {
         path: 'templateModify',
@@ -212,7 +213,8 @@ export const asyncRouterMap = [
         path: 'IndicatorManage',
         component: () => import('@/views/physicalEquipment/IndicatorManage'),
         name: 'IndicatorManage',
-        meta: { title: '物理设备-指标管理', icon: 'IndicatorManage', code: '9200' }
+        meta: { title: '物理设备-指标管理', icon: 'IndicatorManage', code: '9200' },
+        hidden: true // 物理设备-指标管理 不显示
       },
       {
         path: 'physicalEquipmentManager',

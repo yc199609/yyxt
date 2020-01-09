@@ -1,5 +1,6 @@
 <template>
-  <div class="container">
+  <div v-if="!this.$route.query.id">this.$route.query.id</div>
+  <div class="container" v-else>
     <Search :show-btn="true" @search="init" @changeKeyword="changeKeyword">
       <el-button type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
     </Search>
@@ -75,8 +76,9 @@ export default {
   },
   methods: {
     init() {
+      // 从 物理设备管理 跳转到 物理设备-指标管理
       GetList({
-        pdeviceId: 5,
+        pdeviceId: this.$route.query.id,
         keyword: this.keyword,
         pageIndex: this.pageIndex,
         pageSize: this.pageSize

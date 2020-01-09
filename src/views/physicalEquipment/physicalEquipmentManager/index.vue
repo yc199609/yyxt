@@ -5,16 +5,17 @@
     </Search>
     <el-card>
       <el-table border :data="tableData">
-        <el-table-column label="设备编码" prop="code" />
-        <el-table-column label="设备名称" prop="name" />
-        <el-table-column label="设备类型名称" prop="typeName" />
-        <el-table-column label="操作">
+        <el-table-column label="设备编码" prop="code" align="center" />
+        <el-table-column label="设备名称" prop="name" align="center" />
+        <el-table-column label="设备类型名称" prop="typeName" align="center" />
+        <el-table-column label="操作" align="center" width="550">
           <template slot-scope="scope">
             <div>
-              <el-button @click="handleBaseInfo(scope.row.id)">基础信息</el-button>
-              <el-button @click="handleBindCompany(scope.row)">绑定机构</el-button>
-              <el-button @click="handlePParts(scope.row)">设备部位</el-button>
-              <el-button @click="handleDetele(scope.row.id)">删除</el-button>
+              <el-button type="text" icon="el-icon-info" @click="handleBaseInfo(scope.row.id)">基础信息</el-button>
+              <el-button type="text" icon="el-icon-circle-plus" @click="handleBindCompany(scope.row)">绑定机构</el-button>
+              <el-button type="text" icon="el-icon-s-grid" @click="handlePParts(scope.row)">设备部位</el-button>
+              <el-button type="text" icon="el-icon-s-custom" @click="handleIManage(scope.row.id)">指标管理</el-button>
+              <el-button type="text" icon="el-icon-delete" @click="handleDetele(scope.row.id)">删除</el-button>
             </div>
           </template>
         </el-table-column>
@@ -108,6 +109,13 @@ export default {
       this.$nextTick(()=>{
         this.$refs.devicePart.init(obj)
       })
+    },
+    handleIManage(id) {
+      // 物理设备管理跳转至 物理设备-指标管理
+       this.$router.push({
+          path:  '/physicalEquipment/IndicatorManage',
+          query: {id: id}
+        })
     },
     handleDetele(deviceId){
       this.$confirm('此操作将删除设备,是否继续?', '提示',{

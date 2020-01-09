@@ -18,21 +18,9 @@
         <el-input v-model="ruleForm.description"></el-input>
       </el-form-item>
 
-      <!-- deviceTypeId	 -->
       <el-form-item label="设备类型Id">
         <el-input-number v-model="ruleForm.deviceTypeId"></el-input-number>
       </el-form-item>
-      <!-- <el-form-item label="设备类型Id">
-        <el-select v-model="cmds"  multiple placeholder="请选择">
-          <el-option
-            v-for="item in cmdList"
-            :key="item.id"
-            :label="item.cmdCode"
-            :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item> -->
-      
     </el-form>
     
     <span slot="footer" class="dialog-footer">
@@ -43,7 +31,7 @@
 </template>
 
 <script>
-import { create } from '@api/physicalEquipment/location'
+import { create } from '@api/physicalEquipment/location' // UpdateInfo,
 
 export default {
   data() {
@@ -72,13 +60,13 @@ export default {
     },
     submit() {
       if (this.title == '修改') {
-        UpdateInfo(this.ruleForm).then(res => {
-          this.$message({
-            type: 'success',
-            message: '修改成功',
-            duration: 500,
-          })
-        })
+        // UpdateInfo(this.ruleForm).then(res => {
+        //   this.$message({
+        //     type: 'success',
+        //     message: '修改成功',
+        //     duration: 500,
+        //   })
+        // })
       } else if (this.title == '新增') {
         create(this.ruleForm).then(res => {
           this.$message({
