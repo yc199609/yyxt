@@ -77,7 +77,7 @@ export default {
         deviceId: this.deviceId,
         deviceLocationId: this.deviceLocationId
       }).then(res=>{
-        if(res.data){
+        if(res.data&&res.data.terminalCode){
           this.mode = 'unbund'
           this.$set(this,'form',res.data)
         }else{
