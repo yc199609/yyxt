@@ -2,7 +2,7 @@ export const pagging = {
   data() {
     return {
       pageIndex: 1,
-      pageSize: 20,
+      pageSize: 10,
       totalCount: 50
     }
   },

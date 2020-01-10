@@ -1,18 +1,16 @@
 <template>
   <div class="container">
-    <Search :show-btn="true" @search="init" @changeKeyword="changeKeyword">
-      <el-button type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
-    </Search>
-
+    <el-button type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
     <el-card>
       <el-table :data="tableData" class="table" border>
-        <el-table-column align="center" prop="id" label="终端Id"/>
-        <el-table-column align="center" prop="code" label="终端Code"/>
-        <el-table-column align="center" prop="typeName" label="类型名称"/>
+        <el-table-column align="center" prop="id" label="终端类型Id"/>
+        <el-table-column align="center" prop="name" label="终端类型名称"/>
+        <el-table-column align="center" prop="code" label="类型代码（型号）"/>
+        <el-table-column align="center" prop="description" label="类型描述说明"/>
         <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <div>
-              <el-button @click="handleEdit(scope.row)">修改</el-button>
+              <el-button @click="handleEdit(scope.row.id)">修改</el-button>
               <el-button @click="handleDelete(scope.row.id)">删除</el-button>
             </div>
           </template>
@@ -20,33 +18,21 @@
       </el-table>
     </el-card>
 
-    <div class="paginationContainer">
-      <el-pagination
-        :current-page="pageIndex"
-        :page-sizes="[10 ,20, 30, 40, 50]"
-        :page-size="pageSize"
-        :total="totalCount"
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"/>
-    </div>
-
     <Detail v-if="detailShow" ref="detail" @reload="reload" />
   </div>
 </template>
 <script>
 import Search from '@/components/Search'
-import { getListTerminal, deleteTerminal } from '@api/physicalEquipment/terminal'
-import { pagging, keyword, buttonPermissions } from '@/mixin'
+import { getAllTerminalType, deleteTerminalType } from '@api/physicalEquipment/terminalType'
+import { buttonPermissions } from '@/mixin'
 import Detail from './details'
 
 export default {
-  name: 'Location',
   components: {
     Search,
     Detail
   },
-  mixins: [pagging, keyword,buttonPermissions],
+  mixins: [buttonPermissions],
   data() {
     return {
       tableData: [],
@@ -58,17 +44,9 @@ export default {
   },
   methods: {
     init() {
-      getListTerminal({
-        ...this.keyword && {
-          keyword: this.keyword,
-        },
-        pageIndex: this.pageIndex,
-        pageSize: this.pageSize
+      getAllTerminalType({
       }).then(res => {
-        this.$set(this, 'tableData', res.data.items)
-        this.pageIndex = res.data.pageIndex;
-        this.pageSize = res.data.pageSize;
-        this.totalCount = res.data.totalCount;
+        this.$set(this, 'tableData', res.data)
       })
     },
     insert() {
@@ -77,10 +55,10 @@ export default {
         this.$refs.detail.init()
       })
     },
-    handleEdit(row) {
+    handleEdit(id) {
       this.detailShow = true
       this.$nextTick(() => {
-        this.$refs.detail.init(row)
+        this.$refs.detail.init(id)
       })
     },
     reload() {
@@ -88,12 +66,12 @@ export default {
       this.init()
     },
     handleDelete(id) {
-      this.$confirm('此操作将删除该终端, 是否继续?', '提示', {
+      this.$confirm('此操作将删除该终端类型, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteTerminal(id).then(res => {
+        deleteTerminalType(id).then(res => {
           this.$message({
             type: 'success',
             message: '删除成功',
