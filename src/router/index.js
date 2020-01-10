@@ -232,7 +232,13 @@ export const asyncRouterMap = [
         path: 'location',
         component: () => import('@/views/physicalEquipment/location'),
         name: 'location',
-        meta: { title: '物理设备-部位管理', icon: 'location', code: '9200' }
+        meta: { title: '终端管理', icon: 'location', code: '9200' }
+      },
+      {
+        path: 'terminalType',
+        component: () => import('@/views/physicalEquipment/terminalType'),
+        name: 'terminalType',
+        meta: { title: '终端类型管理', icon: 'location', code: '9200' }
       }
     ]
   }

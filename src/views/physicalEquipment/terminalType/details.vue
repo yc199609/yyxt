@@ -8,23 +8,17 @@
     @close="onClose">
 
     <el-form label-position="right" label-width="110px">
-      <el-form-item v-if="mode==='edit'" label="终端id">
-        <el-input disabled v-model="form.id" />
+
+      <el-form-item label="采集设备类型名称">
+        <el-input v-model="form.name" />
       </el-form-item>
 
-      <el-form-item label="终端代码">
+      <el-form-item label="类型代码(型号)">
         <el-input v-model="form.code" />
       </el-form-item>
       
-      <el-form-item label="终端类型">
-        <el-select v-model="form.terminalTypeId" placeholder="请选择">
-          <el-option
-            v-for="(item,index) in typeList"
-            :key="index"
-            :label="item.name"
-            :value="item.id"
-            />
-        </el-select>
+      <el-form-item label="类型描述说明">
+        <el-input v-model="form.description" />
       </el-form-item>
 
     </el-form>
@@ -37,8 +31,7 @@
 </template>
 
 <script>
-import { updateTerminal, createTerminal } from '@api/physicalEquipment/terminal'
-import { getAllTerminalType } from '@api/physicalEquipment/terminalType'
+import { updateTerminalType, createTerminalType, getByIdTerminalType } from '@api/physicalEquipment/terminalType'
 export default {
   data() {
     return {
@@ -51,8 +44,8 @@ export default {
         'edit': '修改'
       },
       modeFn:{
-        'insert': createTerminal,
-        'edit': updateTerminal
+        'insert': createTerminalType,
+        'edit': updateTerminalType
       }
     };
   },
@@ -62,15 +55,14 @@ export default {
     }
   },
   methods: {
-    init(row) {
-      getAllTerminalType()
-        .then(res=>{
-          this.$set(this,'typeList',res.data)
-        })
+    init(id) {
       this.visible = true
-      if(row){
+      if(id){
         this.mode = 'edit'
-        this.$set(this,'form',row)
+        getByIdTerminalType(id)
+        .then(res=>{
+          this.$set(this,'form',res.data)
+        })
       }else{
         this.mode = 'insert'
       }

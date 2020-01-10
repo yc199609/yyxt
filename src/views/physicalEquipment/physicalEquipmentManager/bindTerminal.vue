@@ -23,7 +23,7 @@
         取消
       </el-button>
       <el-button @click="handleSubmit">
-        确定
+        {{mode==='unbund'?'解绑':'确定'}}
       </el-button>
     </div>
   </el-dialog>
@@ -77,13 +77,12 @@ export default {
         deviceId: this.deviceId,
         deviceLocationId: this.deviceLocationId
       }).then(res=>{
-        if(res.data&&res.data.length>0){
+        if(res.data){
           this.mode = 'unbund'
-          this.$set(this,'form',res.data[0])
+          this.$set(this,'form',res.data)
         }else{
           this.mode = 'bind'
         }
-        console.log(this.mode)
       })
     },
     onClose(){
