@@ -8,7 +8,7 @@
         <el-table-column label="设备编码" prop="code" align="center" />
         <el-table-column label="设备名称" prop="name" align="center" />
         <el-table-column label="设备类型名称" prop="typeName" align="center" />
-        <el-table-column label="操作" align="center" width="550">
+        <el-table-column label="操作" align="center" width="440">
           <template slot-scope="scope">
             <div>
               <el-button type="text" icon="el-icon-info" @click="handleBaseInfo(scope.row.id)">基础信息</el-button>
