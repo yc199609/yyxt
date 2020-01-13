@@ -117,7 +117,7 @@ export default {
           message: "修改成功",
           duration: 500,
           onClose:()=>{
-            this.init()
+            this.init(this.typeId)
           }
         })
       })
