@@ -249,7 +249,7 @@ export default {
         .then(res=>{
           this.$message({
             type: "success",
-            message: "新增成功",
+            message: "修改成功",
             duration: 500,
             onClose:()=>{
               this.cancel()

@@ -92,6 +92,12 @@ export const common = {
     formatter(arr) {
       const _cmdIds = []
       arr.forEach(item => {
+        if (!item.maxNumber) {
+          delete item.maxNumber
+        }
+        if (!item.minNumber) {
+          delete item.minNumber
+        }
         // eslint-disable-next-line eqeqeq
         const sds = _cmdIds.find(cur => cur.cmdId == item.cmdId)
         if (sds) {
