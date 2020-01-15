@@ -241,6 +241,22 @@ export const asyncRouterMap = [
         meta: { title: '终端类型管理', icon: 'location', code: '9200' }
       }
     ]
+  },
+  {
+    path: '/Stethophone',
+    alwaysShow: true,
+    redirect: '/Stethophone',
+    component: Layout,
+    name: 'Stethophone',
+    meta: { title: '听诊器管理', icon: 'location', code: '9200' },
+    children: [
+      {
+        path: 'IndicatorManage',
+        component: () => import('@/views/Stethophone/Oprate'),
+        name: 'Oprate',
+        meta: { title: '听诊器', icon: 'location', code: '9200' }
+      }
+    ]
   }
 ]
 
