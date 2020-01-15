@@ -9,13 +9,13 @@
   >
     <el-form>
       <el-form-item label="部位名称">
-        <el-input v-model="form.name" />
+        <el-input v-model.trim="form.name" />
       </el-form-item>
       <el-form-item label="部位代号">
-        <el-input v-model="form.code" />
+        <el-input v-model.trim="form.code" />
       </el-form-item>
       <el-form-item label="部位描述">
-        <el-input v-model="form.description" />
+        <el-input v-model.trim="form.description" />
       </el-form-item>
     </el-form>
     <div slot="footer">

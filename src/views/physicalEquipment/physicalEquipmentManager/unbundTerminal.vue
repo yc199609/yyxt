@@ -9,10 +9,10 @@
   >
     <el-form>
       <el-form-item label="终端code">
-        <el-input disabled v-model="form.code"></el-input>
+        <el-input disabled v-model.trim="form.code"></el-input>
       </el-form-item>
       <el-form-item label="备注">
-        <el-input disabled v-model="form.remark"></el-input>
+        <el-input disabled v-model.trim="form.remark"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer">

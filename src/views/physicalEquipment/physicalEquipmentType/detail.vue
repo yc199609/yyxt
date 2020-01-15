@@ -9,13 +9,13 @@
   >
     <el-form>
       <el-form-item label="设备类型名称">
-        <el-input v-model="form.name" />
+        <el-input v-model.trim="form.name" />
       </el-form-item>
       <el-form-item label="设备类型编码">
-        <el-input v-model="form.code" />
+        <el-input v-model.trim="form.code" />
       </el-form-item>
       <el-form-item label="设备类型描述">
-        <el-input v-model="form.description" />
+        <el-input v-model.trim="form.description" />
       </el-form-item>
     </el-form>
     <div slot="footer">

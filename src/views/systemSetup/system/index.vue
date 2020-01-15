@@ -98,7 +98,7 @@
         >
           <el-input
             :maxlength="100"
-            v-model="editForm.value"
+            v-model.trim="editForm.value"
           ></el-input>
         </el-form-item>
       </el-form>
@@ -129,25 +129,25 @@
           label="参数名称"
           prop="name"
         >
-          <el-input v-model="form.name"></el-input>
+          <el-input v-model.trim="form.name"></el-input>
         </el-form-item>
         <el-form-item
           label="参数代码"
           prop="code"
         >
-          <el-input v-model="form.code"></el-input>
+          <el-input v-model.trim="form.code"></el-input>
         </el-form-item>
         <el-form-item
           label="参数值"
           prop="value"
         >
-          <el-input v-model="form.value"></el-input>
+          <el-input v-model.trim="form.value"></el-input>
         </el-form-item>
         <el-form-item
           label="备注"
           prop="description"
         >
-          <el-input v-model="form.description"></el-input>
+          <el-input v-model.trim="form.description"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="addDialog=false">取消</el-button>
