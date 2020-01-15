@@ -16,7 +16,7 @@
           <div v-if="!scope.row.onEditing">
             {{ scope.row.name }}
           </div>
-          <el-input v-else v-model="scope.row.name" />
+          <el-input v-else v-model.trim="scope.row.name" />
         </template>
       </el-table-column>
 
@@ -25,7 +25,7 @@
           <div v-if="!scope.row.onEditing">
             {{ scope.row.code }}
           </div>
-          <el-input v-else v-model="scope.row.code" />
+          <el-input v-else v-model.trim="scope.row.code" />
         </template>
       </el-table-column>
 
@@ -34,7 +34,7 @@
           <div v-if="!scope.row.onEditing">
             {{ scope.row.description }}
           </div>
-          <el-input v-else v-model="scope.row.description" />
+          <el-input v-else v-model.trim="scope.row.description" />
         </template>
       </el-table-column>
 

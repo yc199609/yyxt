@@ -3,30 +3,30 @@
     <el-form :model="form" :rules="rules" ref="form">
 
       <el-form-item label="数据库id" label-width="120px" prop="id">
-        <el-input v-model="form.id" :disabled='true' :maxlength="50"></el-input>
+        <el-input v-model.trim="form.id" :disabled='true' :maxlength="50"></el-input>
       </el-form-item>
 
       <el-form-item label="服务器IP" label-width="120px" prop="ip">
-        <el-input v-model="form.ip" :maxlength="50"></el-input>
+        <el-input v-model.trim="form.ip" :maxlength="50"></el-input>
       </el-form-item>
 
       <el-form-item label="服务器端口" label-width="120px" prop="port">
-        <el-input v-model="form.port" :maxlength="50"></el-input>
+        <el-input v-model.trim="form.port" :maxlength="50"></el-input>
       </el-form-item>
 
       <el-form-item label="数据库用户名" label-width="120px" prop="userName">
-        <el-input v-model="form.userName" :maxlength="50"></el-input>
+        <el-input v-model.trim="form.userName" :maxlength="50"></el-input>
       </el-form-item>
 
       <el-form-item label="数据库密码" label-width="120px" prop="password">
-        <el-input type="password" v-model="form.password" :maxlength="50"></el-input>
+        <el-input type="password" v-model.trim="form.password" :maxlength="50"></el-input>
       </el-form-item>
 
       <el-form-item label="数据库名" label-width="120px" prop="dbName">
-        <el-input v-model="form.dbName" :maxlength="50"></el-input>
+        <el-input v-model.trim="form.dbName" :maxlength="50"></el-input>
       </el-form-item>
 
-      <el-switch style="display: inline-block;" v-model="form.isDefault" active-color="#13ce66" inactive-color="#ff4949"
+      <el-switch style="display: inline-block;" v-model.trim="form.isDefault" active-color="#13ce66" inactive-color="#ff4949"
         active-text="默认数据库" inactive-text="非默认数据库" :active-value="1" :inactive-value="0">
       </el-switch>
 

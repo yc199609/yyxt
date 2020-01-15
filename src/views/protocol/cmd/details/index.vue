@@ -10,13 +10,13 @@
 
     <el-form ref="form" :model="form" label-position="top" :rules="rules">
       <el-form-item label="指令名称" prop="cmdName">
-        <el-input v-model="form.cmdName" />
+        <el-input v-model.trim="form.cmdName" />
       </el-form-item>
       <el-form-item label="指令协议" prop="cmdCode">
-        <el-input v-model="form.cmdCode" />
+        <el-input v-model.trim="form.cmdCode" />
       </el-form-item>
       <el-form-item label="所属协议" prop="protocalId">
-        <el-select v-model="form.protocalId" placeholder="请选择">
+        <el-select v-model.trim="form.protocalId" placeholder="请选择">
           <el-option
             v-for="item in communication"
             :key="item.id"
@@ -26,7 +26,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="描述" prop="description">
-        <el-input v-model="form.description" />
+        <el-input v-model.trim="form.description" />
       </el-form-item>
     </el-form>
 

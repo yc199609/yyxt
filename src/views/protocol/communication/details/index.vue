@@ -10,16 +10,16 @@
 
     <el-form ref="form" :model="form" label-position="top" :rules="rules">
       <el-form-item label="协议名称" prop="protocalName">
-        <el-input v-model="form.protocalName" />
+        <el-input v-model.trim="form.protocalName" />
       </el-form-item>
       <el-form-item label="代号" prop="protocalCode">
-        <el-input v-model="form.protocalCode" />
+        <el-input v-model.trim="form.protocalCode" />
       </el-form-item>
       <el-form-item label="当前版本" prop="currentVersion">
-        <el-input v-model="form.currentVersion" />
+        <el-input v-model.trim="form.currentVersion" />
       </el-form-item>
       <el-form-item label="描述" prop="description">
-        <el-input v-model="form.description" />
+        <el-input v-model.trim="form.description" />
       </el-form-item>
     </el-form>
 

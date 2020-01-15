@@ -9,13 +9,13 @@
   >
     <el-form>
       <el-form-item label="终端code">
-        <el-input :disabled="mode==='unbund'" v-model="form.terminalCode"></el-input>
+        <el-input :disabled="mode==='unbund'" v-model.trim="form.terminalCode"></el-input>
       </el-form-item>
       <el-form-item v-if="mode==='unbund'" label="绑定时间">
-        <el-input :disabled="mode==='unbund'" v-model="form.bindTime"></el-input>
+        <el-input :disabled="mode==='unbund'" v-model.trim="form.bindTime"></el-input>
       </el-form-item>
       <el-form-item label="备注">
-        <el-input :disabled="mode==='unbund'" v-model="form.remark"></el-input>
+        <el-input :disabled="mode==='unbund'" v-model.trim="form.remark"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer">
