@@ -99,6 +99,7 @@ export default {
             message: "删除成功",
             duration: 500,
             onClose:()=>{
+              this.pageIndex = 1
               this.init()
             }
           })
