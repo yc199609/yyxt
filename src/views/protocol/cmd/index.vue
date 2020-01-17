@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Search :show-btn="true" @search="init" @changeKeyword="changeKeyword">
+    <Search :show-btn="true" @search="search" @changeKeyword="changeKeyword">
       <el-button type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
     </Search>
 
@@ -86,6 +86,10 @@ export default {
     this.init()
   },
   methods: {
+    search() {
+      this.pageIndex = 1
+      this.init()
+    },
     init() {
       GetAll()
         .then(res=>{

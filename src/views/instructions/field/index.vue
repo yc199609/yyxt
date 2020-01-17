@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div v-if="$route.query.id">
-      <Search :show-btn="true" @search="init" @changeKeyword="changeKeyword">
+      <Search :show-btn="true" @search="search" @changeKeyword="changeKeyword">
         <el-button type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
         <h2 style="margin-left: 100px">" {{ $route.query.cmdCode }} 号协议 "</h2>
       </Search> 
@@ -107,6 +107,10 @@ export default {
     this.init()
   },
   methods: {
+    search() {
+      this.pageIndex = 1
+      this.init()
+    },
     init() {
       GetByCmdId({
         cmdId: this.$route.query.id,

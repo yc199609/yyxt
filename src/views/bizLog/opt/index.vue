@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Search @search="init" @changeKeyword="changeKeyword">
+    <Search @search="search" @changeKeyword="changeKeyword">
     </Search>
 
     <el-card>
@@ -53,6 +53,10 @@ export default {
     this.init()
   },
   methods: {
+    search() {
+      this.pageIndex = 1
+      this.init()
+    },
     init() {
       GetList({
         keyword: this.keyword,

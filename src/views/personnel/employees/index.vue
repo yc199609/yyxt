@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Search :show-btn="buttonPermissions('94000101')" @search="init" @changeKeyword="changeKeyword">
+    <Search :show-btn="buttonPermissions('94000101')" @search="search" @changeKeyword="changeKeyword">
       <el-button v-if="buttonPermissions('94000102')" type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
     </Search>
 
@@ -76,6 +76,10 @@ export default {
     this.init()
   },
   methods: {
+    search() {
+      this.pageIndex = 1
+      this.init()
+    },
     init() {
       GetEmployeesByName({
         name: this.keyword,
