@@ -1,7 +1,7 @@
 <template>
   <div v-if="!this.$route.query.id">this.$route.query.id</div>
   <div class="container" v-else>
-    <Search :show-btn="true" @search="init" @changeKeyword="changeKeyword">
+    <Search :show-btn="true" @search="search" @changeKeyword="changeKeyword">
       <el-button type="warning" plain size="small" icon="el-icon-plus" @click="insert">新增</el-button>
     </Search>
 
@@ -75,6 +75,10 @@ export default {
     this.init()
   },
   methods: {
+    search(){
+      this.pageIndex = 1
+      this.init()
+    },
     init() {
       // 从 物理设备管理 跳转到 物理设备-指标管理
       GetList({
