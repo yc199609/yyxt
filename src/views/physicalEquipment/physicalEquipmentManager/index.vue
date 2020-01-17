@@ -8,6 +8,7 @@
         <el-table-column label="设备编码" prop="code" align="center" />
         <el-table-column label="设备名称" prop="name" align="center" />
         <el-table-column label="设备类型名称" prop="typeName" align="center" />
+        <el-table-column label="绑定终端个数" prop="deviceTerminalNum" align="center" />
         <el-table-column label="操作" align="center" width="440">
           <template slot-scope="scope">
             <div>
@@ -57,15 +58,7 @@ export default {
       devicePartView: false,
       companyView: false,
       baseView: false,
-      tableData: [
-        {
-          id:'213',
-          name:"袁常测试",
-          code:"编码",
-          typeId:'类型id',
-          typeName:'类型名称'
-        }
-      ],
+      tableData: [],
     }
   },
   mounted() {

@@ -5,14 +5,14 @@
     </Search>
     <el-card>
       <el-table border :data="tableData">
-        <el-table-column label="设备类型名称" prop="name" />
-        <el-table-column label="设备类型编码" prop="code" />
-        <el-table-column label="操作">
+        <el-table-column align="center" label="设备类型名称" prop="name" />
+        <el-table-column align="center" label="设备类型编码" prop="code" />
+        <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <div>
-              <el-button @click="handlePart(scope.row.id)">设备部位</el-button>
-              <el-button @click="handleEdit(scope.row.id)">编辑</el-button>
-              <el-button @click="handleDetele(scope.row.id)">删除</el-button>
+              <el-button type="text" @click="handlePart(scope.row.id)">设备部位</el-button>
+              <el-button type="text" @click="handleEdit(scope.row.id)">编辑</el-button>
+              <el-button type="text" @click="handleDetele(scope.row.id)">删除</el-button>
             </div>
           </template>
         </el-table-column>

@@ -4,7 +4,8 @@ const api = {
   createTerminal: '/api/Terminal/Terminal/Create',
   getListTerminal: '/api/Terminal/Terminal/GetList',
   updateTerminal: '/api/Terminal/Terminal/Update',
-  deleteTerminal: '/api/Terminal/Terminal/Delete'
+  deleteTerminal: '/api/Terminal/Terminal/Delete',
+  getAllTerminal: '/api/Terminal/Terminal/GetAll'
 }
 
 // 新增采集终端
@@ -45,3 +46,10 @@ export function deleteTerminal(id) {
   })
 }
 
+// 获取全部终端信息
+export function getAllTerminal() {
+  return request({
+    url: api.getAllTerminal,
+    method: 'get'
+  })
+}

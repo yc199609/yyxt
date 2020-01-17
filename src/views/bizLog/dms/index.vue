@@ -45,7 +45,7 @@ export default {
       tableData: [],
       keyword: "",
       pageIndex: 1,
-      pageSize: 20,
+      pageSize: 10,
       totalCount: 30
     }
   },

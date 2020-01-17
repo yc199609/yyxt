@@ -8,14 +8,34 @@
     @close="onClose"
   >
     <el-form>
-      <el-form-item label="终端code">
+      <!-- <el-form-item label="终端code">
         <el-input :disabled="mode==='unbund'" v-model.trim="form.terminalCode"></el-input>
+      </el-form-item> -->
+
+      <el-form-item label="终端code">
+        <el-select :disabled="mode==='unbund'"  filterable v-model="form.terminalId" placeholder="请选择">
+          <el-option
+            v-for="(item,index) in terminalList"
+            :key="index"
+            :label="item.code"
+            :value="item.id"
+            />
+        </el-select>
       </el-form-item>
+
       <el-form-item v-if="mode==='unbund'" label="绑定时间">
         <el-input :disabled="mode==='unbund'" v-model.trim="form.bindTime"></el-input>
       </el-form-item>
       <el-form-item label="备注">
-        <el-input :disabled="mode==='unbund'" v-model.trim="form.remark"></el-input>
+        <el-input
+          :disabled="mode==='unbund'"
+          type="textarea"
+          v-model.trim="form.remark"
+          maxlength="300"
+          show-word-limit
+          resize="none"
+          :rows="7"
+        />
       </el-form-item>
     </el-form>
     <div slot="footer">
@@ -29,6 +49,7 @@
   </el-dialog>
 </template>
 <script>
+import { getAllTerminal } from '@api/physicalEquipment/terminal'
 import { createDeviceTerminalLocation, unboundDevice, GetTerminalByIds } from '@api/physicalEquipment/bindTerminal'
 export default {
   data:()=>({
@@ -40,7 +61,8 @@ export default {
       bindTime: undefined
     },
     deviceId: undefined,
-    deviceLocationId: undefined
+    deviceLocationId: undefined,
+    terminalList: []
   }),
   methods:{
     handleSubmit(){
@@ -73,6 +95,10 @@ export default {
       this.deviceId = obj.deviceId
       this.deviceLocationId = obj.deviceLocationId
       this.visible = true
+      getAllTerminal()
+        .then(res=>{
+          this.$set(this,'terminalList',res.data)
+        })
       GetTerminalByIds({
         deviceId: this.deviceId,
         deviceLocationId: this.deviceLocationId

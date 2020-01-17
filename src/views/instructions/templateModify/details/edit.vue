@@ -191,6 +191,13 @@ export default {
             cmdFields.push(obj)
           })
         })
+        if(!cmdFields||cmdFields.length<=0){
+          this.$message({
+            type: 'error',
+            message: '请选择指标'
+          })
+          return
+        }
       GetCmdFieldByViewId(this.viewId)
         .then(res=>{
           res.data.item2.forEach(item => {

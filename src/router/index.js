@@ -62,7 +62,7 @@ export const asyncRouterMap = [
         path: 'fnTree',
         component: () => import('@/views/OperationSystem/fnTree'),
         name: 'fnTree',
-        meta: { title: '功能树', icon: 'organize', code: '920001' }
+        meta: { title: '功能树', icon: 'function', code: '920001' }
       }
     ]
   },
@@ -175,7 +175,7 @@ export const asyncRouterMap = [
         path: 'templateImport',
         component: () => import('@/views/instructions/templateImport'),
         name: 'templateImport',
-        meta: { title: '模板导入', icon: 'instructions-template', code: '9200' }
+        meta: { title: '模板导入', icon: 'templateImport', code: '9200' }
       }
     ]
   },
@@ -220,7 +220,7 @@ export const asyncRouterMap = [
         path: 'physicalEquipmentManager',
         component: () => import('@/views/physicalEquipment/physicalEquipmentManager'),
         name: 'physicalEquipmentManager',
-        meta: { title: '物理设备管理', icon: 'IndicatorManage', code: '9200' }
+        meta: { title: '物理设备管理', icon: 'equipment', code: '9200' }
       },
       {
         path: 'physicalEquipmentType',
@@ -229,16 +229,16 @@ export const asyncRouterMap = [
         meta: { title: '物理设备类型', icon: 'IndicatorManage', code: '9200' }
       },
       {
-        path: 'location',
-        component: () => import('@/views/physicalEquipment/location'),
-        name: 'location',
-        meta: { title: '终端管理', icon: 'location', code: '9200' }
+        path: 'terminal',
+        component: () => import('@/views/physicalEquipment/terminal'),
+        name: 'terminal',
+        meta: { title: '终端管理', icon: 'terminal', code: '9200' }
       },
       {
         path: 'terminalType',
         component: () => import('@/views/physicalEquipment/terminalType'),
         name: 'terminalType',
-        meta: { title: '终端类型管理', icon: 'location', code: '9200' }
+        meta: { title: '终端类型管理', icon: 'terminalType', code: '9200' }
       }
     ]
   },
@@ -248,13 +248,13 @@ export const asyncRouterMap = [
     redirect: '/Stethophone',
     component: Layout,
     name: 'Stethophone',
-    meta: { title: '听诊器管理', icon: 'location', code: '9200' },
+    meta: { title: '听诊器管理', icon: 'stethoscope', code: '9200' },
     children: [
       {
         path: 'IndicatorManage',
         component: () => import('@/views/Stethophone/Oprate'),
         name: 'Oprate',
-        meta: { title: '听诊器', icon: 'location', code: '9200' }
+        meta: { title: '听诊器', icon: 'stethoscope', code: '9200' }
       }
     ]
   }
