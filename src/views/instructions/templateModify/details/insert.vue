@@ -182,7 +182,8 @@ export default {
       this.$nextTick(()=>{
         this.activeName = 'second'
       })
-      const fieldsList = Object.keys(this.chooseData).reduce((per,next)=>per.concat(this.chooseData[next]),[])
+      let fieldsList = Object.keys(this.chooseData).reduce((per,next)=>per.concat(this.chooseData[next]),[])
+      fieldsList = fieldsList.map(item=>({...item,fieldId:item.id}))
       this.$set(this,'fieldsList',[...fieldsList])
     },
     init() {
